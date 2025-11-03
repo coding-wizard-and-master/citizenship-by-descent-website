@@ -1,3 +1,4 @@
+import Script from "next/script";
 import type { Metadata } from "next";
 
 import "./globals.css";
@@ -13,11 +14,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
-        {children}
-      </body>
-    </html>
-  );
+    return (
+      <html lang="en">
+        <head>
+          <Script
+            id="adsense-script"
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+            data-ad-client="ca-pub-1772060773365341"
+            strategy="afterInteractive"
+          />
+        </head>
+        <body className={`${inter.variable} antialiased`}>
+          {children}
+        </body>
+      </html>
+    );
 }

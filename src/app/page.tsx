@@ -1,5 +1,5 @@
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Link as ScrollLink } from "react-scroll";
 // If you don't actually have this component yet, comment out the import below or replace with your own.
 // import { ResourceCard } from "../components/ResourceCard";
@@ -14,6 +14,13 @@ type Q = {
 };
 
 export default function HeritagePassportLanding() {
+    // Google AdSense loader
+  useEffect(() => {
+    try {
+      // @ts-ignore
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {}
+  }, []);
   // ---------- state ----------
   const [form, setForm] = useState<any>({
     country: "",
@@ -556,23 +563,18 @@ export default function HeritagePassportLanding() {
           </div>
           <ul className="flex gap-8 text-zinc-700 dark:text-zinc-200">
             <li>
-              <ScrollLink to="eligibility" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
-                Eligibility
-              </ScrollLink>
-            </li>
-            <li>
-              <ScrollLink to="resources" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
-                Resources
-              </ScrollLink>
-            </li>
-            <li>
               <ScrollLink to="about" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
                 About
               </ScrollLink>
             </li>
             <li>
-              <ScrollLink to="contact" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
-                Contact
+              <ScrollLink to="eligibility" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
+                Eligibility
+              </ScrollLink>
+            </li>
+            <li>
+              <ScrollLink to="tips" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
+                Research Tips
               </ScrollLink>
             </li>
           </ul>
@@ -580,7 +582,7 @@ export default function HeritagePassportLanding() {
       </header>
 
       {/* Hero Section */}
-      <section className="flex flex-col items-center text-center py-24 px-6 bg-gradient-to-b from-green-50 to-transparent dark:from-green-950">
+  <section className="flex flex-col items-center text-center py-24 px-6 bg-linear-to-b from-green-50 to-transparent dark:from-green-950">
         <h1 className="text-4xl sm:text-5xl font-bold mb-4">Check Your Ancestral Citizenship Eligibility</h1>
         <p className="text-lg max-w-2xl text-zinc-600 dark:text-zinc-300 mb-8">
           Discover whether your family heritage could entitle you to European citizenship. Answer a few guided questions—no account needed.
@@ -643,7 +645,7 @@ export default function HeritagePassportLanding() {
 
         <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl overflow-hidden">
           {/* Header Strip */}
-          <div className="bg-gradient-to-r from-green-700 to-green-600 text-white px-6 sm:px-10 py-4">
+          <div className="bg-linear-to-r from-green-700 to-green-600 text-white px-6 sm:px-10 py-4">
             <div className="flex items-center gap-3">
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="-mt-px">
@@ -740,7 +742,7 @@ export default function HeritagePassportLanding() {
             </div>
 
             {/* Divider */}
-            <div className="my-8 h-px bg-gradient-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent" />
+            <div className="my-8 h-px bg-linear-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent" />
 
             {/* Step 2 header */}
             {form.country && form.ancestor && (
@@ -895,6 +897,17 @@ export default function HeritagePassportLanding() {
       </section>
 
       {/* Footer */}
+      {/* Google AdSense Ad */}
+      <div className="flex justify-center my-8">
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-1772060773365341"
+          data-ad-slot="7043924687"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        ></ins>
+      </div>
       <footer className="mt-24 border-t border-zinc-200 dark:border-zinc-700 py-8 text-center text-sm text-zinc-500">
         © 2025 Heritage Passport Finder · Built for educational and informational use only.
       </footer>
