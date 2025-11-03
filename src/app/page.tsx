@@ -14,7 +14,8 @@ type Q = {
 };
 
 export default function HeritagePassportLanding() {
-    // Google AdSense loader
+  const [navOpen, setNavOpen] = useState(false);
+  // Google AdSense loader
   useEffect(() => {
     try {
       // @ts-ignore
@@ -561,7 +562,18 @@ export default function HeritagePassportLanding() {
           <div className="flex items-center overflow-hidden h-15">
             <img src="/logo.svg" alt="Heritage Passport Logo" className="h-40" />
           </div>
-          <ul className="flex gap-8 text-zinc-700 dark:text-zinc-200">
+          {/* Hamburger Icon */}
+          <button
+            className="md:hidden flex flex-col justify-center items-center w-10 h-10 ml-2 focus:outline-none"
+            aria-label="Open navigation menu"
+            onClick={() => setNavOpen((open) => !open)}
+          >
+            <span className={`block w-7 h-0.5 bg-zinc-700 dark:bg-zinc-200 transition-all duration-200 ${navOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+            <span className={`block w-7 h-0.5 bg-zinc-700 dark:bg-zinc-200 my-1 transition-all duration-200 ${navOpen ? 'opacity-0' : ''}`}></span>
+            <span className={`block w-7 h-0.5 bg-zinc-700 dark:bg-zinc-200 transition-all duration-200 ${navOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+          </button>
+          {/* Desktop Nav */}
+          <ul className="hidden md:flex gap-8 text-zinc-700 dark:text-zinc-200">
             <li>
               <ScrollLink to="about" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
                 About
@@ -583,6 +595,31 @@ export default function HeritagePassportLanding() {
               </ScrollLink>
             </li>
           </ul>
+          {/* Mobile Nav */}
+          {navOpen && (
+            <ul className="absolute top-full left-0 w-full bg-white dark:bg-zinc-900 shadow-md flex flex-col items-center gap-6 py-6 z-30 md:hidden animate-fade-in">
+              <li>
+                <ScrollLink to="about" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer" onClick={() => setNavOpen(false)}>
+                  About
+                </ScrollLink>
+              </li>
+              <li>
+                <ScrollLink to="eligibility" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer" onClick={() => setNavOpen(false)}>
+                  Eligibility
+                </ScrollLink>
+              </li>
+              <li>
+                <ScrollLink to="resources" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer" onClick={() => setNavOpen(false)}>
+                  Resources
+                </ScrollLink>
+              </li>
+              <li>
+                <ScrollLink to="tips" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer" onClick={() => setNavOpen(false)}>
+                  Research Tips
+                </ScrollLink>
+              </li>
+            </ul>
+          )}
         </nav>
       </header>
 
@@ -860,7 +897,7 @@ export default function HeritagePassportLanding() {
       </section>
 
       {/* Research Tips Section */}
-      <section id="tips" className="relative max-w-6xl mx-auto my-24 px-6">
+  <section id="tips" className="relative max-w-6xl mx-auto mb-10 px-6">
         <div className="relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-lg overflow-hidden min-h-[500px]">
           {/* Full-height right image */}
           <img
@@ -913,7 +950,7 @@ export default function HeritagePassportLanding() {
           data-full-width-responsive="true"
         ></ins>
       </div>
-      <footer className="mt-24 border-t border-zinc-200 dark:border-zinc-700 py-8 text-center text-sm text-zinc-500">
+  <footer className="mt-10 border-t border-zinc-200 dark:border-zinc-700 py-8 text-center text-sm text-zinc-500">
         © 2025 Heritage Passport Finder · Built for educational and informational use only.
       </footer>
     </div>
