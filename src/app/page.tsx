@@ -2,7 +2,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { Link as ScrollLink } from "react-scroll";
 // If you don't actually have this component yet, comment out the import below or replace with your own.
-// import { ResourceCard } from "../components/ResourceCard";
+import { ResourceCard } from "../components/ResourceCard";
 
 type Q = {
   key: string;
@@ -573,6 +573,11 @@ export default function HeritagePassportLanding() {
               </ScrollLink>
             </li>
             <li>
+              <ScrollLink to="resources" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
+                Resources
+              </ScrollLink>
+            </li>
+            <li>
               <ScrollLink to="tips" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
                 Research Tips
               </ScrollLink>
@@ -834,8 +839,8 @@ export default function HeritagePassportLanding() {
         </div>
       </section>
 
-      {/* Resources Section (optional; comment out if you don't have ResourceCard yet) */}
-      {/* <section id="resources" className="max-w-6xl mx-auto my-24 px-6">
+      {/* Resources Section */}
+      <section id="resources" className="max-w-6xl mx-auto my-24 px-6">
         <h2 className="text-3xl font-bold text-center mb-8">Resources</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
@@ -852,7 +857,7 @@ export default function HeritagePassportLanding() {
             <ResourceCard key={item.code} item={item} />
           ))}
         </div>
-      </section> */}
+      </section>
 
       {/* Research Tips Section */}
       <section id="tips" className="relative max-w-6xl mx-auto my-24 px-6">
