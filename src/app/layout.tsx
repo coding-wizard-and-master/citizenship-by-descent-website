@@ -1,10 +1,10 @@
-
 import Script from "next/script";
 import type { Metadata } from "next";
 import "./globals.css";
 import { inter } from "./fonts";
 import { OrganizationJsonLd } from "@/components/seo/OrganizationJsonLd";
 import { buildCanonical } from "@/lib/seo";
+import { Analytics } from "@vercel/analytics/next";
 
 const siteUrl = "https://heritagepassportfinder.com";
 const siteName = "Heritage Passport Finder";
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   applicationName: siteName,
   category: "education",
   alternates: {
-  canonical: siteUrl,
+    canonical: siteUrl,
   },
   openGraph: {
     type: "website",
@@ -73,6 +73,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         <meta name="google-adsense-account" content="ca-pub-1772060773365341" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <Script
           id="adsense-script"
           async
@@ -84,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${inter.variable} antialiased`}>
         <OrganizationJsonLd />
         {children}
+        <Analytics />
       </body>
     </html>
   );
