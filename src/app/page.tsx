@@ -3,6 +3,8 @@ import React, { useMemo, useState, useEffect } from "react";
 import { Link as ScrollLink } from "react-scroll";
 // If you don't actually have this component yet, comment out the import below or replace with your own.
 import { ResourceCard } from "../components/ResourceCard";
+import Script from "next/script";
+import Image from "next/image";
 
 type Q = {
   key: string;
@@ -11,6 +13,100 @@ type Q = {
   options: { value: string; label: string }[];
   required?: boolean;
   showIf?: (form: any) => boolean; // visibility predicate
+};
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "How do I find my ancestor's birth records?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Start with civil registries in the country of birth, then check church records and online genealogy databases."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "What is an apostille and when do I need one?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "An apostille is a certification for international documents. You need one for official records used abroad."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "Do I need certified translations?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Most countries require certified translations of foreign documents. Check the consulate's requirements."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "How do I prove my lineage?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "You must provide a chain of birth, marriage, and (if applicable) naturalization records for each generation."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "What if a document is missing?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Try to obtain alternative evidence, such as census records, military files, or notarized affidavits."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "How long does the process take?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "It varies by country and consulate, but expect several months to over a year."
+      }
+    },
+    {
+      "@type": "Question",
+      name: "Is this tool an official government service?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "No. Heritage Passport Finder is an educational tool and links to official government resources."
+      }
+    }
+  ]
+};
+
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://heritagepassportfinder.com/"
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Eligibility Checker",
+      item: "https://heritagepassportfinder.com/#eligibility"
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: "Resources",
+      item: "https://heritagepassportfinder.com/#resources"
+    },
+    {
+      "@type": "ListItem",
+      position: 4,
+      name: "Research Tips",
+      item: "https://heritagepassportfinder.com/#tips"
+    }
+  ]
 };
 
 export default function HeritagePassportLanding() {
@@ -560,7 +656,15 @@ export default function HeritagePassportLanding() {
       <header className="sticky top-0 bg-white dark:bg-zinc-900 shadow-sm z-20">
         <nav className="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
           <div className="flex items-center overflow-hidden h-15">
-            <img src="/logo.svg" alt="Heritage Passport Logo" className="h-40" />
+            {/* <img src="/logo.svg" alt="Heritage Passport Logo" className="h-40" /> */}
+            <Image
+              src="/logo.svg"
+              alt="Heritage Passport Finder logo with passport and globe"
+              width={160}
+              height={160}
+              className="h-40 w-auto"
+              priority
+            />
           </div>
           {/* Hamburger Icon */}
           <button
@@ -953,6 +1057,17 @@ export default function HeritagePassportLanding() {
   <footer className="mt-10 border-t border-zinc-200 dark:border-zinc-700 py-8 text-center text-sm text-zinc-500">
         © 2025 Heritage Passport Finder · Built for educational and informational use only.
       </footer>
+      {/* Place FAQPage JSON-LD at the end of the main div for SEO */}
+      <Script
+        id="faq-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <Script
+        id="breadcrumb-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
     </div>
   );
 }
