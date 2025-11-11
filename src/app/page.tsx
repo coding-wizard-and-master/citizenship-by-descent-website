@@ -837,7 +837,6 @@ export default function HeritagePassportLanding() {
                 <option>Portugal</option>
                 <option>Lithuania</option>
                 <option>Hungary</option>
-                <option>Other</option>
               </select>
 
               {/* Ancestor select */}
