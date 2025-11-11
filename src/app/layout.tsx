@@ -69,19 +69,22 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const isHome = typeof window !== "undefined" ? window.location.pathname === "/" : false;
   return (
     <html lang="en">
       <head>
         <meta name="google-adsense-account" content="ca-pub-1772060773365341" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <Script
-          id="adsense-script"
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-          data-ad-client="ca-pub-1772060773365341"
-          strategy="afterInteractive"
-        />
+        {isHome && (
+          <Script
+            id="adsense-script"
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+            data-ad-client="ca-pub-1772060773365341"
+            strategy="afterInteractive"
+          />
+        )}
       </head>
       <body className={`${inter.variable} antialiased`}>
         <OrganizationJsonLd />
