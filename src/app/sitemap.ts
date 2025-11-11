@@ -30,3 +30,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [...staticRoutes, ...countryRoutes];
 }
+
+export const metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};

@@ -7,22 +7,23 @@ export function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const host = req.headers.get("host") || "";
 
-  // force apex
-  if (host.startsWith("www.")) {
-    url.host = primaryHost;
-    return NextResponse.redirect(url, 301);
+  // Keep static files and API routes unchanged
+  if (
+    url.pathname.startsWith("/api") ||
+    url.pathname.startsWith("/_next") ||
+    url.pathname.startsWith("/static") ||
+    url.pathname.startsWith("/favicon.ico") ||
+    url.pathname.startsWith("/ads.txt") ||
+    url.pathname.startsWith("/robots.txt") ||
+    url.pathname.startsWith("/sitemap.xml")
+  ) {
+    return NextResponse.next();
   }
 
-  // force https in case of proxies
-  if (url.protocol === "http:") {
-    url.protocol = "https:";
-    return NextResponse.redirect(url, 301);
-  }
-
-  // optional: drop trailing slash except root
-  if (url.pathname !== "/" && url.pathname.endsWith("/")) {
-    url.pathname = url.pathname.slice(0, -1);
-    return NextResponse.redirect(url, 301);
+  // Rewrite all other paths to homepage
+  if (url.pathname !== "/") {
+    url.pathname = "/";
+    return NextResponse.rewrite(url);
   }
 
   return NextResponse.next();

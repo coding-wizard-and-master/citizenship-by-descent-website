@@ -3,6 +3,13 @@ import type { NextRequest } from 'next/server';
 
 export const runtime = 'edge';
 
+export const metadata = {
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const title = searchParams.get('title') || 'Heritage Passport Finder';
