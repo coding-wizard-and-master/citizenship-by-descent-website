@@ -7,7 +7,7 @@ export function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const host = req.headers.get("host") || "";
 
-  // Keep static files and API routes unchanged
+  // Allow all requests for static assets (files with an extension) and API routes to pass through
   if (
     url.pathname.startsWith("/api") ||
     url.pathname.startsWith("/_next") ||
@@ -15,7 +15,8 @@ export function middleware(req: NextRequest) {
     url.pathname.startsWith("/favicon.ico") ||
     url.pathname.startsWith("/ads.txt") ||
     url.pathname.startsWith("/robots.txt") ||
-    url.pathname.startsWith("/sitemap.xml")
+    url.pathname.startsWith("/sitemap.xml") ||
+    /\.[a-zA-Z0-9]+$/.test(url.pathname) // matches any file with an extension
   ) {
     return NextResponse.next();
   }
