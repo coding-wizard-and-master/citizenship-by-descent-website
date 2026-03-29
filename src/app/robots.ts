@@ -14,10 +14,3 @@ export default function robots(): MetadataRoute.Robots {
     host: base,
   };
 }
-
-export const metadata = {
-  robots: {
-    index: false,
-    follow: false,
-  },
-};

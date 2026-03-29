@@ -21,11 +21,5 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  // Rewrite all other paths to homepage
-  if (url.pathname !== "/") {
-    url.pathname = "/";
-    return NextResponse.rewrite(url);
-  }
-
   return NextResponse.next();
 }

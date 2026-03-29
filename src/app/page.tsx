@@ -1,8 +1,6 @@
 "use client";
 import React, { useMemo, useState, useEffect } from "react";
 import { Link as ScrollLink } from "react-scroll";
-// If you don't actually have this component yet, comment out the import below or replace with your own.
-import { ResourceCard } from "../components/ResourceCard";
 import Script from "next/script";
 import Image from "next/image";
 
@@ -12,7 +10,18 @@ type Q = {
   type: "radio" | "select";
   options: { value: string; label: string }[];
   required?: boolean;
-  showIf?: (form: any) => boolean; // visibility predicate
+  showIf?: (form: any) => boolean;
+};
+
+type CountryMeta = {
+  code?: string;
+  ancestorLabel?: string;
+  supportsResidencyFallback?: boolean;
+  residencyPathLabel?: string;
+};
+
+type CountryQuestions = CountryMeta & {
+  questions: Q[];
 };
 
 const faqJsonLd = {
@@ -21,50 +30,50 @@ const faqJsonLd = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "How do I find my ancestor's birth records?",
+      name: "Can I get citizenship if my great-grandparent was from Italy or another European country?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Start with civil registries in the country of birth, then check church records and online genealogy databases."
+        text: "It depends on the country and whether the citizenship chain was broken by naturalization. Italy has no generational limit — if no ancestor naturalized before their child in your line was born, you may qualify regardless of how many generations back. Countries like Ireland only go to grandparent level without extra steps. Use the checker above to see your specific situation."
       }
     },
     {
       "@type": "Question",
-      name: "What is an apostille and when do I need one?",
+      name: "Does naturalization automatically break the citizenship by descent chain?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "An apostille is a certification for international documents. You need one for official records used abroad."
+        text: "Yes — in most countries including Italy, Germany, and Poland, if your ancestor naturalized as a citizen of another country before the next generation in your line was born, the citizenship chain is broken and you cannot claim through that ancestor. The exact rules vary by country and the year of naturalization."
       }
     },
     {
       "@type": "Question",
-      name: "Do I need certified translations?",
+      name: "What is the 1948 rule for Italian citizenship by descent?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Most countries require certified translations of foreign documents. Check the consulate's requirements."
+        text: "Before January 1, 1948, Italian law only allowed citizenship to pass through the male line. If your claim passes through a female Italian ancestor and the next child in your line was born before that date, you cannot use the standard consular process. You must file a lawsuit in Italian court — typically in Rome — to obtain recognition under gender-equality precedents established since the 1980s."
       }
     },
     {
       "@type": "Question",
-      name: "How do I prove my lineage?",
+      name: "Can I hold dual citizenship if I claim European citizenship through ancestry?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "You must provide a chain of birth, marriage, and (if applicable) naturalization records for each generation."
+        text: "Most EU countries on this site allow dual citizenship for descent claimants — including Italy, Ireland, Germany (since 2024), Poland, Greece, Hungary, Estonia, Latvia, Luxembourg, and Lithuania. Notable exceptions: Slovakia generally forbids dual citizenship, and Portugal requires proof of community ties. Always verify the specific dual citizenship rules with the relevant consulate before starting your application."
       }
     },
     {
       "@type": "Question",
-      name: "What if a document is missing?",
+      name: "What documents do I need to apply for citizenship by descent?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Try to obtain alternative evidence, such as census records, military files, or notarized affidavits."
+        text: "The core requirement across all countries is a chain of vital records — birth, marriage, and death certificates — for every generation from your European ancestor to you. You also typically need proof the ancestor held citizenship (not residency only) and, for countries with naturalization chain-break rules, evidence of when or whether naturalization occurred. All foreign documents usually require an apostille seal and a certified translation into the target country's language."
       }
     },
     {
       "@type": "Question",
-      name: "How long does the process take?",
+      name: "How long does citizenship by descent take from start to finish?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "It varies by country and consulate, but expect several months to over a year."
+        text: "Timelines vary significantly. Irish Foreign Births Register applications currently take 12–18 months. Italian consulate appointments in the US can have 2–5 year backlogs, though applying directly in Italy can take 3–6 months. German recognition typically takes 12–24 months. Polish confirmation takes 6–12 months. Document preparation — gathering, apostilling, and translating records — can add 3–12 months on top of government processing time."
       }
     },
     {
@@ -72,7 +81,7 @@ const faqJsonLd = {
       name: "Is this tool an official government service?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "No. Heritage Passport Finder is an educational tool and links to official government resources."
+        text: "No. Heritage Passport Finder is a free educational tool, not a government service. It does not submit applications, store your data, or provide legal advice. Results are for informational purposes only. Always confirm your eligibility directly with the relevant consulate or embassy, and consider consulting a qualified immigration attorney for complex cases."
       }
     }
   ]
@@ -109,10 +118,49 @@ const breadcrumbJsonLd = {
   ]
 };
 
+const webAppJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "Heritage Passport Finder — Citizenship by Descent Checker",
+  url: "https://heritagepassportfinder.com",
+  description: "Free interactive tool to check whether you qualify for European citizenship by descent across 14 countries including Italy, Ireland, Germany, Poland, Spain, Portugal, Greece, Lithuania, Hungary, Estonia, Latvia, Czech Republic, Slovakia, and Luxembourg.",
+  applicationCategory: "UtilitiesApplication",
+  operatingSystem: "Web",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD"
+  },
+  creator: {
+    "@type": "Organization",
+    name: "Heritage Passport Finder",
+    url: "https://heritagepassportfinder.com"
+  }
+};
+
+const howToJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  name: "How to Research Your Ancestry for European Citizenship by Descent",
+  description: "Step-by-step guide to tracing your family history and assembling the document chain required for a European citizenship by descent application.",
+  totalTime: "P3M",
+  step: [
+    { "@type": "HowToStep", position: 1, name: "Create an Ancestry account", text: "Sign up at Ancestry.com and start a family tree with everything you already know — names, birthplaces, and dates for parents, grandparents, and great-grandparents." },
+    { "@type": "HowToStep", position: 2, name: "Search vital records", text: "Use Ancestry databases to find birth, marriage, and death certificates. These are essential for proving your lineage and eligibility for citizenship by descent." },
+    { "@type": "HowToStep", position: 3, name: "Explore immigration records", text: "Look for ship manifests, immigration documents, and naturalization records. These establish when ancestors moved and their citizenship status at the time." },
+    { "@type": "HowToStep", position: 4, name: "Review census data", text: "Census records provide clues about family relationships, places of birth, and citizenship changes, often filling in gaps where vital records are missing." },
+    { "@type": "HowToStep", position: 5, name: "Collaborate and verify", text: "Connect with distant relatives who may have already done research. Always cross-reference sources against official government archives." },
+    { "@type": "HowToStep", position: 6, name: "Organize your lineage chain", text: "Save certified copies and organize documents by generation and type — birth, marriage, naturalization — to build a clear, provable chain from your ancestor to you." },
+    { "@type": "HowToStep", position: 7, name: "Translate and apostille", text: "Most countries require certified translations and apostilles on foreign documents. Budget for this cost and allow time when preparing your application." },
+    { "@type": "HowToStep", position: 8, name: "Assess and apply", text: "Once you have a complete chain, consult the consulate for application instructions. Consider a citizenship attorney for complex or multi-generational cases." }
+  ]
+};
+
 export default function HeritagePassportLanding() {
   const [navOpen, setNavOpen] = useState(false);
-  // Google AdSense loader
+  // Google AdSense loader (production only — avoids empty container gap in development)
   useEffect(() => {
+    if (process.env.NODE_ENV !== "production") return;
     try {
       // @ts-ignore
       (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -120,18 +168,23 @@ export default function HeritagePassportLanding() {
   }, []);
   // ---------- state ----------
   const [form, setForm] = useState<any>({
-    country: "",
-    ancestor: "",
-    it1: "", it2: "", it3: "", it4: "", it5: "",
-    ie1: "", ie2: "", ie3: "",
-    de1: "", de2: "", de3: "", de4: "",
-    pl1: "", pl2: "", pl3: "", pl4: "",
-    gr1: "", gr2: "", gr3: "",
-    es1: "", es2: "", es3: "", es4: "",
-    pt1: "", pt2: "", pt3: "", pt4: "",
-    lt1: "", lt2: "", lt3: "",
-    huA1: "", huA2: "",
-    huB1: "", huB2: "", huB3: "", huB4: ""
+  country: "",
+  ancestor: "",
+  it1: "", it2: "", it3: "", it4: "", it5: "",
+  ie1: "", ie2: "", ie3: "",
+  de1: "", de2: "", de3: "", de4: "",
+  pl1: "", pl2: "", pl3: "", pl4: "",
+  gr1: "", gr2: "", gr3: "",
+  es1: "", es2: "", es3: "", es4: "",
+  pt1: "", pt2: "", pt3: "", pt4: "",
+  lt1: "", lt2: "", lt3: "", lt4: "", lt5: "",
+  huA1: "", huA2: "",
+  huB1: "", huB2: "", huB3: "", huB4: "",
+  ee1: "", ee2: "",
+  lv1: "", lv2: "",
+  cz1: "", cz2: "", cz3: "", cz4: "",
+  sk1: "", sk2: "",
+  lu1: "", lu2: "", lu3: ""
   });
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState<string | null>(null);
@@ -149,14 +202,145 @@ export default function HeritagePassportLanding() {
       gr1: "", gr2: "", gr3: "",
       es1: "", es2: "", es3: "", es4: "",
       pt1: "", pt2: "", pt3: "", pt4: "",
-      lt1: "", lt2: "", lt3: "",
+      lt1: "", lt2: "", lt3: "", lt4: "", lt5: "",
       huA1: "", huA2: "",
-      huB1: "", huB2: "", huB3: "", huB4: ""
+      huB1: "", huB2: "", huB3: "", huB4: "",
+      ee1: "", ee2: "",
+      lv1: "", lv2: "",
+      cz1: "", cz2: "", cz3: "", cz4: "",
+      sk1: "", sk2: "",
+      lu1: "", lu2: "", lu3: ""
     });
   }
 
   // ---------- question sets with showIf ----------
-  const countryQuestions: Record<string, { questions: Q[] }> = {
+  const countryQuestions: Record<string, CountryQuestions> = {
+    Estonia: {
+      questions: [
+        {
+          key: "ee1",
+          label: "Do you have a parent, grandparent, or great-grandparent who was an Estonian citizen before June 16, 1940?",
+          type: "radio",
+          options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
+          required: true
+        },
+        {
+          key: "ee2",
+          label: "Can you provide official documents proving that ancestor’s Estonian citizenship and your family connection?",
+          type: "radio",
+          options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
+          required: true,
+          showIf: f => f.ee1 === "yes"
+        }
+      ]
+    },
+    Latvia: {
+      questions: [
+        {
+          key: "lv1",
+          label: "Do you have a parent, grandparent, or great-grandparent who was a Latvian citizen on June 17, 1940?",
+          type: "radio",
+          options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
+          required: true
+        },
+        {
+          key: "lv2",
+          label: "Can you provide documents proving that ancestor’s Latvian citizenship and your relationship?",
+          type: "radio",
+          options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
+          required: true,
+          showIf: f => f.lv1 === "yes"
+        }
+      ]
+    },
+    CzechRepublic: {
+      code: "CZ",
+      ancestorLabel: "Which ancestor are you claiming through?",
+      supportsResidencyFallback: true,
+      residencyPathLabel: "Apply for Permanent Residence if Czech origin proven",
+  questions: [
+        {
+          key: "cz1",
+          label: "Was one of your parents a Czech (or Czechoslovak) citizen at the time of your birth?",
+          type: "radio",
+          options: [{ value: "Yes", label: "Yes" }, { value: "No", label: "No" }],
+          required: true
+        },
+        {
+          key: "cz2",
+          label: "If not, was one of your grandparents a Czech (or Czechoslovak) citizen?",
+          type: "radio",
+          options: [{ value: "Yes", label: "Yes" }, { value: "No", label: "No" }],
+          required: true,
+          showIf: f => f.cz1 === "No"
+        },
+        {
+          key: "cz3",
+          label: "Did your Czech/Czechoslovak ancestor lose citizenship under Nazi, postwar, or Slovak separation laws (e.g., minority decrees or Slovak acquisition)?",
+          type: "radio",
+          options: [{ value: "Yes", label: "Yes" }, { value: "No", label: "No" }],
+          required: true,
+          showIf: f => f.cz1 === "Yes" || f.cz2 === "Yes"
+        },
+        {
+          key: "cz4",
+          label: "Are you of Czech origin (can you prove your ancestor was Czech)?",
+          type: "radio",
+          options: [{ value: "Yes", label: "Yes" }, { value: "No", label: "No" }],
+          required: true,
+          showIf: f => (f.cz1 === "No" && f.cz2 === "No") || ((f.cz1 === "Yes" || f.cz2 === "Yes") && f.cz3 === "Yes")
+        }
+      ]
+    },
+    Slovakia: {
+      questions: [
+        {
+          key: "sk1",
+          label: "Do you have a parent, grandparent, or great-grandparent who was born in present-day Slovakia and held Czechoslovak citizenship?",
+          type: "radio",
+          options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
+          required: true
+        },
+        {
+          key: "sk2",
+          label: "Can you provide official documentation to prove both birth and descent?",
+          type: "radio",
+          options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
+          required: true,
+          showIf: f => f.sk1 === "yes"
+        }
+      ]
+    },
+    Luxembourg: {
+      code: "LU",
+      ancestorLabel: "Which ancestor are you claiming through?",
+      supportsResidencyFallback: false,
+      questions: [
+        {
+          key: "lu1",
+          label: "Do you have a parent or grandparent who is/was a Luxembourg citizen?",
+          type: "radio",
+          options: [{ value: "Yes", label: "Yes" }, { value: "No", label: "No" }],
+          required: true
+        },
+        {
+          key: "lu2",
+          label: "Do you have an all-male lineage (father → grandfather → etc.) leading back to a Luxembourg citizen born between 1815 and 1943?",
+          type: "radio",
+          options: [{ value: "Yes", label: "Yes" }, { value: "No", label: "No" }],
+          required: true,
+          showIf: f => f.lu1 === "No"
+        },
+        {
+          key: "lu3",
+          label: "Was your mother eligible for all-male descent (per above) and were you born after Jan 1, 1969?",
+          type: "radio",
+          options: [{ value: "Yes", label: "Yes" }, { value: "No", label: "No" }],
+          required: true,
+          showIf: f => f.lu2 === "Yes"
+        }
+      ]
+    },
     Italy: {
       questions: [
         {
@@ -417,28 +601,42 @@ export default function HeritagePassportLanding() {
       questions: [
         {
           key: "lt1",
-          label:
-            "Do you have a parent, grandparent, or great-grandparent who was a Lithuanian citizen before 15 June 1940?",
+          label: "Do you have a parent, grandparent, or great-grandparent who held Lithuanian citizenship before 1940?",
           type: "radio",
           options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
           required: true
         },
         {
           key: "lt2",
-          label: "Did that ancestor emigrate or was exiled/deported before 1990?",
+          label: "Did that ancestor leave Lithuania (or were they exiled) during the Soviet era (approximately 1940–1990)?",
           type: "radio",
-          options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Unsure" }],
+          options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
           required: true,
           showIf: f => f.lt1 === "yes"
         },
         {
           key: "lt3",
-          label:
-            "Can you obtain proof of the ancestor’s Lithuanian citizenship (passport/archives) and the civil chain to you?",
+          label: "Can you provide documents proving your ancestor’s Lithuanian citizenship and your family connection (birth/death certificates, etc.)?",
           type: "radio",
           options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
           required: true,
-          showIf: f => f.lt1 === "yes" && f.lt2 === "yes"
+          showIf: f => f.lt2 === "yes"
+        },
+        {
+          key: "lt4",
+          label: "Have you legally resided in Lithuania for at least 10 years?",
+          type: "radio",
+          options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
+          required: true,
+          showIf: f => f.lt1 === "no" || (f.lt1 === "yes" && (f.lt2 === "no" || f.lt3 === "no"))
+        },
+        {
+          key: "lt5",
+          label: "Have you demonstrated Lithuanian language proficiency and passed the citizenship exam (language and basics of Constitution)?",
+          type: "radio",
+          options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
+          required: true,
+          showIf: f => f.lt4 === "yes"
         }
       ]
     },
@@ -551,6 +749,57 @@ export default function HeritagePassportLanding() {
 
   // ---------- decision engine ----------
   function checkEligibility() {
+    // Estonia
+    if (form.country === "Estonia") {
+  if (form.ee1 === "yes" && form.ee2 === "yes") return "Eligible for Estonian citizenship by descent.";
+  return "Not eligible for citizenship by descent.";
+    }
+
+    // Latvia
+    if (form.country === "Latvia") {
+    if (form.lv1 === "yes" && form.lv2 === "yes") return "Eligible for Latvian citizenship by descent.";
+    return "Not eligible.";
+    }
+
+    // Czech Republic
+    if (form.country === "CzechRepublic") {
+      if (form.cz1 === "Yes" && form.cz3 === "No") {
+        return "✅ Eligible for Czech citizenship by descent via parent.";
+      } else if (form.cz2 === "Yes" && form.cz3 === "No") {
+        return "✅ Eligible for Czech citizenship by declaration via grandparent.";
+      } else if ((form.cz1 === "Yes" || form.cz2 === "Yes") && form.cz3 === "Yes") {
+        if (form.cz4 === "Yes") {
+          return "✅ You qualify for Czech permanent residency as a person of Czech origin.";
+        } else {
+          return "❌ Not eligible: ancestry lost Czech citizenship under disqualifying historical laws, and you do not qualify for permanent residency.";
+        }
+      } else {
+        if (form.cz4 === "Yes") {
+          return "✅ You qualify for Czech permanent residency as a person of Czech origin.";
+        } else {
+          return "❌ Not eligible for Czech citizenship or permanent residency by origin.";
+        }
+      }
+    }
+
+    // Slovakia
+    if (form.country === "Slovakia") {
+    if (form.sk1 === "yes" && form.sk2 === "yes") return "Eligible for Slovak citizenship by descent.";
+    return "Not eligible";
+    }
+
+    // Luxembourg
+    if (form.country === "Luxembourg") {
+      if (form.lu1 === "Yes") {
+        return "✅ Eligible for Luxembourg citizenship via parent or grandparent (Article 23)";
+      } else if (form.lu2 === "Yes" && form.lu3 === "Yes") {
+        return "✅ Eligible for Luxembourg citizenship via maternal all-male lineage (Article 7)";
+      } else if (form.lu2 === "Yes" && form.lu3 === "No") {
+        return "✅ Eligible for Luxembourg citizenship via paternal lineage (Article 7)";
+      } else {
+        return "❌ Not eligible for Luxembourg citizenship by descent.";
+      }
+    }
     if (!form.country || !form.ancestor) return "Please fill out all required fields.";
 
     // Single source of truth for “unanswered”
@@ -634,10 +883,15 @@ export default function HeritagePassportLanding() {
       return "Not eligible for Portuguese citizenship by descent.";
     }
 
-    // Lithuania — restoration
+    // Lithuania — restoration or residency-based naturalization
     if (form.country === "Lithuania") {
-      if (form.lt1 === "yes" && form.lt2 === "yes" && form.lt3 === "yes") return "Eligible for Lithuanian citizenship restoration (descendant of pre-1940 citizen).";
-      return "Not eligible for Lithuanian citizenship by descent.";
+      if (form.lt1 === "yes" && form.lt2 === "yes" && form.lt3 === "yes")
+        return "Eligible for Lithuanian citizenship by reinstatement (descent).";
+      if (form.lt4 === "yes" && form.lt5 === "yes")
+        return "Eligible for Lithuanian citizenship via naturalization (10-year residency + language exam).";
+      if (form.lt4 === "yes" && form.lt5 === "no")
+        return "Not eligible yet. You will be eligible once you pass the language and Constitution exam.";
+      return "Not eligible for Lithuanian citizenship by descent or naturalization.";
     }
 
     return "Eligibility rules are complex. Please consult the relevant consulate.";
@@ -651,288 +905,313 @@ export default function HeritagePassportLanding() {
 
   // ---------- UI ----------
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-100 font-sans">
-      {/* Header */}
-      <header className="sticky top-0 bg-white dark:bg-zinc-900 shadow-sm z-20">
-        <nav className="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
-          <div className="flex items-center overflow-hidden h-15">
-            {/* <img src="/logo.svg" alt="Heritage Passport Logo" className="h-40" /> */}
-            <Image
-              src="/logo.svg"
-              alt="Heritage Passport Finder logo with passport and globe"
-              width={160}
-              height={160}
-              className="h-40 w-auto"
-              priority
-            />
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
+      {/* ── HEADER ─────────────────────────────────────────────── */}
+      <header className="sticky top-0 z-30 bg-white/90 dark:bg-zinc-950/90 backdrop-blur border-b border-zinc-100 dark:border-zinc-800">
+        <nav className="max-w-6xl mx-auto flex items-center justify-between px-6 py-3">
+          <div className="flex items-center gap-2">
+            <Image src="/logo.svg" alt="Heritage Passport Finder" width={36} height={36} priority />
+            <span className="font-bold text-lg tracking-tight hidden sm:block">Heritage Passport Finder</span>
           </div>
-          {/* Hamburger Icon */}
-          <button
-            className="md:hidden flex flex-col justify-center items-center w-10 h-10 ml-2 focus:outline-none"
-            aria-label="Open navigation menu"
-            onClick={() => setNavOpen((open) => !open)}
-          >
-            <span className={`block w-7 h-0.5 bg-zinc-700 dark:bg-zinc-200 transition-all duration-200 ${navOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
-            <span className={`block w-7 h-0.5 bg-zinc-700 dark:bg-zinc-200 my-1 transition-all duration-200 ${navOpen ? 'opacity-0' : ''}`}></span>
-            <span className={`block w-7 h-0.5 bg-zinc-700 dark:bg-zinc-200 transition-all duration-200 ${navOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
-          </button>
-          {/* Desktop Nav */}
-          <ul className="hidden md:flex gap-8 text-zinc-700 dark:text-zinc-200">
+
+          <ul className="hidden md:flex items-center gap-1">
+            {[
+              { label: "About", to: "about" },
+              { label: "Eligibility", to: "eligibility" },
+              { label: "Countries", to: "resources" },
+              { label: "Research Guide", to: "ancestry-guide" },
+            ].map(({ label, to }) => (
+              <li key={to}>
+                <ScrollLink
+                  to={to} smooth offset={-80} duration={400}
+                  className="px-4 py-2 rounded-lg text-sm font-medium text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer transition-colors"
+                >
+                  {label}
+                </ScrollLink>
+              </li>
+            ))}
             <li>
-              <ScrollLink to="about" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
-                About
-              </ScrollLink>
-            </li>
-            <li>
-              <ScrollLink to="eligibility" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
-                Eligibility
-              </ScrollLink>
-            </li>
-            <li>
-              <ScrollLink to="resources" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
-                Resources
-              </ScrollLink>
-            </li>
-            <li>
-              <ScrollLink to="tips" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer">
-                Research Tips
+              <ScrollLink
+                to="eligibility" smooth offset={-80} duration={400}
+                className="ml-2 px-4 py-2 rounded-lg text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-700 cursor-pointer transition-colors"
+              >
+                Check Eligibility
               </ScrollLink>
             </li>
           </ul>
-          {/* Mobile Nav */}
-          {navOpen && (
-            <ul className="absolute top-full left-0 w-full bg-white dark:bg-zinc-900 shadow-md flex flex-col items-center gap-6 py-6 z-30 md:hidden animate-fade-in">
-              <li>
-                <ScrollLink to="about" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer" onClick={() => setNavOpen(false)}>
-                  About
-                </ScrollLink>
-              </li>
-              <li>
-                <ScrollLink to="eligibility" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer" onClick={() => setNavOpen(false)}>
-                  Eligibility
-                </ScrollLink>
-              </li>
-              <li>
-                <ScrollLink to="resources" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer" onClick={() => setNavOpen(false)}>
-                  Resources
-                </ScrollLink>
-              </li>
-              <li>
-                <ScrollLink to="tips" smooth={true} duration={500} offset={-80} className="hover:text-green-700 dark:hover:text-green-400 cursor-pointer" onClick={() => setNavOpen(false)}>
-                  Research Tips
-                </ScrollLink>
-              </li>
-            </ul>
-          )}
+
+          <button
+            className="md:hidden p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            aria-label="Open navigation menu"
+            onClick={() => setNavOpen(o => !o)}
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+              {navOpen ? (
+                <path fillRule="evenodd" clipRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" />
+              ) : (
+                <path fillRule="evenodd" clipRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" />
+              )}
+            </svg>
+          </button>
         </nav>
+
+        {navOpen && (
+          <div className="md:hidden border-t border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 px-6 py-4 flex flex-col gap-1">
+            {[
+              { label: "About", to: "about" },
+              { label: "Eligibility Checker", to: "eligibility" },
+              { label: "Countries", to: "resources" },
+              { label: "Research Guide", to: "ancestry-guide" },
+              { label: "Research Tips", to: "tips" },
+            ].map(({ label, to }) => (
+              <ScrollLink
+                key={to}
+                to={to} smooth offset={-80} duration={400}
+                className="px-4 py-3 rounded-lg text-sm font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 cursor-pointer transition-colors"
+                onClick={() => setNavOpen(false)}
+              >
+                {label}
+              </ScrollLink>
+            ))}
+          </div>
+        )}
       </header>
 
-      {/* Hero Section */}
-  <section className="flex flex-col items-center text-center py-24 px-6 bg-linear-to-b from-green-50 to-transparent dark:from-green-950">
-        <h1 className="text-4xl sm:text-5xl font-bold mb-4">Check Your Ancestral Citizenship Eligibility</h1>
-        <p className="text-lg max-w-2xl text-zinc-600 dark:text-zinc-300 mb-8">
-          Discover whether your family heritage could entitle you to European citizenship. Answer a few guided questions—no account needed.
-        </p>
-        <ScrollLink
-          to="eligibility"
-          smooth={true}
-          duration={500}
-          offset={-80}
-          className="bg-green-700 text-white px-8 py-3 rounded-xl text-lg font-semibold shadow-md hover:bg-green-800 transition-colors cursor-pointer"
-        >
-          Start Eligibility Check
-        </ScrollLink>
-      </section>
+      {/* ── HERO ───────────────────────────────────────────────── */}
+      <section className="relative overflow-hidden bg-zinc-950 text-white">
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle, #fff 1px, transparent 1px)`, backgroundSize: "32px 32px" }} aria-hidden />
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/60 via-zinc-950 to-zinc-950" aria-hidden />
 
-      {/* About Section */}
-      <section id="about" className="relative max-w-6xl mx-auto my-24 px-6">
-        <div className="relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-lg overflow-hidden min-h-[500px]">
-          {/* Full-height image on right */}
-          <div className="absolute top-0 right-0 h-full w-1/2 rounded-r-2xl hidden md:block overflow-hidden">
-            <img
-              src="/passport-photo.jpeg"
-              alt="Open passport with stamps"
-              className="h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black/20" />
+        <div className="relative max-w-5xl mx-auto px-6 py-28 sm:py-36 flex flex-col items-center text-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold uppercase tracking-wider mb-8">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+            Free
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
+            Private
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
+            No signup required
           </div>
 
-          <div className="relative z-10 md:w-1/2 p-8 sm:p-12">
-            <h2 className="text-3xl font-bold mb-6 text-center md:text-left">About Heritage Passport Finder</h2>
-            <hr className="h-[3px] bg-green-700 dark:bg-zinc-700 border-0 rounded mb-6 w-2/3" />
-            <p className="text-lg text-zinc-700 dark:text-zinc-300 leading-relaxed mb-6">
-              Heritage Passport Finder is a free, educational tool designed to help people with European ancestry understand if they may qualify for <strong>citizenship by descent</strong>. Many countries allow descendants of former citizens to reclaim nationality based on family lineage — but the rules vary widely, and the process can be confusing.
-            </p>
-            <p className="text-lg text-zinc-700 dark:text-zinc-300 leading-relaxed mb-6">
-              Our platform simplifies the first step by offering an <strong>interactive questionnaire</strong> built on verified legal pathways for countries such as Italy, Ireland, Germany, Hungary, and more. It is <em>not</em> a government site and does not collect personal data — your answers stay on your device until you choose to restart or clear them.
-            </p>
-            <p className="text-lg text-zinc-700 dark:text-zinc-300 leading-relaxed">
-              The goal is to make citizenship research accessible and transparent for everyone — whether you’re reconnecting with your heritage, exploring family migration history, or considering a future in Europe.
-            </p>
+          <h1 className="text-4xl sm:text-6xl font-bold leading-[1.1] mb-6 tracking-tight">
+            Do you qualify for{" "}
+            <span className="text-emerald-400">European</span>
+            <br />citizenship by descent?
+          </h1>
+          <p className="text-lg sm:text-xl text-zinc-400 max-w-2xl mb-10 leading-relaxed">
+            Answer a few guided questions about your ancestry and find out if you may be entitled to a second passport through your family heritage.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3 mb-16">
+            <ScrollLink
+              to="eligibility" smooth offset={-80} duration={400}
+              className="px-8 py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-base transition-colors cursor-pointer shadow-lg shadow-emerald-500/20"
+            >
+              Check My Eligibility →
+            </ScrollLink>
+            <ScrollLink
+              to="about" smooth offset={-80} duration={400}
+              className="px-8 py-4 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold text-base border border-white/10 transition-colors cursor-pointer"
+            >
+              Learn How It Works
+            </ScrollLink>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3 text-sm text-zinc-400">
+            {[
+              { flag: "🇮🇹", name: "Italy" }, { flag: "🇮🇪", name: "Ireland" },
+              { flag: "🇩🇪", name: "Germany" }, { flag: "🇵🇱", name: "Poland" },
+              { flag: "🇬🇷", name: "Greece" }, { flag: "🇪🇸", name: "Spain" },
+              { flag: "🇵🇹", name: "Portugal" }, { flag: "🇱🇹", name: "Lithuania" },
+              { flag: "🇭🇺", name: "Hungary" }, { flag: "🇪🇪", name: "Estonia" },
+              { flag: "🇱🇻", name: "Latvia" }, { flag: "🇨🇿", name: "Czech Rep." },
+              { flag: "🇸🇰", name: "Slovakia" }, { flag: "🇱🇺", name: "Luxembourg" },
+            ].map(({ flag, name }) => (
+              <span key={name} className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10">
+                <span>{flag}</span>
+                <span>{name}</span>
+              </span>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* === Eligibility Section (Redesigned) === */}
-      <section
-        id="eligibility"
-        className="relative mx-auto my-24 px-6 max-w-5xl"
-        aria-labelledby="eligibility-title"
-      >
-        {/* Decorative gradient ring */}
-        <div
-          className="absolute inset-0 -z-10 blur-3xl opacity-30 pointer-events-none"
-          aria-hidden="true"
-          style={{
-            background:
-              "radial-gradient(60% 60% at 50% 0%, rgba(34,197,94,0.15), rgba(34,197,94,0) 60%), radial-gradient(50% 60% at 80% 30%, rgba(21,128,61,0.12), rgba(21,128,61,0) 60%)",
-          }}
-        />
 
-        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-xl overflow-hidden">
-          {/* Header Strip */}
-          <div className="bg-linear-to-r from-green-700 to-green-600 text-white px-6 sm:px-10 py-4">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/15">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="-mt-px">
-                  <path d="M12 3v18M3 12h18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-                {/* <img src="/passport-logo-icon.svg" alt="Passport Icon" className="w-18 rounded-full" /> */}
-              </span>
-              <h2 id="eligibility-title" className="text-2xl sm:text-3xl font-bold tracking-tight">
-                Eligibility Checker
-              </h2>
-            </div>
-            <p className="mt-2 text-white/90 text-sm sm:text-base">
-              Choose a country and your link to an ancestor. We’ll show only the questions you need.
-            </p>
+      {/* ── HOW IT WORKS / ABOUT ────────────────────────────────── */}
+      <section id="about" className="bg-zinc-50 dark:bg-zinc-900 border-y border-zinc-100 dark:border-zinc-800">
+        <div className="max-w-5xl mx-auto px-6 py-20">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-bold mb-3">How it works</h2>
+            <p className="text-zinc-500 dark:text-zinc-400 max-w-xl mx-auto">Three simple steps to find out if your family history could entitle you to a European passport.</p>
+          </div>
+          <div className="grid sm:grid-cols-3 gap-8 mb-16">
+            {[
+              {
+                step: "01",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                  </svg>
+                ),
+                title: "Choose a country",
+                desc: "Select which European country you want to explore and which ancestor you are claiming through.",
+              },
+              {
+                step: "02",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25z" />
+                  </svg>
+                ),
+                title: "Answer questions",
+                desc: "We show only the questions relevant to your situation — no irrelevant forms, no personal data collected.",
+              },
+              {
+                step: "03",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ),
+                title: "Get your result",
+                desc: "See whether you likely qualify and what documents you will need to start the process.",
+              },
+            ].map(({ step, icon, title, desc }) => (
+              <div key={step} className="flex flex-col items-start gap-4 p-6 rounded-2xl bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 shadow-sm">
+                <div className="flex items-center gap-3 w-full">
+                  <div className="w-11 h-11 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center flex-shrink-0">
+                    {icon}
+                  </div>
+                  <span className="text-xs font-bold text-zinc-200 dark:text-zinc-700 ml-auto">{step}</span>
+                </div>
+                <h3 className="font-bold text-lg">{title}</h3>
+                <p className="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed">{desc}</p>
+              </div>
+            ))}
           </div>
 
-          {/* Form body */}
-          <div className="p-6 sm:p-10">
-            {/* Progress hint */}
-            <div className="mb-6 flex items-center gap-3 text-sm">
-              <span className="inline-flex h-2 w-2 rounded-full bg-green-600"></span>
-              <span className="text-zinc-600 dark:text-zinc-300">Step 1 of 2 · Select country & ancestor</span>
-            </div>
-
-            {/* Inputs row */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_1fr_auto]">
-              {/* Country select */}
-              <label className="sr-only" htmlFor="country">Country to check</label>
-              <select
-                id="country"
-                name="country"
-                value={form.country}
-                onChange={handleChange}
-                className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-green-600"
-              >
-                <option value="">Country to check for eligibility</option>
-                <option>Italy</option>
-                <option>Ireland</option>
-                <option>Germany</option>
-                <option>Poland</option>
-                <option>Greece</option>
-                <option>Spain</option>
-                <option>Portugal</option>
-                <option>Lithuania</option>
-                <option>Hungary</option>
-              </select>
-
-              {/* Ancestor select */}
-              <label className="sr-only" htmlFor="ancestor">Ancestor link</label>
-              <select
-                id="ancestor"
-                name="ancestor"
-                value={form.ancestor}
-                onChange={handleChange}
-                className="w-full rounded-xl border border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-green-600"
-              >
-                <option value="">Which ancestor are you claiming through?</option>
-                <option value="parent">Parent</option>
-                <option value="grandparent">Grandparent</option>
-                <option value="great-grandparent">Great-grandparent</option>
-                <option value="great-great-grandparent">Great-great-grandparent</option>
-              </select>
-
-              {/* Continue button */}
-              <button
-                type="button"
-                onClick={() => {
-                  const el = document.getElementById("form");
-                  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
-                disabled={!form.country || !form.ancestor}
-                className={`rounded-xl px-6 py-3 font-semibold shadow transition
-                  ${form.country && form.ancestor
-                    ? "bg-green-700 text-white hover:bg-green-800"
-                    : "bg-zinc-300 text-zinc-500 cursor-not-allowed"}`}
-              >
-                Continue
-              </button>
-            </div>
-
-            {/* Helper strip */}
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                We’ll never submit an application—this just estimates eligibility based on your answers.
+          <div className="grid md:grid-cols-2 gap-10 items-center">
+            <div>
+              <h3 className="text-2xl font-bold mb-4">About Heritage Passport Finder</h3>
+              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
+                Heritage Passport Finder is a free, educational tool that helps people with European ancestry understand whether they may qualify for <strong className="text-zinc-900 dark:text-zinc-200">citizenship by descent</strong>. Many European countries allow descendants of former citizens to reclaim nationality — but the rules vary widely and the process can be confusing.
               </p>
-              <div className="flex flex-wrap gap-2">
-                {["Italy","Ireland","Germany","Hungary","Poland","Spain","Portugal","Lithuania","Greece"].map((c) => (
-                  <span key={c} className="text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 px-3 py-1 rounded-full border border-zinc-200 dark:border-zinc-700">
-                    {c}
-                  </span>
-                ))}
+              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                This is <em>not</em> a government site and does not collect personal data. Your answers stay on your device. Always consult an immigration attorney for your specific situation.
+              </p>
+            </div>
+            <div className="relative rounded-2xl overflow-hidden h-64 md:h-72">
+              <Image
+                src="/passport-photo.jpeg"
+                alt="Open passport with travel stamps"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── ELIGIBILITY CHECKER ─────────────────────────────────── */}
+      <section id="eligibility" className="max-w-4xl mx-auto px-6 py-20">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold mb-3">Eligibility Checker</h2>
+          <p className="text-zinc-500 dark:text-zinc-400">Select a country and answer a few questions. Takes under 2 minutes.</p>
+        </div>
+
+        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 shadow-sm overflow-hidden">
+          {/* Step indicator */}
+          <div className="px-6 sm:px-8 pt-6">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-2">
+                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${form.country && form.ancestor ? "bg-emerald-500 text-white" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400"}`}>1</span>
+                <span className={`text-sm font-medium ${form.country && form.ancestor ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-400"}`}>Select</span>
+              </div>
+              <div className="flex-1 h-px bg-zinc-100 dark:bg-zinc-800" />
+              <div className="flex items-center gap-2">
+                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${submitted ? "bg-emerald-500 text-white" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400"}`}>2</span>
+                <span className={`text-sm font-medium ${submitted ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-400"}`}>Answer</span>
+              </div>
+              <div className="flex-1 h-px bg-zinc-100 dark:bg-zinc-800" />
+              <div className="flex items-center gap-2">
+                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${submitted && result ? "bg-emerald-500 text-white" : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400"}`}>3</span>
+                <span className={`text-sm font-medium ${submitted && result ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-400"}`}>Result</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="px-6 sm:px-8 pb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+              <div>
+                <label className="block text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1.5" htmlFor="country">Country</label>
+                <select
+                  id="country" name="country" value={form.country} onChange={handleChange}
+                  className="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400"
+                >
+                  <option value="">Select a country...</option>
+                  <option>Italy</option>
+                  <option>Ireland</option>
+                  <option>Germany</option>
+                  <option>Poland</option>
+                  <option>Greece</option>
+                  <option>Spain</option>
+                  <option>Portugal</option>
+                  <option>Lithuania</option>
+                  <option>Hungary</option>
+                  <option>Estonia</option>
+                  <option>Latvia</option>
+                  <option value="CzechRepublic">Czech Republic</option>
+                  <option>Slovakia</option>
+                  <option>Luxembourg</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide mb-1.5" htmlFor="ancestor">Ancestor</label>
+                <select
+                  id="ancestor" name="ancestor" value={form.ancestor} onChange={handleChange}
+                  className="w-full rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:focus:ring-emerald-400"
+                >
+                  <option value="">Select ancestor...</option>
+                  <option value="parent">Parent</option>
+                  <option value="grandparent">Grandparent</option>
+                  <option value="great-grandparent">Great-grandparent</option>
+                  <option value="great-great-grandparent">Great-great-grandparent</option>
+                </select>
               </div>
             </div>
 
-            {/* Divider */}
-            <div className="my-8 h-px bg-linear-to-r from-transparent via-zinc-200 dark:via-zinc-800 to-transparent" />
-
-            {/* Step 2 header */}
-            {form.country && form.ancestor && (
-              <div className="mb-4 flex items-center gap-3 text-sm">
-                <span className="inline-flex h-2 w-2 rounded-full bg-green-600"></span>
-                <span className="text-zinc-600 dark:text-zinc-300">Step 2 of 2 · Answer the relevant questions</span>
-              </div>
-            )}
-
-            {/* Dynamic questions + submit */}
-            <form id="form" onSubmit={handleSubmit} className="w-full">
-              {form.country && form.ancestor && (
-                <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800 p-6 sm:p-8 grid grid-cols-1 gap-6">
-                  {visibleQuestions(form.country).map((q: Q) => (
-                    <div className="flex flex-col gap-2" key={q.key}>
-                      <span className="text-zinc-800 dark:text-zinc-100 text-base sm:text-lg font-semibold">
+            {form.country && form.ancestor && !submitted && (
+              <form id="form" onSubmit={handleSubmit} className="mt-6">
+                <div className="flex flex-col gap-5">
+                  {visibleQuestions(form.country).map((q: Q, idx: number) => (
+                    <div key={q.key} className="rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 p-5">
+                      <p className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 mb-3 leading-relaxed">
+                        <span className="text-emerald-500 mr-2 font-bold">Q{idx + 1}.</span>
                         {q.label}
-                      </span>
-
+                      </p>
                       {q.type === "radio" && (
-                        <div className="flex gap-3 flex-wrap">
+                        <div className="flex flex-wrap gap-2">
                           {q.options.map((opt) => (
-                            <label key={opt.value}>
+                            <label key={opt.value} className="cursor-pointer">
                               <input
-                                type="radio"
-                                name={q.key}
-                                value={opt.value}
+                                type="radio" name={q.key} value={opt.value}
                                 checked={form[q.key] === opt.value}
                                 onChange={handleChange}
                                 className="peer sr-only"
                               />
-                              <span className="block w-[260px] px-4 py-2 text-center rounded-lg border border-zinc-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-800 dark:text-zinc-200 font-medium cursor-pointer transition-colors peer-checked:bg-green-700 peer-checked:text-white peer-checked:border-green-700">
+                              <span className="block px-4 py-2 rounded-lg border text-sm font-medium transition-all border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 peer-checked:border-emerald-500 peer-checked:bg-emerald-500 peer-checked:text-white">
                                 {opt.label}
                               </span>
                             </label>
                           ))}
                         </div>
                       )}
-
                       {q.type === "select" && (
                         <select
-                          name={q.key}
-                          value={form[q.key] || ""}
+                          name={q.key} value={form[q.key] || ""}
                           onChange={handleChange}
-                          className="w-full rounded-lg border border-zinc-300 dark:border-zinc-700 px-3 py-2 bg-white dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-green-600"
+                          className="w-full rounded-lg border border-zinc-200 dark:border-zinc-700 px-3 py-2 text-sm bg-white dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         >
                           <option value="">Select...</option>
                           {q.options.map((opt) => (
@@ -942,131 +1221,267 @@ export default function HeritagePassportLanding() {
                       )}
                     </div>
                   ))}
-
-                  <button
-                    type="submit"
-                    className={`mt-2 w-full rounded-lg font-semibold py-3 text-lg shadow transition-colors ${
-                      isFormComplete ? "bg-green-700 hover:bg-green-800 text-white" : "bg-zinc-400 text-zinc-200 cursor-not-allowed"
-                    }`}
-                    disabled={!isFormComplete}
-                  >
-                    CHECK ELIGIBILITY
-                  </button>
-                </div>
-              )}
-            </form>
-
-            {/* RESULT */}
-            {submitted && result && (
-              <div className="mt-8">
-                <div className={`p-6 rounded-xl border-2 ${
-                  result.toLowerCase().includes("eligible")
-                    ? "border-green-600 bg-green-50 dark:bg-green-900/20"
-                    : "border-red-600 bg-red-50 dark:bg-red-900/20"
-                }`}>
-                  <p className="text-lg">{result}</p>
                 </div>
                 <button
-                  type="button"
-                  onClick={handleBack}
-                  className="mt-4 px-6 py-2 rounded-lg bg-green-700 text-white font-semibold hover:bg-green-800 transition-colors"
+                  type="submit"
+                  disabled={!isFormComplete}
+                  className={`mt-6 w-full py-4 rounded-xl font-bold text-base transition-all ${
+                    isFormComplete
+                      ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20 cursor-pointer"
+                      : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400 cursor-not-allowed"
+                  }`}
                 >
-                  Check another path
+                  Check My Eligibility
+                </button>
+              </form>
+            )}
+
+            {submitted && result && (
+              <div className="mt-6">
+                <div className={`rounded-2xl p-6 border-2 ${
+                  result.toLowerCase().includes("eligible") && !result.toLowerCase().includes("not eligible")
+                    ? "border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20"
+                    : "border-red-300 dark:border-red-700 bg-red-50 dark:bg-red-900/20"
+                }`}>
+                  <div className="flex items-start gap-3">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      result.toLowerCase().includes("eligible") && !result.toLowerCase().includes("not eligible")
+                        ? "bg-emerald-500" : "bg-red-500"
+                    }`}>
+                      {result.toLowerCase().includes("eligible") && !result.toLowerCase().includes("not eligible") ? (
+                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      ) : (
+                        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-zinc-900 dark:text-zinc-100 leading-relaxed">{result}</p>
+                      <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">This is an estimate only. Consult an immigration attorney and official consulate sources for your specific case.</p>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={handleBack}
+                  className="mt-4 w-full py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 text-sm font-semibold text-zinc-600 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
+                >
+                  &#8592; Check Another Country
                 </button>
               </div>
+            )}
+
+            {!submitted && (
+              <p className="mt-4 text-xs text-zinc-400 dark:text-zinc-500 text-center">
+                &#128274; Your answers are never stored or transmitted. Everything stays in your browser.
+              </p>
             )}
           </div>
         </div>
       </section>
 
-      {/* Resources Section */}
-      <section id="resources" className="max-w-6xl mx-auto my-24 px-6">
-        <h2 className="text-3xl font-bold text-center mb-8">Resources</h2>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[
-            { code: "IT", name: "Italy", desc: "Official Consulate Directory & 1948 Rule Info", href: "https://www.esteri.it/" },
-            { code: "IE", name: "Ireland", desc: "Department of Foreign Affairs — Citizenship by Descent", href: "https://www.dfa.ie/" },
-            { code: "DE", name: "Germany", desc: "Federal Office — Citizenship by Descent & Declaration", href: "https://www.bundesverwaltungsamt.de/" },
-            { code: "PL", name: "Poland", desc: "Polish Citizenship Confirmation & Consulate Info", href: "https://www.gov.pl/web/dyplomacja" },
-            { code: "GR", name: "Greece", desc: "Greek Ministry of Foreign Affairs — Citizenship", href: "https://www.mfa.gr/" },
-            { code: "ES", name: "Spain", desc: "Spanish Ministry — Citizenship by Descent & DML", href: "https://www.exteriores.gob.es/" },
-            { code: "PT", name: "Portugal", desc: "Portuguese Nationality Portal — Descent & Grandchild Route", href: "https://justica.gov.pt/Servicos/Nacionalidade" },
-            { code: "LT", name: "Lithuania", desc: "Lithuanian Migration Dept. — Citizenship Restoration", href: "https://migracija.lrv.lt/" },
-            { code: "HU", name: "Hungary", desc: "Hungarian Consular Service — Simplified Naturalization", href: "https://konzuliszolgalat.kormany.hu/" },
-          ].map((item) => (
-            <ResourceCard key={item.code} item={item} />
-          ))}
-        </div>
-      </section>
-
-      {/* Research Tips Section */}
-  <section id="tips" className="relative max-w-6xl mx-auto mb-10 px-6">
-        <div className="relative bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-lg overflow-hidden min-h-[500px]">
-          {/* Full-height right image */}
-          <img
-            src="/maps-wall.jpeg"
-            alt="Wall of vintage maps and genealogy documents"
-            className="absolute top-0 right-0 h-full w-1/2 object-cover rounded-r-2xl hidden md:block"
-          />
-
-          <div className="relative z-10 md:w-1/2 p-10 sm:p-14">
-            <h2 className="text-3xl font-bold mb-6 text-center md:text-left text-green-800 dark:text-green-400">
-              How to Research Your Family Citizenship Path
-            </h2>
-            <hr className="h-[3px] bg-green-700 dark:bg-zinc-700 border-0 rounded mb-6 w-2/3" />
-            <ul className="space-y-6 text-lg text-zinc-700 dark:text-zinc-300 leading-relaxed">
-              <li>
-                <strong>1. Start with what you know:</strong> Gather full names, birthplaces, and dates for your parents, grandparents, and great-grandparents. Family records, old letters, or photos can help fill in gaps.
-              </li>
-              <li>
-                <strong>2. Collect civil records:</strong> Look for birth, marriage, and death certificates in your home country first. Then search national or church archives for those born abroad.
-              </li>
-              <li>
-                <strong>3. Trace immigration:</strong> Search passenger lists, Ellis Island or ship manifests, and census data to see when ancestors arrived in their new country.
-              </li>
-              <li>
-                <strong>4. Find naturalization details:</strong> Check national archives or local court records for naturalization certificates — the date they became citizens elsewhere can affect your eligibility.
-              </li>
-              <li>
-                <strong>5. Confirm citizenship retention:</strong> For European ancestors, determine if they ever lost citizenship through foreign service, marriage, or renunciation.
-              </li>
-              <li>
-                <strong>6. Organize your lineage chain:</strong> Each link between you and your ancestor must be proven with civil documents — from birth to marriage to your own record.
-              </li>
-              <li>
-                <strong>7. Translate and legalize:</strong> Most countries require certified translations and apostilles on foreign documents before submission.
-              </li>
-            </ul>
+      {/* ── COUNTRY GUIDES ─────────────────────────────────────── */}
+      <section id="resources" className="bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-3">Country Guides</h2>
+            <p className="text-zinc-500 dark:text-zinc-400">In-depth eligibility guides and official resources for each country.</p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { flag: "🇮🇹", code: "IT", name: "Italy", slug: "italy-citizenship-by-descent", desc: "Jure sanguinis — no generational limit" },
+              { flag: "🇮🇪", code: "IE", name: "Ireland", slug: "ireland-citizenship-by-descent", desc: "Foreign Births Register — grandparent route" },
+              { flag: "🇩🇪", code: "DE", name: "Germany", slug: "germany-citizenship-by-descent", desc: "Art. 116 restoration & declaration remedy" },
+              { flag: "🇵🇱", code: "PL", name: "Poland", slug: "poland-citizenship-by-descent", desc: "Citizenship confirmation via voivode" },
+              { flag: "🇬🇷", code: "GR", name: "Greece", slug: "greece-citizenship-by-descent", desc: "Dimotologio registration & omogenis path" },
+              { flag: "🇪🇸", code: "ES", name: "Spain", slug: "spain-citizenship-by-descent", desc: "Democratic Memory Law — grandchildren of exiles" },
+              { flag: "🇵🇹", code: "PT", name: "Portugal", slug: "portugal-citizenship-by-descent", desc: "Grandchild route with A2 Portuguese" },
+              { flag: "🇱🇹", code: "LT", name: "Lithuania", slug: "lithuania-citizenship-by-descent", desc: "Citizenship restoration for pre-1940 descendants" },
+              { flag: "🇭🇺", code: "HU", name: "Hungary", slug: "hungary-citizenship-by-descent", desc: "Simplified naturalization — no generational limit" },
+              { flag: "🇪🇪", code: "EE", name: "Estonia", slug: "estonia-citizenship-by-descent", desc: "Pre-1940 citizenship restoration route" },
+              { flag: "🇱🇻", code: "LV", name: "Latvia", slug: "latvia-citizenship-by-descent", desc: "People's Register descendants — June 17, 1940" },
+              { flag: "🇨🇿", code: "CZ", name: "Czech Republic", slug: "czech-republic-citizenship-by-descent", desc: "Descent & declaration route for expellees" },
+              { flag: "🇸🇰", code: "SK", name: "Slovakia", slug: "slovakia-citizenship-by-descent", desc: "Czechoslovak heritage via Slovak-born ancestor" },
+              { flag: "🇱🇺", code: "LU", name: "Luxembourg", slug: "luxembourg-citizenship-by-descent", desc: "Reacquisition route — multiple citizenship allowed" },
+            ].map((item) => (
+              <a
+                key={item.code}
+                href={`/${item.slug}`}
+                className="group flex items-start gap-4 p-5 rounded-2xl bg-white dark:bg-zinc-800 border border-zinc-100 dark:border-zinc-700 hover:border-emerald-300 dark:hover:border-emerald-700 hover:shadow-md transition-all"
+              >
+                <span className="text-3xl flex-shrink-0">{item.flag}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="font-bold text-zinc-900 dark:text-zinc-100">{item.name}</h3>
+                    <svg className="w-4 h-4 text-zinc-300 dark:text-zinc-600 group-hover:text-emerald-500 transition-colors flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{item.desc}</p>
+                  <span className="mt-2 inline-block text-xs text-emerald-600 dark:text-emerald-400 font-medium">Read full guide</span>
+                </div>
+              </a>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      {/* Google AdSense Ad */}
-      <div className="flex justify-center my-8">
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-1772060773365341"
-          data-ad-slot="7043924687"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        ></ins>
-      </div>
-  <footer className="mt-10 border-t border-zinc-200 dark:border-zinc-700 py-8 text-center text-sm text-zinc-500">
-        © 2025 Heritage Passport Finder · Built for educational and informational use only.
+      {/* ── RESEARCH GUIDE ──────────────────────────────────────── */}
+      <section id="ancestry-guide" className="max-w-4xl mx-auto px-6 py-20">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-3">Genealogy Research Guide</h2>
+          <p className="text-zinc-500 dark:text-zinc-400">How to use Ancestry.com and other resources to build your document chain.</p>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-4">
+          {[
+            { num: "01", title: "Create an Ancestry account", body: "Sign up at Ancestry.com and start a family tree with everything you already know about names, birthplaces, and dates for parents, grandparents, and great-grandparents." },
+            { num: "02", title: "Search vital records", body: "Use Ancestry databases to find birth, marriage, and death certificates. These are essential for proving your lineage and eligibility for citizenship by descent." },
+            { num: "03", title: "Explore immigration records", body: "Look for ship manifests, immigration documents, and naturalization records. These establish when ancestors moved and their citizenship status at the time." },
+            { num: "04", title: "Review census data", body: "Census records provide clues about family relationships, places of birth, and citizenship changes over time, often filling in gaps where vital records are missing." },
+            { num: "05", title: "Collaborate and verify", body: "Connect with distant relatives who may have already done research. Always cross-reference against official government sources before relying on any record." },
+            { num: "06", title: "Organize your chain", body: "Save certified copies and organize documents by generation and type (birth, marriage, naturalization) to build a clear, provable chain from ancestor to you." },
+            { num: "07", title: "Translate and apostille", body: "Most countries require certified translations and apostilles on foreign documents. Plan for this cost and time when preparing your application." },
+            { num: "08", title: "Assess and apply", body: "Once you have a complete chain, consult the consulate for application instructions. Consider a citizenship attorney for complex cases or large families." },
+          ].map(({ num, title, body }) => (
+            <div key={num} className="flex gap-4 p-5 rounded-2xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900">
+              <span className="text-2xl font-black text-zinc-100 dark:text-zinc-800 flex-shrink-0 w-8">{num}</span>
+              <div>
+                <h3 className="font-semibold text-zinc-900 dark:text-zinc-100 mb-1">{title}</h3>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">{body}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── RESEARCH TIPS ───────────────────────────────────────── */}
+      <section id="tips" className="bg-zinc-50 dark:bg-zinc-900 border-t border-zinc-100 dark:border-zinc-800">
+        <div className="max-w-4xl mx-auto px-6 py-20">
+          <div className="grid md:grid-cols-2 gap-10 items-start">
+            <div>
+              <h2 className="text-3xl font-bold mb-3">Research Tips</h2>
+              <p className="text-zinc-500 dark:text-zinc-400 mb-8">Key steps to trace your family citizenship path.</p>
+              <div className="flex flex-col gap-5">
+                {[
+                  { title: "Start with what you know", body: "Gather full names, birthplaces, and dates for parents and grandparents. Old letters, photos, and family records can fill in gaps." },
+                  { title: "Collect civil records first", body: "Find birth, marriage, and death certificates in your home country, then search national or church archives for ancestors born abroad." },
+                  { title: "Trace immigration", body: "Search passenger lists, Ellis Island manifests, and census data to see when and where your ancestors moved." },
+                  { title: "Find naturalization dates", body: "The exact date an ancestor naturalized abroad can make or break your eligibility claim. Check national archives and local court records." },
+                  { title: "Confirm citizenship retention", body: "Determine if European ancestors lost citizenship through foreign service, marriage, or renunciation — this affects the chain." },
+                  { title: "Organize your lineage chain", body: "Each link from your ancestor to you must be evidenced with a civil document. Do not assume — prove it." },
+                  { title: "Translate and legalize", body: "Budget for certified translations and apostilles. Most countries require these before accepting foreign documents." },
+                ].map(({ title, body }) => (
+                  <div key={title} className="flex gap-3">
+                    <div className="w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{title}</p>
+                      <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-0.5">{body}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="sticky top-24">
+              <div className="relative rounded-2xl overflow-hidden h-72 mb-4">
+                <Image
+                  src="/maps-wall.jpeg"
+                  alt="Vintage maps and genealogy documents"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
+              <div className="rounded-2xl bg-emerald-600 dark:bg-emerald-700 p-6 text-white">
+                <h3 className="font-bold text-lg mb-2">Ready to check your eligibility?</h3>
+                <p className="text-emerald-100 text-sm mb-4">Takes under 2 minutes. No signup required.</p>
+                <ScrollLink
+                  to="eligibility" smooth offset={-80} duration={400}
+                  className="block text-center bg-white text-emerald-700 font-bold px-6 py-3 rounded-xl hover:bg-emerald-50 transition-colors cursor-pointer text-sm"
+                >
+                  Start the Checker
+                </ScrollLink>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── ADSENSE ─────────────────────────────────────────────── */}
+      {process.env.NODE_ENV === "production" && (
+        <div className="max-w-4xl mx-auto px-6 py-8">
+          <ins
+            className="adsbygoogle"
+            style={{ display: "block" }}
+            data-ad-client="ca-pub-1772060773365341"
+            data-ad-slot="7043924687"
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          />
+        </div>
+      )}
+
+      {/* ── FOOTER ──────────────────────────────────────────────── */}
+      <footer className="border-t border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+        <div className="max-w-6xl mx-auto px-6 py-12">
+          <div className="flex flex-col md:flex-row justify-between gap-8">
+            <div className="max-w-xs">
+              <div className="flex items-center gap-2 mb-3">
+                <Image src="/logo.svg" alt="Heritage Passport Finder" width={28} height={28} />
+                <span className="font-bold text-zinc-900 dark:text-zinc-100">Heritage Passport Finder</span>
+              </div>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                A free educational tool to help people explore their European citizenship by descent eligibility.
+              </p>
+            </div>
+            <div className="flex gap-12 text-sm">
+              <div>
+                <p className="font-semibold text-zinc-900 dark:text-zinc-100 mb-3">Countries</p>
+                <ul className="flex flex-col gap-2 text-zinc-500 dark:text-zinc-400">
+                  <li><a href="/italy-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Italy</a></li>
+                  <li><a href="/ireland-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Ireland</a></li>
+                  <li><a href="/germany-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Germany</a></li>
+                  <li><a href="/poland-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Poland</a></li>
+                  <li><a href="/greece-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Greece</a></li>
+                  <li><a href="/spain-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Spain</a></li>
+                  <li><a href="/portugal-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Portugal</a></li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-semibold text-zinc-900 dark:text-zinc-100 mb-3">More</p>
+                <ul className="flex flex-col gap-2 text-zinc-500 dark:text-zinc-400">
+                  <li><a href="/hungary-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Hungary</a></li>
+                  <li><a href="/lithuania-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Lithuania</a></li>
+                  <li><a href="/estonia-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Estonia</a></li>
+                  <li><a href="/latvia-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Latvia</a></li>
+                  <li><a href="/czech-republic-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Czech Republic</a></li>
+                  <li><a href="/slovakia-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Slovakia</a></li>
+                  <li><a href="/luxembourg-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Luxembourg</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className="mt-10 pt-6 border-t border-zinc-100 dark:border-zinc-800 flex flex-col sm:flex-row justify-between gap-2 text-xs text-zinc-400">
+            <p>&#169; {new Date().getFullYear()} Heritage Passport Finder &#183; Educational and informational use only.</p>
+            <div className="flex gap-4">
+              <a href="/citizenship-by-descent-requirements-by-country" className="hover:text-emerald-600 transition-colors">Compare Countries</a>
+              <a href="/apostille-guide" className="hover:text-emerald-600 transition-colors">Apostille Guide</a>
+              <a href="/documents-checklist" className="hover:text-emerald-600 transition-colors">Document Checklist</a>
+              <a href="/about" className="hover:text-emerald-600 transition-colors">About</a>
+              <a href="/privacy-policy" className="hover:text-emerald-600 transition-colors">Privacy Policy</a>
+              <p>Not a government service &#183; Not legal advice</p>
+            </div>
+          </div>
+        </div>
       </footer>
-      {/* Place FAQPage JSON-LD at the end of the main div for SEO */}
-      <Script
-        id="faq-jsonld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-      />
-      <Script
-        id="breadcrumb-jsonld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+
+      <Script id="faq-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <Script id="breadcrumb-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <Script id="webapp-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }} />
+      <Script id="howto-jsonld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }} />
     </div>
   );
 }
