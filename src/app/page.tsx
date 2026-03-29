@@ -1412,7 +1412,7 @@ export default function HeritagePassportLanding() {
 
       {/* ── ADSENSE ─────────────────────────────────────────────── */}
       {process.env.NODE_ENV === "production" && (
-        <div className="max-w-4xl mx-auto px-6 py-8">
+        <div className="max-w-4xl mx-auto px-6">
           <ins
             className="adsbygoogle"
             style={{ display: "block" }}
@@ -1425,55 +1425,90 @@ export default function HeritagePassportLanding() {
       )}
 
       {/* ── FOOTER ──────────────────────────────────────────────── */}
-      <footer className="border-t border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-        <div className="max-w-6xl mx-auto px-6 py-12">
-          <div className="flex flex-col md:flex-row justify-between gap-8">
-            <div className="max-w-xs">
-              <div className="flex items-center gap-2 mb-3">
+      <footer className="bg-zinc-950 text-white">
+        {/* Main grid */}
+        <div className="max-w-6xl mx-auto px-6 pt-16 pb-10">
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-10">
+
+            {/* Brand */}
+            <div className="sm:col-span-2 md:col-span-1">
+              <div className="flex items-center gap-2 mb-4">
                 <Image src="/logo.svg" alt="Heritage Passport Finder" width={28} height={28} />
-                <span className="font-bold text-zinc-900 dark:text-zinc-100">Heritage Passport Finder</span>
+                <span className="font-bold text-white text-sm">Heritage Passport Finder</span>
               </div>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-                A free educational tool to help people explore their European citizenship by descent eligibility.
+              <p className="text-zinc-400 text-sm leading-relaxed mb-6">
+                Free educational guidance for people exploring European citizenship by descent. Covers 14 EU countries.
               </p>
+              <ScrollLink
+                to="eligibility" smooth offset={-80} duration={400}
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-semibold transition-colors cursor-pointer"
+              >
+                Check Eligibility →
+              </ScrollLink>
             </div>
-            <div className="flex gap-12 text-sm">
-              <div>
-                <p className="font-semibold text-zinc-900 dark:text-zinc-100 mb-3">Countries</p>
-                <ul className="flex flex-col gap-2 text-zinc-500 dark:text-zinc-400">
-                  <li><a href="/italy-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Italy</a></li>
-                  <li><a href="/ireland-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Ireland</a></li>
-                  <li><a href="/germany-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Germany</a></li>
-                  <li><a href="/poland-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Poland</a></li>
-                  <li><a href="/greece-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Greece</a></li>
-                  <li><a href="/spain-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Spain</a></li>
-                  <li><a href="/portugal-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Portugal</a></li>
-                </ul>
-              </div>
-              <div>
-                <p className="font-semibold text-zinc-900 dark:text-zinc-100 mb-3">More</p>
-                <ul className="flex flex-col gap-2 text-zinc-500 dark:text-zinc-400">
-                  <li><a href="/hungary-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Hungary</a></li>
-                  <li><a href="/lithuania-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Lithuania</a></li>
-                  <li><a href="/estonia-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Estonia</a></li>
-                  <li><a href="/latvia-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Latvia</a></li>
-                  <li><a href="/czech-republic-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Czech Republic</a></li>
-                  <li><a href="/slovakia-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Slovakia</a></li>
-                  <li><a href="/luxembourg-citizenship-by-descent" className="hover:text-emerald-600 transition-colors">Luxembourg</a></li>
-                </ul>
-              </div>
+
+            {/* Countries */}
+            <div>
+              <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-4">Countries</p>
+              <ul className="space-y-2.5 text-sm text-zinc-400">
+                {[
+                  ["Italy", "/italy-citizenship-by-descent"],
+                  ["Ireland", "/ireland-citizenship-by-descent"],
+                  ["Germany", "/germany-citizenship-by-descent"],
+                  ["Poland", "/poland-citizenship-by-descent"],
+                  ["Greece", "/greece-citizenship-by-descent"],
+                  ["Spain", "/spain-citizenship-by-descent"],
+                  ["Portugal", "/portugal-citizenship-by-descent"],
+                ].map(([name, href]) => (
+                  <li key={name}><a href={href} className="hover:text-emerald-400 transition-colors">{name}</a></li>
+                ))}
+              </ul>
+            </div>
+
+            {/* More Countries */}
+            <div>
+              <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-4">More</p>
+              <ul className="space-y-2.5 text-sm text-zinc-400">
+                {[
+                  ["Hungary", "/hungary-citizenship-by-descent"],
+                  ["Lithuania", "/lithuania-citizenship-by-descent"],
+                  ["Estonia", "/estonia-citizenship-by-descent"],
+                  ["Latvia", "/latvia-citizenship-by-descent"],
+                  ["Czech Republic", "/czech-republic-citizenship-by-descent"],
+                  ["Slovakia", "/slovakia-citizenship-by-descent"],
+                  ["Luxembourg", "/luxembourg-citizenship-by-descent"],
+                ].map(([name, href]) => (
+                  <li key={name}><a href={href} className="hover:text-emerald-400 transition-colors">{name}</a></li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-4">Resources</p>
+              <ul className="space-y-2.5 text-sm text-zinc-400">
+                {[
+                  ["Compare Countries", "/citizenship-by-descent-requirements-by-country"],
+                  ["Apostille Guide", "/apostille-guide"],
+                  ["Document Checklist", "/documents-checklist"],
+                  ["Italy 1948 Rule", "/italy-1948-rule"],
+                  ["Ireland FBR", "/ireland-foreign-births-register"],
+                  ["German Article 116", "/german-article-116-citizenship"],
+                  ["About", "/about"],
+                  ["Privacy Policy", "/privacy-policy"],
+                ].map(([name, href]) => (
+                  <li key={name}><a href={href} className="hover:text-emerald-400 transition-colors">{name}</a></li>
+                ))}
+              </ul>
             </div>
           </div>
-          <div className="mt-10 pt-6 border-t border-zinc-100 dark:border-zinc-800 flex flex-col sm:flex-row justify-between gap-2 text-xs text-zinc-400">
+        </div>
+
+        {/* Bottom bar */}
+        <div className="border-t border-zinc-800">
+          <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs text-zinc-500">
             <p>&#169; {new Date().getFullYear()} Heritage Passport Finder &#183; Educational and informational use only.</p>
-            <div className="flex gap-4">
-              <a href="/citizenship-by-descent-requirements-by-country" className="hover:text-emerald-600 transition-colors">Compare Countries</a>
-              <a href="/apostille-guide" className="hover:text-emerald-600 transition-colors">Apostille Guide</a>
-              <a href="/documents-checklist" className="hover:text-emerald-600 transition-colors">Document Checklist</a>
-              <a href="/about" className="hover:text-emerald-600 transition-colors">About</a>
-              <a href="/privacy-policy" className="hover:text-emerald-600 transition-colors">Privacy Policy</a>
-              <p>Not a government service &#183; Not legal advice</p>
-            </div>
+            <p className="text-zinc-600">Not a government service &#183; Not legal advice</p>
           </div>
         </div>
       </footer>
