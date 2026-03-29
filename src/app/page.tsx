@@ -7,6 +7,7 @@ import Image from "next/image";
 type Q = {
   key: string;
   label: string;
+  hint?: string;
   type: "radio" | "select";
   options: { value: string; label: string }[];
   required?: boolean;
@@ -123,7 +124,7 @@ const webAppJsonLd = {
   "@type": "WebApplication",
   name: "Heritage Passport Finder — Citizenship by Descent Checker",
   url: "https://heritagepassportfinder.com",
-  description: "Free interactive tool to check whether you qualify for European citizenship by descent across 14 countries including Italy, Ireland, Germany, Poland, Spain, Portugal, Greece, Lithuania, Hungary, Estonia, Latvia, Czech Republic, Slovakia, and Luxembourg.",
+  description: "Free interactive tool to check whether you qualify for European citizenship by descent across 46 countries — including Italy, Ireland, Germany, Poland, Spain, Portugal, Greece, Lithuania, Hungary, Estonia, Latvia, Czech Republic, Slovakia, Luxembourg, France, Romania, Croatia, Bulgaria, and more.",
   applicationCategory: "UtilitiesApplication",
   operatingSystem: "Web",
   offers: {
@@ -185,18 +186,18 @@ export default function HeritagePassportLanding() {
   cz1: "", cz2: "", cz3: "", cz4: "",
   sk1: "", sk2: "",
   lu1: "", lu2: "", lu3: "",
-  fr1: "", fr2: "",
+  fr1: "", fr2: "", fr3: "",
   ro1: "", ro2: "", ro3: "",
   hr1: "", hr2: "",
-  bg1: "", bg2: "",
+  bg1: "", bg2: "", bg3: "",
   se1: "", se2: "", se3: "",
   dk1: "", dk2: "", dk3: "",
   fi1: "", fi2: "", fi3: "",
   nl1: "", nl2: "", nl3: "",
-  be1: "", be2: "",
-  si1: "", si2: "",
+  be1: "", be2: "", be3: "",
+  si1: "", si2: "", si3: "",
   at1: "", at2: "", at3: "",
-  cy1: "", cy2: "",
+  cy1: "", cy2: "", cy3: "",
   mt1: "", mt2: "", mt3: "",
   gb1: "", gb2: "", gb3: "",
   ua1: "", ua2: "",
@@ -209,12 +210,12 @@ export default function HeritagePassportLanding() {
   ba1: "", ba2: "", ba3: "",
   mk1: "", mk2: "",
   xk1: "", xk2: "",
-  md1: "", md2: "",
+  md1: "", md2: "", md3: "",
   ge1: "", ge2: "", ge3: "",
   am1: "", am2: "", am3: "",
-  by1: "", by2: "", by3: "",
+  by1: "", by2: "",
   sm1: "", sm2: "",
-  mc1: "", mc2: "", mc3: "",
+  mc1: "", mc2: "",
   li1: "", li2: "",
   ad1: "", ad2: "", ad3: ""
   });
@@ -242,18 +243,18 @@ export default function HeritagePassportLanding() {
       cz1: "", cz2: "", cz3: "", cz4: "",
       sk1: "", sk2: "",
       lu1: "", lu2: "", lu3: "",
-      fr1: "", fr2: "",
+      fr1: "", fr2: "", fr3: "",
       ro1: "", ro2: "", ro3: "",
       hr1: "", hr2: "",
-      bg1: "", bg2: "",
+      bg1: "", bg2: "", bg3: "",
       se1: "", se2: "", se3: "",
       dk1: "", dk2: "", dk3: "",
       fi1: "", fi2: "", fi3: "",
       nl1: "", nl2: "", nl3: "",
-      be1: "", be2: "",
-      si1: "", si2: "",
+      be1: "", be2: "", be3: "",
+      si1: "", si2: "", si3: "",
       at1: "", at2: "", at3: "",
-      cy1: "", cy2: "",
+      cy1: "", cy2: "", cy3: "",
       mt1: "", mt2: "", mt3: "",
       gb1: "", gb2: "", gb3: "",
       ua1: "", ua2: "",
@@ -266,12 +267,12 @@ export default function HeritagePassportLanding() {
       ba1: "", ba2: "", ba3: "",
       mk1: "", mk2: "",
       xk1: "", xk2: "",
-      md1: "", md2: "",
+      md1: "", md2: "", md3: "",
       ge1: "", ge2: "", ge3: "",
       am1: "", am2: "", am3: "",
-      by1: "", by2: "", by3: "",
+      by1: "", by2: "",
       sm1: "", sm2: "",
-      mc1: "", mc2: "", mc3: "",
+      mc1: "", mc2: "",
       li1: "", li2: "",
       ad1: "", ad2: "", ad3: ""
     });
@@ -360,7 +361,8 @@ export default function HeritagePassportLanding() {
       questions: [
         {
           key: "sk1",
-          label: "Do you have a parent, grandparent, or great-grandparent who was born in present-day Slovakia and held Czechoslovak citizenship?",
+          label: "Do you have a parent, grandparent, or great-grandparent who held Slovak or Czechoslovak citizenship (or was a Slovak national before 1993)?",
+          hint: "Slovak ancestry does not require that the ancestor was born in present-day Slovakia — a Slovak national could have lived anywhere. After the 1993 split of Czechoslovakia, Slovak citizens automatically became citizens of the Slovak Republic. Answer 'Yes' if a close ancestor was Slovak or held Czechoslovak citizenship.",
           type: "radio",
           options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
           required: true
@@ -506,12 +508,16 @@ export default function HeritagePassportLanding() {
         },
         {
           key: "de4",
-          label:
-            "If born abroad to a German also born abroad (after 1999): was your birth registered at a German mission within 1 year?",
+          label: "Was your German parent born IN Germany (or elsewhere within Germany's borders) — or were they also born abroad to a German parent?",
+          hint: "Under § 4(4) StAG, if your German parent was ALSO born abroad after 1999 and your birth was not registered at a German mission within one year, automatic transmission of German citizenship does not apply. If your German parent was born in Germany, this rule does not affect you — answer 'Born in Germany'.",
           type: "radio",
-          options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }, { value: "na", label: "Not applicable" }],
+          options: [
+            { value: "yes", label: "Born in Germany (or before 1999)" },
+            { value: "no", label: "Also born abroad after 1999" },
+            { value: "registered", label: "Also born abroad after 1999, but my birth WAS registered at a German mission within 1 year" }
+          ],
           required: true,
-          showIf: f => f.de1 === "no"
+          showIf: f => f.de1 === "yes"
         }
       ]
     },
@@ -707,302 +713,310 @@ export default function HeritagePassportLanding() {
 
     Hungary: {
       questions: [
-        // Path A — Verification/registration (already citizen by parent)
+        // Gate question: is the chain unbroken (verification) or broken (simplified naturalization)?
         {
           key: "huA1",
-          label: "Path A — Was either parent a Hungarian citizen at your birth?",
-          type: "radio",
-          options: [{ value: "yes", label: "Yes (verification/registration)" }, { value: "no", label: "No" }],
-          required: true
-        },
-        {
-          key: "huA2",
-          label: "Was your birth registered with the Hungarian civil registry/consulate?",
+          label: "Do you have a Hungarian ancestor — parent, grandparent, great-grandparent, or further — AND do you believe the chain of Hungarian citizenship passed unbroken from that ancestor to you (meaning no ancestor in the line formally naturalised in another country BEFORE the next generation in your line was born)?",
+          hint: "Hungarian citizenship passes automatically by blood — even without a passport. If your grandparent was Hungarian and never formally naturalised abroad before your parent was born, your parent may also be a Hungarian citizen without knowing it. Simply emigrating does NOT break the chain — only formal foreign naturalisation before the next generation was born does. If the chain stayed fully intact all the way down to you, you may already BE a Hungarian citizen (no language test needed).",
           type: "radio",
           options: [
-            { value: "yes", label: "Yes (already in system)" },
-            { value: "no", label: "No (can register now)" },
-            { value: "na", label: "Not applicable" }
+            { value: "yes", label: "Yes — I have a Hungarian ancestor and the chain appears unbroken" },
+            { value: "no", label: "No — an ancestor formally naturalised abroad (chain is broken)" },
+            { value: "unsure", label: "Unsure — ancestor emigrated but I don't know if they naturalised" }
+          ],
+          required: true
+        },
+        // Verification route — document the unbroken chain
+        {
+          key: "huA2",
+          label: "Can you document the unbroken chain with birth and marriage certificates for each generation, plus evidence that no ancestor formally naturalised abroad before the next generation was born?",
+          type: "radio",
+          options: [
+            { value: "yes", label: "Yes — documents available" },
+            { value: "partial", label: "Partial — have some documents, still gathering" },
+            { value: "no", label: "No" }
           ],
           required: true,
-          showIf: f => f.huA1 === "yes"
+          showIf: f => f.huA1 === "yes" || f.huA1 === "unsure"
         },
 
-        // Path B — Simplified naturalization (ancestry + language)
+        // Simplified naturalization — chain was broken
         {
           key: "huB1",
-          label:
-            "Do you have any ancestor — there’s no generational limit — who was a Hungarian citizen or whose documents show Hungarian origin from territories of historical Hungary (before 1920 or between 1941 and 1945)?",
+          label: "Do you have any ancestor — there is no generational limit — who was a Hungarian citizen or whose origin is documented from historical Hungarian territories (including areas now in Romania, Slovakia, Serbia, or Ukraine, which were part of Hungary before 1920)?",
           type: "radio",
-          options: [{ value: "yes", label: "Yes (ancestry proven)" }, { value: "no", label: "No" }],
-          required: true
+          options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
+          required: true,
+          showIf: f => f.huA1 === "no"
         },
         {
           key: "huB2",
-          label: "Can you converse in basic Hungarian (or will you learn to a basic conversational level before applying)?",
+          label: "Can you demonstrate basic conversational Hungarian in a casual interview with a consular officer? (This is not a formal test — but genuine basic communication ability is assessed.)",
           type: "radio",
           options: [{ value: "yes", label: "Yes / Will learn" }, { value: "no", label: "No" }],
           required: true,
-          showIf: f => f.huB1 === "yes"
+          showIf: f => f.huA1 === "no" && f.huB1 === "yes"
         },
         {
           key: "huB3",
-          label:
-            "Can you provide civil chain documents and proof of the ancestor’s Hungarian citizenship or residence (passport, ID, registry, or archival record)?",
+          label: "Can you provide civil chain documents and proof of the ancestor's Hungarian citizenship or origin (birth certificate, passport, registry record, church record, or archival record)?",
           type: "radio",
           options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
           required: true,
-          showIf: f => f.huB1 === "yes"
+          showIf: f => f.huA1 === "no" && f.huB1 === "yes"
         },
         {
           key: "huB4",
-          label: "Do you have a clean criminal record (good-character requirement)?",
+          label: "Do you have a clean criminal record?",
           type: "radio",
           options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }],
           required: true,
-          showIf: f => f.huB1 === "yes"
+          showIf: f => f.huA1 === "no" && f.huB1 === "yes"
         }
       ]
     },
-
     France: {
       questions: [
-        { key: "fr1", label: "Was at least one parent a French citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "fr2", label: "Can you document the descent with birth and civil registration certificates?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.fr1 === "yes" }
+        { key: "fr1", label: "Was at least one parent a French citizen at the time of your birth?", hint: "Your parent may have been a French citizen automatically by birth or descent — even if they never held a French passport and even if they didn't know it themselves. Answer 'Yes' if a parent was born in France, or was born abroad to a French parent.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "fr2", label: "Does your claim pass through a female ancestor who married a foreigner BEFORE 1973 — meaning she may have automatically lost French nationality?", type: "radio", options: [{ value: "yes", label: "Yes — lineage runs through a pre-1973 female immigrant" }, { value: "no", label: "No / Not applicable" }], required: true, showIf: f => f.fr1 === "yes" },
+        { key: "fr3", label: "Can you provide birth and civil registration certificates for every link in the chain?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.fr1 === "yes" }
       ]
     },
 
     Romania: {
       questions: [
-        { key: "ro1", label: "Was at least one parent a Romanian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "ro2", label: "If not, do you have a grandparent who held Romanian citizenship (including before communist-era loss)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ro1 === "no" },
-        { key: "ro3", label: "Can you document the descent chain with birth and marriage certificates?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ro1 === "yes" || f.ro2 === "yes" }
+        { key: "ro1", label: "Was at least one parent a Romanian citizen at the time of your birth (standard jus sanguinis — no generational cap)?", hint: "Your parent may have been Romanian automatically — even if they never held a Romanian passport or lived in Romania. If a parent was born in Romania or had a Romanian parent themselves, they are very likely a Romanian citizen by descent. Answer 'Yes' even if your parent never knew about or claimed it.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "ro2", label: "Do you have a parent OR grandparent who was a Romanian citizen deprived of citizenship between 1940–1989 by Communist or wartime coercion (Article 11 repatriation route)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ro1 === "no" },
+        { key: "ro3", label: "Can you document each generational link with birth and marriage certificates?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ro1 === "yes" || f.ro2 === "yes" }
       ]
     },
 
     Croatia: {
       questions: [
-        { key: "hr1", label: "Was at least one parent a Croatian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "hr2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.hr1 === "yes" }
+        { key: "hr1", label: "Do you have ANY direct-line ancestor (parent, grandparent, great-grandparent, or further) who was a Croatian émigré or person of Croatian origin? Croatia's Article 11 has NO generational limit.", hint: "This question is about origin, not formal papers. If your great-grandmother emigrated from what is now Croatia (including historical territories like Dalmatia or Slavonia), that counts — regardless of whether anyone in the chain ever held a Croatian passport.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "hr2", label: "Can you document Croatian origin through birth records, Yugoslav-era identity documents, church records, or emigration records from Croatian territory?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.hr1 === "yes" }
       ]
     },
 
     Bulgaria: {
       questions: [
-        { key: "bg1", label: "Was at least one parent a Bulgarian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "bg2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.bg1 === "yes" }
+        { key: "bg1", label: "Was at least one parent OR grandparent OR great-grandparent a Bulgarian citizen? Bulgaria allows descent claims up to the 3rd generation (great-grandparent).", hint: "Your relative may have been a Bulgarian citizen without a Bulgarian passport — citizenship passes automatically. Answer 'Yes' if a parent, grandparent, or great-grandparent was born in Bulgaria or was Bulgarian by descent, even if they emigrated and never returned.", type: "radio", options: [{ value: "yes", label: "Yes — within 3 generations" }, { value: "no", label: "No — further back than great-grandparent" }], required: true },
+        { key: "bg2", label: "Can you demonstrate Bulgarian ethnic origin through language, culture, or family records (ethnic Bulgarian pathway via DABA)?", type: "radio", options: [{ value: "yes", label: "Yes — can show ethnic Bulgarian origin" }, { value: "no", label: "No" }], required: true, showIf: f => f.bg1 === "no" },
+        { key: "bg3", label: "Can you document the lineage with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.bg1 === "yes" || f.bg2 === "yes" }
       ]
     },
 
     Sweden: {
       questions: [
-        { key: "se1", label: "Was at least one parent a Swedish citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "se2", label: "Were you born outside Sweden AND do you currently hold another citizenship?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.se1 === "yes" },
-        { key: "se3", label: "Have you lived in Sweden for at least 2 consecutive years, OR already filed a retention declaration with a Swedish consulate (required before age 22)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Not yet" }], required: true, showIf: f => f.se1 === "yes" && f.se2 === "yes" }
+        { key: "se1", label: "Was at least one parent a Swedish citizen at the time of your birth?", hint: "A parent born in Sweden is a Swedish citizen automatically. A parent born abroad to a Swedish parent also acquired Swedish citizenship automatically — even without a Swedish passport. Answer 'Yes' if a parent had Swedish ancestry, as they very likely had Swedish citizenship whether or not they knew it.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "se2", label: "Were you born outside Sweden AND do you hold another citizenship AND have never been registered in Sweden?", type: "radio", options: [{ value: "yes", label: "Yes — all three apply" }, { value: "no", label: "No — at least one does not apply" }], required: true, showIf: f => f.se1 === "yes" },
+        { key: "se3", label: "Have you either: (a) lived in Sweden for 2+ consecutive years, OR (b) notified the Swedish Tax Agency (Skatteverket) that you wish to retain citizenship — before age 22?", type: "radio", options: [{ value: "yes", label: "Yes — retention established" }, { value: "no", label: "No" }, { value: "under22", label: "Not yet — but I am under 22" }], required: true, showIf: f => f.se1 === "yes" && f.se2 === "yes" }
       ]
     },
 
     Denmark: {
       questions: [
-        { key: "dk1", label: "Was at least one parent a Danish citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "dk2", label: "Were you born outside Denmark AND do you currently hold another citizenship?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.dk1 === "yes" },
-        { key: "dk3", label: "Have you lived in Denmark, or filed a retention declaration before age 22?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Not yet" }], required: true, showIf: f => f.dk1 === "yes" && f.dk2 === "yes" }
+        { key: "dk1", label: "Was at least one parent a Danish citizen at the time of your birth? (Since July 1, 2014, children of Danish parents acquire citizenship automatically regardless of birth location.)", hint: "A parent born in Denmark is Danish automatically. A parent born abroad to a Danish parent may also have been automatically Danish. Answer 'Yes' if a parent had Danish ancestry — they likely held Danish citizenship whether they knew it or not.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "dk2", label: "Were you born outside Denmark AND do you hold another citizenship AND have never been resident in Denmark?", type: "radio", options: [{ value: "yes", label: "Yes — all three apply" }, { value: "no", label: "No" }], required: true, showIf: f => f.dk1 === "yes" },
+        { key: "dk3", label: "Have you applied to retain Danish citizenship (Section 8 of the Danish Nationality Act) — must be done between ages 18 and 22?", type: "radio", options: [{ value: "yes", label: "Yes — retention applied for" }, { value: "no", label: "No" }, { value: "under18", label: "Not yet — I am under 18" }], required: true, showIf: f => f.dk1 === "yes" && f.dk2 === "yes" }
       ]
     },
 
     Finland: {
       questions: [
-        { key: "fi1", label: "Was at least one parent a Finnish citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "fi2", label: "Were you born outside Finland AND do you hold another citizenship AND have you never been registered in a Finnish municipality?", type: "radio", options: [{ value: "yes", label: "All three apply" }, { value: "no", label: "No / Not all" }], required: true, showIf: f => f.fi1 === "yes" },
-        { key: "fi3", label: "Have you lived in Finland or filed a retention declaration with the Finnish Population Register Centre before age 22?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Not yet" }], required: true, showIf: f => f.fi1 === "yes" && f.fi2 === "yes" }
+        { key: "fi1", label: "Was at least one parent a Finnish citizen at the time of your birth? (For unmarried Finnish fathers, legal paternity must be established.)", hint: "Finnish citizenship passes automatically by descent. A parent born in Finland, or born abroad to a Finnish parent, is a Finnish citizen — even without a Finnish passport and even if they never registered it. Answer 'Yes' if a parent had Finnish roots.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "fi2", label: "Were you born outside Finland AND hold another citizenship AND have never been registered in a Finnish municipality?", type: "radio", options: [{ value: "yes", label: "Yes — all three apply" }, { value: "no", label: "No" }], required: true, showIf: f => f.fi1 === "yes" },
+        { key: "fi3", label: "Have you filed a retention declaration with the Finnish Population Register Centre (Digi- ja väestötietovirasto) OR have you lived in Finland — before age 22? (Section 33 of the Nationality Act 359/2003.)", type: "radio", options: [{ value: "yes", label: "Yes — connection established before 22" }, { value: "no", label: "No" }, { value: "under22", label: "Not yet — but I am under 22" }], required: true, showIf: f => f.fi1 === "yes" && f.fi2 === "yes" }
       ]
     },
 
     Netherlands: {
       questions: [
-        { key: "nl1", label: "Was at least one parent a Dutch citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "nl2", label: "Was that Dutch parent born in the Netherlands (or Aruba/Curaçao/Sint Maarten), OR was your birth registered at a Dutch consulate within one year?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Unsure" }], required: true, showIf: f => f.nl1 === "yes" },
-        { key: "nl3", label: "Can you document the descent with birth and civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.nl1 === "yes" && f.nl2 === "yes" }
+        { key: "nl1", label: "Was at least one parent a Dutch citizen at the time of your birth? (Gender-equal transmission since 1985.)", hint: "A parent born in the Netherlands is Dutch automatically. A parent born abroad to a Dutch parent may also have Dutch citizenship by descent — even if they never applied for a passport. Answer 'Yes' if a parent was born in the Netherlands or had Dutch ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "nl2", label: "Was your Dutch parent born inside the Kingdom of the Netherlands (Netherlands, Aruba, Curaçao, or Sint Maarten), OR were they naturalized/registered in the Netherlands — OR was your birth registered at a Dutch consulate within one year?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No — Dutch parent was also born abroad to a Dutch parent" }], required: true, showIf: f => f.nl1 === "yes" },
+        { key: "nl3", label: "Do you currently live OUTSIDE the EU and have you gone 10+ consecutive years without renewing your Dutch passport? (Article 15 of the Kingdom Act — this triggers automatic loss of Dutch citizenship for dual nationals outside the EU.)", type: "radio", options: [{ value: "yes", label: "Yes — this situation applies to me" }, { value: "no", label: "No — I live in the EU or have kept my passport current" }], required: true, showIf: f => f.nl1 === "yes" && f.nl2 === "yes" }
       ]
     },
 
     Belgium: {
       questions: [
-        { key: "be1", label: "Was at least one parent a Belgian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "be2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.be1 === "yes" }
+        { key: "be1", label: "Was at least one parent a Belgian citizen at the time of your birth? (Gender-equal transmission since 1985.)", hint: "Belgian citizenship passes automatically by birth or descent. A parent born in Belgium is Belgian automatically. Answer 'Yes' if a parent was born in Belgium or had Belgian ancestry — they may well have been Belgian citizens even without a Belgian passport.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "be2", label: "Were you born outside Belgium AND hold another citizenship AND are NOT currently resident in Belgium?", type: "radio", options: [{ value: "yes", label: "Yes — all three apply" }, { value: "no", label: "No" }], required: true, showIf: f => f.be1 === "yes" },
+        { key: "be3", label: "Have you filed a declaration of conservation with Belgian authorities (Article 22 §2 of the Belgian Nationality Code) — must be done between ages 18 and 28?", type: "radio", options: [{ value: "yes", label: "Yes — conservation declared" }, { value: "no", label: "No" }, { value: "under18", label: "Not yet — I am under 18" }], required: true, showIf: f => f.be1 === "yes" && f.be2 === "yes" }
       ]
     },
 
     Slovenia: {
       questions: [
-        { key: "si1", label: "Was at least one parent a Slovenian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "si2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.si1 === "yes" }
+        { key: "si1", label: "Was at least one parent a Slovenian citizen AND was their Slovenian citizenship formally registered?", hint: "Slovenia is unusual — citizenship here does depend on whether the ancestor formally registered it. If your parent or grandparent emigrated from Slovenia (or the former Yugoslav Republic of Slovenia) but never officially registered Slovenian citizenship, the automatic path may not apply. If unsure, answer 'No' and see the diaspora route.", type: "radio", options: [{ value: "yes", label: "Yes — parent's citizenship was registered" }, { value: "no", label: "No — or unsure if registered" }], required: true },
+        { key: "si2", label: "Are you a descendant up to the 4th generation of a Slovenian diaspora member (Articles 19 and 40 of the ZDRS)? This route requires 1 year of residency in Slovenia but allows dual citizenship.", type: "radio", options: [{ value: "yes", label: "Yes — within 4 generations" }, { value: "no", label: "No" }], required: true, showIf: f => f.si1 === "no" },
+        { key: "si3", label: "Are you willing and able to establish 1 year of residency in Slovenia for the diaspora route?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.si1 === "no" && f.si2 === "yes" }
       ]
     },
 
     Austria: {
       questions: [
-        { key: "at1", label: "Was at least one parent an Austrian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "at2", label: "Are you prepared to renounce your other citizenship(s)? Austria does not permit dual citizenship in most cases.", type: "radio", options: [{ value: "yes", label: "Yes, willing to renounce" }, { value: "no", label: "No, want to keep existing citizenship" }], required: true, showIf: f => f.at1 === "yes" },
-        { key: "at3", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.at1 === "yes" && f.at2 === "yes" }
+        { key: "at1", label: "Was at least one parent an Austrian citizen at the time of your birth?", hint: "A parent born in Austria is likely a citizen automatically. Even if your parent never held an Austrian passport, they may have had Austrian citizenship by descent. Answer 'Yes' if a parent was born in Austria or had Austrian parentage.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "at2", label: "Do you have an ancestor who lost Austrian citizenship under the Nazi regime (1933–1945, including the 1938 Anschluss period) due to political, racial, religious, or military resistance grounds? (§58c StbG — the persecution pathway — permits dual citizenship and has no generational limit.)", type: "radio", options: [{ value: "yes", label: "Yes — Nazi persecution applies" }, { value: "no", label: "No" }], required: true, showIf: f => f.at1 === "no" },
+        { key: "at3", label: "Are you prepared to renounce ALL other citizenships? Standard Austrian naturalization requires renunciation — Austria has among the strictest dual-citizenship rules in the EU for non-persecution cases.", type: "radio", options: [{ value: "yes", label: "Yes, willing to renounce all other nationalities" }, { value: "no", label: "No, want to retain existing citizenship(s)" }], required: true, showIf: f => f.at1 === "yes" }
       ]
     },
 
     Cyprus: {
       questions: [
-        { key: "cy1", label: "Was at least one parent a Cypriot citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "cy2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.cy1 === "yes" }
+        { key: "cy1", label: "Was at least one parent a Cypriot citizen at the time of your birth?", hint: "Cypriot citizenship passes automatically. A parent born in Cyprus is a Cypriot citizen — even without a Cypriot passport or ID. Answer 'Yes' if a parent was born in Cyprus or had Cypriot ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "cy2", label: "Is your claim through a grandparent (rather than parent)? Grandchild claims require a formal application demonstrating documented lineage.", type: "radio", options: [{ value: "yes", label: "Yes — claiming through grandparent" }, { value: "no", label: "No — claiming through parent" }], required: true, showIf: f => f.cy1 === "yes" },
+        { key: "cy3", label: "Can you document the lineage with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.cy1 === "yes" }
       ]
     },
 
     Malta: {
       questions: [
-        { key: "mt1", label: "Was at least one parent a Maltese citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "mt2", label: "Was that Maltese parent born in Malta, or did they acquire citizenship by registration/naturalization in Malta (not purely by descent from abroad)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No — my parent was also born abroad" }], required: true, showIf: f => f.mt1 === "yes" },
-        { key: "mt3", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.mt1 === "yes" && f.mt2 === "yes" }
+        { key: "mt1", label: "Was at least one parent a Maltese citizen at the time of your birth?", hint: "A parent born in Malta is a Maltese citizen automatically — even if they emigrated and never held a Maltese passport. Answer 'Yes' if a parent was born in Malta or acquired Maltese citizenship.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "mt2", label: "Was your Maltese parent themselves born in Malta OR did they formally register/affirm their Maltese citizenship in their generation? (Each generation must have registered — automatic transmission does not silently pass for generations that never registered.)", type: "radio", options: [{ value: "yes", label: "Yes — parent was born in Malta or registered their citizenship" }, { value: "no", label: "No — parent was also born abroad and never registered" }], required: true, showIf: f => f.mt1 === "yes" },
+        { key: "mt3", label: "Do you have a Maltese-born grandparent or great-grandparent (lineal ascendant pathway)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.mt1 === "no" || (f.mt1 === "yes" && f.mt2 === "no") }
       ]
     },
 
     "United Kingdom": {
       questions: [
-        { key: "gb1", label: "Was at least one parent a British citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "gb2", label: "Was that British parent a citizen 'otherwise than by descent' — i.e., born in the UK, or naturalised/registered in the UK (not simply inheriting citizenship from a grandparent abroad)?", type: "radio", options: [{ value: "yes", label: "Yes — born/naturalised in the UK" }, { value: "no", label: "No — they were also a citizen by descent only" }], required: true, showIf: f => f.gb1 === "yes" },
-        { key: "gb3", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.gb1 === "yes" && f.gb2 === "yes" }
+        { key: "gb1", label: "Was at least one parent a British citizen at the time of your birth?", hint: "A parent born in the UK is a British citizen automatically. A parent born abroad to a British parent may also have been British by descent — even without a UK passport. Answer 'Yes' if a parent was born in the UK or had British ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "gb2", label: "Was your British parent a citizen 'otherwise than by descent' — i.e., born in the UK, naturalised in the UK, or registered in the UK (not simply inheriting citizenship from their own parent born abroad)? This is the key test under Section 2 BNA 1981 — citizenship by descent does NOT automatically pass beyond one generation born abroad.", type: "radio", options: [{ value: "yes", label: "Yes — parent was born/naturalised/registered IN the UK" }, { value: "no", label: "No — parent was also a citizen by descent only (born abroad)" }], required: true, showIf: f => f.gb1 === "yes" },
+        { key: "gb3", label: "If your parent was a citizen by descent only (born abroad), are you under 18? Children under 18 may apply to register under Section 3(2) or 3(5) BNA 1981 — grandchildren of British-born citizens.", type: "radio", options: [{ value: "yes", label: "Yes — I am under 18" }, { value: "no", label: "No — I am 18 or older" }], required: true, showIf: f => f.gb1 === "yes" && f.gb2 === "no" }
       ]
     },
 
     Ukraine: {
       questions: [
-        { key: "ua1", label: "Was at least one parent a Ukrainian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "ua2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ua1 === "yes" }
+        { key: "ua1", label: "Was at least one parent a Ukrainian citizen at the time of your birth?", hint: "A parent born in Ukraine is a Ukrainian citizen automatically. This includes anyone born in the territory of Ukraine before or after 1991 independence. Answer 'Yes' if a parent was born in Ukraine, even if they emigrated and never held a Ukrainian passport.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "ua2", label: "If no parent was a Ukrainian citizen, were you OR a parent/grandparent born in Ukraine before 1991 (territorial origin pathway under Articles 9–10)?", type: "radio", options: [{ value: "yes", label: "Yes — territorial origin applies" }, { value: "no", label: "No" }], required: true, showIf: f => f.ua1 === "no" }
       ]
     },
 
     Norway: {
       questions: [
-        { key: "no1", label: "Was at least one parent a Norwegian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "no2", label: "Were you born outside Norway AND do you currently hold another citizenship?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.no1 === "yes" },
-        { key: "no3", label: "Have you lived in Norway for at least 2 years, OR have you filed a retention declaration before age 22?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Not yet" }], required: true, showIf: f => f.no1 === "yes" && f.no2 === "yes" }
+        { key: "no1", label: "Was at least one parent a Norwegian citizen at the time of your birth? (Dual citizenship permitted since January 1, 2020.)", hint: "Norwegian citizenship passes automatically by descent. A parent born in Norway is Norwegian — even without a passport. A parent born abroad to a Norwegian parent may also have been Norwegian automatically. Answer 'Yes' if a parent had Norwegian ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "no2", label: "Were you born outside Norway AND hold another citizenship AND have never been resident in Norway?", type: "radio", options: [{ value: "yes", label: "Yes — all three apply" }, { value: "no", label: "No" }], required: true, showIf: f => f.no1 === "yes" },
+        { key: "no3", label: "Have you either: (a) lived in Norway for 2+ consecutive years, OR (b) applied to retain Norwegian citizenship before age 22 (Section 24 of the Nationality Act)?", type: "radio", options: [{ value: "yes", label: "Yes — retention established" }, { value: "no", label: "No" }, { value: "under22", label: "Not yet — but I am under 22" }], required: true, showIf: f => f.no1 === "yes" && f.no2 === "yes" }
       ]
     },
 
     Switzerland: {
       questions: [
-        { key: "ch1", label: "Was at least one parent a Swiss citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "ch2", label: "Were you born outside Switzerland AND do you hold another citizenship AND have you never lived in Switzerland?", type: "radio", options: [{ value: "yes", label: "All three apply" }, { value: "no", label: "No / Not all" }], required: true, showIf: f => f.ch1 === "yes" },
-        { key: "ch3", label: "Have you filed a retention declaration with a Swiss consulate before age 25?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Not yet" }], required: true, showIf: f => f.ch1 === "yes" && f.ch2 === "yes" }
+        { key: "ch1", label: "Was at least one parent a Swiss citizen at the time of your birth? (For unmarried Swiss fathers, legal paternity must be established.)", hint: "Swiss citizenship is passed automatically by descent. A parent born in Switzerland, or born abroad to a Swiss parent, is a Swiss citizen — even without a Swiss passport. Answer 'Yes' if a parent had Swiss ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "ch2", label: "Were you born outside Switzerland AND hold another citizenship AND have NEVER resided in Switzerland?", type: "radio", options: [{ value: "yes", label: "Yes — all three apply" }, { value: "no", label: "No" }], required: true, showIf: f => f.ch1 === "yes" },
+        { key: "ch3", label: "Have you filed a retention declaration with a Swiss consulate or cantonal authority before turning 25? (Article 8 BüG — Switzerland's loss cutoff is age 25, giving one more year than the Nordic age-22 rule.)", type: "radio", options: [{ value: "yes", label: "Yes — declaration filed" }, { value: "no", label: "No" }, { value: "under25", label: "Not yet — but I am under 25" }], required: true, showIf: f => f.ch1 === "yes" && f.ch2 === "yes" }
       ]
     },
 
     Iceland: {
       questions: [
-        { key: "is1", label: "Was at least one parent an Icelandic citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "is2", label: "Were you born outside Iceland AND do you currently hold another citizenship?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.is1 === "yes" },
-        { key: "is3", label: "Have you resided in Iceland or filed a retention declaration before age 22?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Not yet" }], required: true, showIf: f => f.is1 === "yes" && f.is2 === "yes" }
+        { key: "is1", label: "Was at least one parent an Icelandic citizen at the time of your birth? (For unmarried Icelandic fathers, paternity must be registered before the child turns 18.)", hint: "Icelandic citizenship passes automatically by descent. A parent born in Iceland or born to Icelandic parents is Icelandic — even without a passport. Answer 'Yes' if a parent had Icelandic ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "is2", label: "Were you born outside Iceland AND hold another citizenship?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.is1 === "yes" },
+        { key: "is3", label: "Have you notified Þjóðskrá Íslands (Registers Iceland) that you wish to retain Icelandic citizenship before age 22? (Article 8 of the Nationality Act — failure to notify causes automatic loss.)", type: "radio", options: [{ value: "yes", label: "Yes — notification made" }, { value: "no", label: "No" }, { value: "under22", label: "Not yet — but I am under 22" }], required: true, showIf: f => f.is1 === "yes" && f.is2 === "yes" }
       ]
     },
 
     Serbia: {
       questions: [
-        { key: "rs1", label: "Was at least one parent a Serbian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "rs2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.rs1 === "yes" }
+        { key: "rs1", label: "Was at least one parent a Serbian citizen at the time of your birth?", hint: "Serbian citizenship passes automatically by descent. A parent born in Serbia (or the former Yugoslavia) is very likely a Serbian citizen — even without a Serbian passport. Answer 'Yes' if a parent had Serbian ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "rs2", label: "If you were born abroad and are under age 23, have you applied to have your citizenship formally registered? (Descendants under 23 born abroad may file an application under the Citizenship Law.)", type: "radio", options: [{ value: "yes", label: "Yes — registered, or not applicable (born in Serbia or over 23)" }, { value: "no", label: "No — born abroad and under 23, not yet registered" }], required: true, showIf: f => f.rs1 === "yes" }
       ]
     },
 
     Montenegro: {
       questions: [
-        { key: "me1", label: "Was at least one parent a Montenegrin citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "me2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.me1 === "yes" }
+        { key: "me1", label: "Was at least one parent a Montenegrin citizen at the time of your birth?", hint: "A parent born in Montenegro is a Montenegrin citizen automatically — even without a passport. Montenegro was part of Yugoslavia and later Serbia and Montenegro — ancestry from that territory counts. Answer 'Yes' if a parent had Montenegrin roots.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "me2", label: "IMPORTANT — Montenegro prohibits dual citizenship. Are you prepared to renounce ALL other citizenships? Acquiring Montenegrin citizenship requires renouncing all foreign nationalities, and Montenegrin citizens who acquire foreign citizenship automatically lose Montenegrin citizenship.", type: "radio", options: [{ value: "yes", label: "Yes, willing to renounce all other nationalities" }, { value: "no", label: "No, want to retain existing citizenship(s)" }], required: true, showIf: f => f.me1 === "yes" }
       ]
     },
 
     Albania: {
       questions: [
-        { key: "al1", label: "Was at least one parent an Albanian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "al2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.al1 === "yes" }
+        { key: "al1", label: "Was at least one parent an Albanian citizen at the time of your birth?", hint: "Albanian citizenship passes automatically by descent. A parent born in Albania is an Albanian citizen — even if they emigrated and never held a current Albanian passport. Answer 'Yes' if a parent was born in Albania or had Albanian ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "al2", label: "If no Albanian citizen parent, do you have an Albanian grandparent? A documented Albanian grandparent qualifies you for the reduced 3-year residency naturalization route (vs 5 years standard).", type: "radio", options: [{ value: "yes", label: "Yes — Albanian grandparent" }, { value: "no", label: "No" }], required: true, showIf: f => f.al1 === "no" }
       ]
     },
 
     "Bosnia & Herzegovina": {
       questions: [
-        { key: "ba1", label: "Were BOTH parents BiH citizens at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes — both parents" }, { value: "no", label: "No — only one" }], required: true },
-        { key: "ba2", label: "Was one parent a BiH citizen AND were you born in Bosnia and Herzegovina?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ba1 === "no" },
-        { key: "ba3", label: "Are you currently stateless (you hold no other citizenship)?", type: "radio", options: [{ value: "yes", label: "Yes — stateless" }, { value: "no", label: "No — I have another citizenship" }], required: true, showIf: f => f.ba1 === "no" && f.ba2 === "no" }
+        { key: "ba1", label: "Were BOTH parents BiH citizens at the time of your birth?", hint: "A parent born in Bosnia & Herzegovina is a BiH citizen automatically — even without a BiH passport. Answer based on whether a parent was born there or had Bosnian ancestry, not just whether they hold a current document.", type: "radio", options: [{ value: "yes", label: "Yes — both parents are BiH citizens" }, { value: "no", label: "No — only one parent is a BiH citizen" }], required: true },
+        { key: "ba2", label: "Were you born IN Bosnia and Herzegovina (while one parent is a BiH citizen)?", type: "radio", options: [{ value: "yes", label: "Yes — born in BiH" }, { value: "no", label: "No — born outside BiH" }], required: true, showIf: f => f.ba1 === "no" },
+        { key: "ba3", label: "Are you currently stateless — meaning you hold NO other citizenship? (Under Article 7, the one-parent rule for those born outside BiH only applies if the child would otherwise be stateless.)", type: "radio", options: [{ value: "yes", label: "Yes — I am stateless / hold no other nationality" }, { value: "no", label: "No — I hold another citizenship" }], required: true, showIf: f => f.ba1 === "no" && f.ba2 === "no" }
       ]
     },
 
     "North Macedonia": {
       questions: [
-        { key: "mk1", label: "Was at least one parent a North Macedonian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "mk2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.mk1 === "yes" }
+        { key: "mk1", label: "Was at least one parent a North Macedonian citizen at the time of your birth?", hint: "A parent born in North Macedonia (or the former Yugoslav Republic of Macedonia) is a citizen automatically — even without a passport. Answer 'Yes' if a parent was born there or had Macedonian ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "mk2", label: "If born abroad and under age 23, have you filed an application to formally acquire citizenship? (Descent-born applicants abroad under 23 should file promptly under the Citizenship Law.)", type: "radio", options: [{ value: "yes", label: "Yes — applied/registered, or not under-23 concern" }, { value: "no", label: "No — born abroad and under 23, not yet filed" }], required: true, showIf: f => f.mk1 === "yes" }
       ]
     },
 
     Kosovo: {
       questions: [
-        { key: "xk1", label: "Was at least one parent a Kosovo citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "xk2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.xk1 === "yes" }
+        { key: "xk1", label: "Was at least one parent a Kosovo citizen at the time of your birth?", hint: "Kosovo declared independence in 2008. A parent born in Kosovo or with documented Kosovo Albanian or Kosovo heritage may automatically be a Kosovo citizen. Answer 'Yes' if a parent had Kosovo ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "xk2", label: "Are you aware that Kosovo is only partially internationally recognised (~100 of 193 UN members)? A Kosovo passport has restricted utility — for example, it is not recognised by Russia, China, Spain, or Serbia.", type: "radio", options: [{ value: "yes", label: "Yes, understood" }, { value: "no", label: "No, I was not aware" }], required: true, showIf: f => f.xk1 === "yes" }
       ]
     },
 
     Moldova: {
       questions: [
-        { key: "md1", label: "Was at least one parent a Moldovan citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "md2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.md1 === "yes" }
+        { key: "md1", label: "Was at least one parent a Moldovan citizen at the time of your birth?", hint: "A parent born in Moldova is a Moldovan citizen automatically — even without a Moldovan passport. Moldova was part of the USSR as the Moldavian SSR until 1991. Answer 'Yes' if a parent was born in Moldova or had Moldovan ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "md2", label: "If no citizen parent, do you have a grandparent who was a Moldovan citizen (grandparent route may apply)?", type: "radio", options: [{ value: "yes", label: "Yes — Moldovan grandparent" }, { value: "no", label: "No" }], required: true, showIf: f => f.md1 === "no" },
+        { key: "md3", label: "Are you of ethnic Moldovan/Romanian origin? If so, you may ALSO have a separate Romanian citizenship claim (separate from Moldovan CBD).", type: "radio", options: [{ value: "yes", label: "Yes — ethnic Moldovan / Romanian origin" }, { value: "no", label: "No" }], required: true, showIf: f => f.md1 === "yes" || f.md2 === "yes" }
       ]
     },
 
     Georgia: {
       questions: [
-        { key: "ge1", label: "Was at least one parent a Georgian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "ge2", label: "If no citizen-parent, do you identify as ethnically Georgian (Georgian diaspora or descendants of Georgian emigrants)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ge1 === "no" },
-        { key: "ge3", label: "Can you document your Georgian descent or ethnic identity (civil records, church records, etc.)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ge1 === "yes" || f.ge2 === "yes" }
+        { key: "ge1", label: "Was at least one parent a Georgian citizen at the time of your birth?", hint: "A parent born in Georgia (the country) is a Georgian citizen automatically — even without a Georgian passport. Georgia was part of the USSR until 1991. Answer 'Yes' if a parent was born in Georgia or had Georgian ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "ge2", label: "If no citizen parent, do you identify as ethnically Georgian (diaspora descendants, including Georgians who emigrated during Soviet era)? A Presidential decree ethnic Georgian pathway exists.", type: "radio", options: [{ value: "yes", label: "Yes — ethnically Georgian / diaspora" }, { value: "no", label: "No" }], required: true, showIf: f => f.ge1 === "no" },
+        { key: "ge3", label: "Can you document your Georgian descent or ethnic identity (civil records, church records, Soviet-era documents)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ge1 === "yes" || f.ge2 === "yes" }
       ]
     },
 
     Armenia: {
       questions: [
-        { key: "am1", label: "Was at least one parent an Armenian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "am2", label: "If no citizen-parent, are you of Armenian ethnic descent (including descendants of 1915 Genocide survivors)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.am1 === "no" },
-        { key: "am3", label: "Can you document your Armenian descent — civil records, church records, or diaspora evidence?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.am1 === "yes" || f.am2 === "yes" }
+        { key: "am1", label: "Was at least one parent an Armenian citizen at the time of your birth?", hint: "A parent born in Armenia is an Armenian citizen automatically — even without an Armenian passport. Armenia was part of the USSR until 1991. Answer 'Yes' if a parent was born in Armenia or had Armenian ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "am2", label: "If no citizen parent, are you of Armenian ethnic descent? This includes descendants of the 1915 Genocide survivors — the diaspora pathway (Presidential Decree No. 222-A) is specifically open to ethnic Armenians worldwide.", type: "radio", options: [{ value: "yes", label: "Yes — ethnic Armenian, including Genocide descendants" }, { value: "no", label: "No" }], required: true, showIf: f => f.am1 === "no" },
+        { key: "am3", label: "Can you document Armenian descent — civil records, church records, diaspora community records, or Genocide survivor documentation?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.am1 === "yes" || f.am2 === "yes" }
       ]
     },
 
     Belarus: {
       questions: [
-        { key: "by1", label: "Was at least one parent a Belarusian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "by2", label: "Are you prepared to renounce ALL other citizenships? Belarus strictly prohibits dual citizenship.", type: "radio", options: [{ value: "yes", label: "Yes, willing to renounce all other nationalities" }, { value: "no", label: "No, want to retain existing citizenship(s)" }], required: true, showIf: f => f.by1 === "yes" },
-        { key: "by3", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.by1 === "yes" && f.by2 === "yes" }
+        { key: "by1", label: "Was at least one parent a Belarusian citizen at the time of your birth?", hint: "A parent born in Belarus is a Belarusian citizen automatically — even without a passport. Belarus was part of the USSR (Byelorussian SSR) until 1991. Answer 'Yes' if a parent was born in Belarus or had Belarusian ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "by2", label: "IMPORTANT — Belarus strictly prohibits dual citizenship (Law No. 136-Z). Belarusian citizens who acquire foreign citizenship automatically lose Belarusian citizenship. Have you considered the significant political and practical implications, including that a Belarusian passport currently carries EU/US/UK travel restrictions under international sanctions?", type: "radio", options: [{ value: "yes", label: "Yes, aware and prepared to renounce all other citizenships" }, { value: "no", label: "No, want to retain existing citizenship(s)" }], required: true, showIf: f => f.by1 === "yes" }
       ]
     },
 
     "San Marino": {
       questions: [
-        { key: "sm1", label: "Was at least one parent a Sammarinese citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "sm2", label: "Can you document the descent with records from the San Marino Civil Status Office?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.sm1 === "yes" }
+        { key: "sm1", label: "Was at least one parent a Sammarinese citizen at the time of your birth? (Historically patrilineal — recent 2024–2026 reforms are extending this to matrilineal descent. Confirm current eligibility with the Civil Status Office.)", hint: "San Marino is a tiny microstate; citizenship records are closely maintained. A parent with Sammarinese ancestry may well have been a citizen — even without a current Sammarinese ID. Answer 'Yes' if a parent was born in San Marino or had Sammarinese ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "sm2", label: "Can you provide the complete birth certificate chain back to the Sammarinese ancestor, plus marriage certificates at every generational link?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Unsure" }], required: true, showIf: f => f.sm1 === "yes" }
       ]
     },
 
     Monaco: {
       questions: [
-        { key: "mc1", label: "Was at least one parent a Monégasque citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "mc2", label: "Are you prepared to renounce ALL other citizenships? Monaco absolutely prohibits dual citizenship.", type: "radio", options: [{ value: "yes", label: "Yes, willing to renounce all other nationalities" }, { value: "no", label: "No, want to retain existing citizenship(s)" }], required: true, showIf: f => f.mc1 === "yes" },
-        { key: "mc3", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.mc1 === "yes" && f.mc2 === "yes" }
+        { key: "mc1", label: "Was at least one parent a Monégasque (Monaco) citizen at the time of your birth?", hint: "Monaco citizenship is extremely rare (~10,000 people). A parent born in Monaco is a Monégasque citizen automatically. Answer 'Yes' only if a parent was specifically a Monaco national.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "mc2", label: "CRITICAL — Monaco absolutely prohibits dual citizenship (Monégasque Nationality Code). A Monégasque citizen who acquires foreign nationality automatically loses Monaco citizenship. Are you prepared to renounce ALL other nationalities?", type: "radio", options: [{ value: "yes", label: "Yes — willing to renounce all other nationalities (rare commitment given Monaco's ~10,000 citizens)" }, { value: "no", label: "No — want to retain existing citizenship(s)" }], required: true, showIf: f => f.mc1 === "yes" }
       ]
     },
 
     Liechtenstein: {
       questions: [
-        { key: "li1", label: "Was at least one parent a Liechtenstein citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "li2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.li1 === "yes" }
+        { key: "li1", label: "Was at least one parent a Liechtenstein citizen at the time of your birth?", hint: "Liechtenstein is a tiny principality; citizenship is relatively rare. A parent born in Liechtenstein is a Liechtenstein citizen automatically — even without a Liechtenstein passport. Answer 'Yes' if a parent was born there or had Liechtenstein ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "li2", label: "Note: dual citizenship IS permitted for citizenship acquired by descent (CBD). It is NOT permitted for naturalization (which requires 30 years of residency). Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.li1 === "yes" }
       ]
     },
 
     Andorra: {
       questions: [
-        { key: "ad1", label: "Was at least one parent an Andorran citizen?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
-        { key: "ad2", label: "Are you prepared to renounce your other citizenship(s)? Andorra does not permit dual citizenship.", type: "radio", options: [{ value: "yes", label: "Yes, willing to renounce" }, { value: "no", label: "No, want to keep existing citizenship" }], required: true, showIf: f => f.ad1 === "yes" },
-        { key: "ad3", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ad1 === "yes" && f.ad2 === "yes" }
+        { key: "ad1", label: "Was at least one parent an Andorran citizen?", hint: "Andorran citizenship is rare. A parent born in Andorra is a citizen automatically — even without current documentation. Answer 'Yes' if a parent was born in Andorra or had Andorran ancestry.", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "ad2", label: "IMPORTANT — Andorra does NOT permit dual citizenship. You must renounce your other citizenship(s) to acquire Andorran citizenship. Are you prepared to do this?", type: "radio", options: [{ value: "yes", label: "Yes — willing to renounce other citizenship(s)" }, { value: "no", label: "No — want to retain existing citizenship" }], required: true, showIf: f => f.ad1 === "yes" },
+        { key: "ad3", label: "Can you document the descent with civil records from Andorran authorities?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ad1 === "yes" && f.ad2 === "yes" }
       ]
     }
   };
@@ -1056,14 +1070,16 @@ export default function HeritagePassportLanding() {
   function checkEligibility() {
     // Estonia
     if (form.country === "Estonia") {
-  if (form.ee1 === "yes" && form.ee2 === "yes") return "Eligible for Estonian citizenship by descent.";
-  return "Not eligible for citizenship by descent.";
+      if (form.ee1 === "yes" && form.ee2 === "yes") return "Eligible for Estonian citizenship by restoration of descent (Citizenship Act § 5). Estonia grants citizenship to persons whose parent, grandparent, or great-grandparent was an Estonian citizen before the Soviet occupation on June 16, 1940. Dual citizenship is permitted in this specific restoration context. Apply through a Estonian embassy, consulate, or the Police and Border Guard Board (PPA) in Estonia. Documents required: the ancestor's Estonian citizenship records (from the National Archives of Estonia — ERA) plus the civil certificate chain to you.";
+      if (form.ee1 === "yes" && form.ee2 === "no") return "Potentially eligible for Estonian citizenship by descent — but you need to gather documents. Key records: the ancestor's Estonian pre-1940 citizenship documentation (Estonian National Archives — ERR/ERA), and birth/marriage certificates for each generation from them to you. Contact the Estonian Embassy once documentation is assembled.";
+      return "Not eligible for Estonian citizenship by descent. The Estonian restoration route requires a pre-1940 citizen ancestor within three generations.";
     }
 
     // Latvia
     if (form.country === "Latvia") {
-    if (form.lv1 === "yes" && form.lv2 === "yes") return "Eligible for Latvian citizenship by descent.";
-    return "Not eligible.";
+      if (form.lv1 === "yes" && form.lv2 === "yes") return "Eligible for Latvian citizenship by registration (Section 3 of the Citizenship Law). Latvia grants citizenship to persons whose parent, grandparent, or great-grandparent was a Latvian citizen on June 17, 1940 (date of Soviet occupation). Dual citizenship is permitted for this restoration pathway. Apply at a Latvian consulate or the Office of Citizenship and Migration Affairs (OCMA). Key documents: the ancestor's pre-1940 Latvian citizenship evidence (Latvian State Historical Archives — LVVA) and civil certificates for each generation.";
+      if (form.lv1 === "yes" && form.lv2 === "no") return "Potentially eligible for Latvian citizenship by descent — gather documents. Key records: the ancestor's Latvian pre-1940 citizenship documentation (from LVVA — Latvijas Valsts vēstures arhīvs) and birth/marriage certificates for each generation. Contact the Latvian Embassy once documentation is ready.";
+      return "Not eligible for Latvian citizenship by descent. The Latvian restoration route requires a pre-occupation (June 17, 1940) citizen ancestor within three generations.";
     }
 
     // Czech Republic
@@ -1089,8 +1105,8 @@ export default function HeritagePassportLanding() {
 
     // Slovakia
     if (form.country === "Slovakia") {
-    if (form.sk1 === "yes" && form.sk2 === "yes") return "Eligible for Slovak citizenship by descent.";
-    return "Not eligible";
+      if (form.sk1 === "yes" && form.sk2 === "yes") return "Potentially eligible for Slovak citizenship by descent (Act No. 40/1993 Coll.). IMPORTANT: Slovakia has strict dual citizenship rules. A Slovak citizen who voluntarily acquires foreign citizenship automatically loses Slovak citizenship (Section 7(1)(b)). A 2022 amendment added exceptions — you do NOT lose Slovak citizenship if the foreign citizenship was acquired by birth, marriage, adoption, or after 5 years of registered foreign residence. Carefully assess this trade-off before applying. Apply through the Slovak Embassy or Ministry of Interior (Ministerstvo vnútra SR).";
+      return "Not eligible for Slovak citizenship by descent.";
     }
 
     // Luxembourg
@@ -1115,27 +1131,37 @@ export default function HeritagePassportLanding() {
 
     // Hungary
     if (form.country === "Hungary") {
-      // Path A – verification/registration via parent
+      // Path A – Citizenship by Verification (állampolgárság igazolása) — unbroken chain, NO language test
       if (form.huA1 === "yes") {
-        if (form.huA2 === "yes") return "Eligible for Hungarian citizenship (already recognized; apply for passport).";
-        if (form.huA2 === "no" || form.huA2 === "na") return "Eligible for Hungarian citizenship (register your birth with Hungary; no language/residency required).";
-      } else {
-        // Path B – simplified naturalization (ancestry + language + clean record + docs)
-        if (form.huB1 === "yes" && form.huB3 === "yes" && form.huB4 === "yes") {
-          if (form.huB2 === "yes") return "Eligible for Hungarian citizenship via simplified naturalization (ancestry + basic Hungarian).";
-          if (form.huB2 === "no") return "Not eligible now. You will be eligible once you learn basic Hungarian.";
-        }
+        if (form.huA2 === "yes") return "You may already BE a Hungarian citizen by operation of law under the citizenship by verification route (állampolgárság igazolása / megállapítása, Section 11 of Act LV of 1993). No language test is required — you are not applying for new citizenship, you are confirming existing citizenship. Apply through a Hungarian consulate, providing the birth and marriage certificate chain and evidence the chain remained unbroken. Dual citizenship is fully permitted.";
+        if (form.huA2 === "partial") return "Potentially eligible for Hungarian citizenship by verification (no language test required) — but you need to complete your documentary evidence. Key documents to find: birth certificates for each generation, marriage certificates, and proof that no ancestor formally naturalised abroad before the next generation was born. Contact the Hungarian National Archives (MNL) and relevant local archives. Once documentation is complete, apply through a Hungarian consulate.";
+        if (form.huA2 === "no") return "Potentially eligible for Hungarian citizenship by verification, but documentation is needed. Start by gathering birth and marriage certificates for each generation, and research whether any ancestor formally naturalised abroad (and if so, when — if after your parent was born, the chain may still be intact). The Hungarian National Archives (MNL) and FamilySearch can help. If the verification route cannot be established, the simplified naturalization route (which does require a language interview) is still available.";
       }
-      return "Not eligible for Hungarian citizenship by descent/ancestry.";
+      if (form.huA1 === "unsure") {
+        if (form.huA2 === "yes") return "You may be eligible for Hungarian citizenship by verification (no language test), but you need to confirm whether the chain is truly unbroken. Research whether any ancestor formally naturalised abroad — and if so, whether it happened before or after the next generation was born. If the chain is intact, use the verification route (Section 11, Act LV of 1993). If it was broken, you still qualify for simplified naturalization with a basic Hungarian language interview. Contact a Hungarian consulate to assess your specific chain.";
+        return "Your situation needs more research. Determine whether any ancestor formally naturalised outside Hungary, and if so, when. If the chain is unbroken, you may already be a Hungarian citizen (no language test needed). If it was broken, simplified naturalization is still available — no generational limit, but a basic Hungarian language interview is required. Contact the Hungarian consulate and begin document gathering.";
+      }
+      // Path B – Simplified Naturalization (kedvezményes honosítás) — chain broken, language interview required
+      if (form.huA1 === "no") {
+        if (form.huB1 === "yes" && form.huB3 === "yes" && form.huB4 === "yes") {
+          if (form.huB2 === "yes") return "Eligible for Hungarian citizenship via simplified naturalization (kedvezményes honosítás). No residency in Hungary required. The language interview is a casual conversation — not a formal test — but genuine basic conversational ability is assessed. Apply through a Hungarian consulate. Dual citizenship is fully permitted. Processing typically takes 3–6 months after the interview.";
+          if (form.huB2 === "no") return "You have Hungarian ancestry and the documentation, but need basic conversational Hungarian to use the simplified naturalization route. Once you reach a conversational level (many applicants use tutors or apps over 3–6 months of preparation), you will be eligible. No residency in Hungary required — just the ancestry, language, clean record, and documents.";
+        }
+        if (form.huB1 === "no") return "Not eligible for Hungarian citizenship by descent or simplified naturalization. Hungarian ancestry — or ancestry from historical Hungarian territories — is required for both routes.";
+      }
+      return "Not eligible for Hungarian citizenship by descent/ancestry based on the information provided.";
     }
 
     // Germany — parent/remedies/restoration
     if (form.country === "Germany") {
-      if (form.de1 === "yes") return "You are eligible for German citizenship by descent (recognition via parent).";
+      if (form.de1 === "yes") {
+        if (form.de4 === "no") return "Potentially not eligible — under § 4(4) StAG, if your German parent was also born abroad after 1999 and your birth was not registered at a German mission within one year, automatic transmission of citizenship does not apply. However, if you are under 23, late registration may still be possible. Contact the German Embassy immediately to assess your options.";
+        return "Eligible for German citizenship by descent (§ 4(1) StAG — citizenship passes via a German parent). Dual citizenship is fully permitted since the June 2024 reform. Apply for recognition at the German Embassy or consulate in your country of residence.";
+      }
       if (form.de1 === "no") {
-        if (form.de2 === "yes") return "You are eligible for German citizenship via declaration (historical remedy).";
-        if (form.de3 === "yes") return "You are eligible for German citizenship via restoration (Article 116(2)).";
-        return "You are not eligible for German citizenship by descent.";
+        if (form.de2 === "yes") return "Eligible for German citizenship via the declaration remedy — this covers historical gender or legitimacy-based exclusions (German mother before 1 Jan 1975, or out-of-wedlock to German father before 1 July 1993). Dual citizenship permitted. Contact the German Embassy.";
+        if (form.de3 === "yes") return "Eligible for German citizenship restoration under Article 116(2) of the Basic Law — for descendants of persecuted persons who lost German citizenship under National Socialism (1933–1945). No generational limit, dual citizenship fully permitted. Contact the German Embassy or Federal Administration Office (Bundesverwaltungsamt).";
+        return "Not eligible for German citizenship by descent or via the historical remedies based on the information provided.";
       }
     }
 
@@ -1200,233 +1226,298 @@ export default function HeritagePassportLanding() {
     }
 
     // France
+    // France
     if (form.country === "France") {
-      if (form.fr1 === "yes" && form.fr2 === "yes") return "Eligible for French citizenship by descent. Dual citizenship is permitted.";
       if (form.fr1 === "no") return "Not eligible for French citizenship by descent.";
-      return "Not eligible — consult the French consulate.";
+      if (form.fr1 === "yes" && form.fr2 === "yes") return "⚠️ Chain potentially broken — French women who married foreigners before 1973 automatically lost French nationality under old law, which can sever the descent chain. Contact the French consulate (Service de la nationalité) to assess whether the chain survives despite this rule.";
+      if (form.fr1 === "yes" && form.fr2 === "no" && form.fr3 === "yes") return "Eligible for French citizenship by descent (Article 18 of the Civil Code). There is no generational limit and dual citizenship is fully permitted. You will need a complete chain of birth and civil registration certificates.";
+      if (form.fr1 === "yes" && form.fr2 === "no" && form.fr3 === "no") return "Potentially eligible, but you will need to gather the documentary evidence. Contact the French consulate once documentation is complete.";
+      return "Consult the French consulate for your specific situation.";
     }
 
     // Romania
     if (form.country === "Romania") {
-      if ((form.ro1 === "yes" || form.ro2 === "yes") && form.ro3 === "yes") return "Eligible for Romanian citizenship by descent. Dual citizenship is permitted.";
-      if (form.ro1 === "no" && form.ro2 === "no") return "Not eligible for Romanian citizenship by descent.";
-      return "Not eligible — consult the Romanian consulate.";
+      if (form.ro1 === "no" && form.ro2 === "no") return "Not eligible for Romanian citizenship by descent. Romania's standard route requires a Romanian citizen parent, and the Article 11 repatriation route requires an ancestor whose citizenship was coercively removed in 1940–1989.";
+      if (form.ro1 === "yes" && form.ro3 === "yes") return "Eligible for Romanian citizenship by descent (Law 21/1991, standard jus sanguinis). There is no generational cap. Dual citizenship is permitted. You will need civil records for each generational link.";
+      if (form.ro1 === "no" && form.ro2 === "yes" && form.ro3 === "yes") return "Eligible via the Article 11 repatriation route — descendants (children and grandchildren) of Romanians denaturalised by Communist or wartime coercion between 1940 and 1989 may reclaim Romanian citizenship. No residency requirement, no language test. Dual citizenship permitted. Consult the Romanian National Authority for Citizenship (ANC).";
+      if ((form.ro1 === "yes" || form.ro2 === "yes") && form.ro3 === "no") return "Potentially eligible, but you will need documentary evidence. Gather birth and marriage certificates for each link in the chain, then contact the Romanian consulate.";
+      return "Consult the Romanian consulate or ANC for your specific situation.";
     }
 
     // Croatia
     if (form.country === "Croatia") {
-      if (form.hr1 === "yes" && form.hr2 === "yes") return "Eligible for Croatian citizenship by descent. Dual citizenship is permitted.";
-      return "Not eligible for Croatian citizenship by descent.";
+      if (form.hr1 === "no") return "Not eligible for Croatian citizenship by descent.";
+      if (form.hr1 === "yes" && form.hr2 === "yes") return "Eligible for Croatian citizenship by descent under Article 11 of the Croatian Citizenship Act. Croatia has NO generational limit — any documented descendant of a Croatian émigré qualifies regardless of how many generations have passed. Dual citizenship is fully permitted. Key documents: birth certificates, marriage certificates, and evidence of Croatian origin (Yugoslav-era ID, church records, emigration records).";
+      if (form.hr1 === "yes" && form.hr2 === "no") return "Potentially eligible — Croatia has no generational limit — but you will need to locate documentary evidence of Croatian origin. Croatian church records and Yugoslav civil registry records are held by parish offices and state archives. Contact the Croatian Ministry of the Interior (MUP).";
+      return "Consult the Croatian consulate for your specific situation.";
     }
 
     // Bulgaria
     if (form.country === "Bulgaria") {
-      if (form.bg1 === "yes" && form.bg2 === "yes") return "Eligible for Bulgarian citizenship by descent. Dual citizenship is permitted.";
-      return "Not eligible for Bulgarian citizenship by descent.";
+      if (form.bg1 === "no" && form.bg2 === "no") return "Not eligible for Bulgarian citizenship. Standard descent is limited to the 3rd generation (great-grandparent), and you do not qualify for the ethnic Bulgarian pathway.";
+      if (form.bg1 === "yes" && form.bg3 === "yes") return "Eligible for Bulgarian citizenship by descent (Article 8, Bulgarian Citizenship Act). Claims are accepted up to the 3rd generation (great-grandparent). Dual citizenship is permitted. Gather civil records for each generational link.";
+      if (form.bg1 === "yes" && form.bg3 === "no") return "Potentially eligible — you have a Bulgarian ancestor within 3 generations. Gather civil records and contact the Bulgarian State Agency for Bulgarians Abroad (DABA) or the Bulgarian Ministry of Justice.";
+      if (form.bg1 === "no" && form.bg2 === "yes" && form.bg3 === "yes") return "Potentially eligible via the ethnic Bulgarian pathway (Article 15 of the Bulgarian Citizenship Act and DABA — State Agency for Bulgarians Abroad). You may qualify by demonstrating Bulgarian ethnic identity through language, cultural ties, and family records, even beyond the 3rd generation. This is a discretionary application process — contact DABA directly.";
+      if (form.bg1 === "no" && form.bg2 === "yes" && form.bg3 === "no") return "Potentially eligible via the ethnic pathway — but you need documentary evidence of Bulgarian ethnic origin. Contact DABA (State Agency for Bulgarians Abroad) for guidance.";
+      return "Consult the Bulgarian consulate for your specific situation.";
     }
 
     // Sweden
     if (form.country === "Sweden") {
       if (form.se1 === "no") return "Not eligible for Swedish citizenship by descent.";
-      if (form.se1 === "yes" && form.se2 === "no") return "Eligible for Swedish citizenship by descent. Dual citizenship is permitted.";
-      if (form.se1 === "yes" && form.se2 === "yes" && form.se3 === "yes") return "Eligible for Swedish citizenship by descent — retention satisfied. Dual citizenship is permitted.";
-      if (form.se1 === "yes" && form.se2 === "yes" && form.se3 === "no") return "⚠️ At risk: if under 22, file a retention declaration at a Swedish consulate immediately. If already 22+, your Swedish citizenship may have lapsed — contact the Swedish Tax Agency.";
-      return "Not eligible.";
+      if (form.se1 === "yes" && form.se2 === "no") return "Eligible for Swedish citizenship by descent (Lag 2001:82 om svenskt medborgarskap). Dual citizenship has been fully permitted since 2001.";
+      if (form.se1 === "yes" && form.se2 === "yes" && form.se3 === "yes") return "Eligible for Swedish citizenship by descent — retention of citizenship is established. Dual citizenship is permitted.";
+      if (form.se1 === "yes" && form.se2 === "yes" && form.se3 === "under22") return "You are still within the window to act. Under Section 14 of the Swedish Nationality Act, born-abroad dual nationals must establish a genuine connection before age 22: either 2+ consecutive years of residence in Sweden, or notifying the Swedish Tax Agency (Skatteverket). Act immediately — do not wait.";
+      if (form.se1 === "yes" && form.se2 === "yes" && form.se3 === "no") return "⚠️ Swedish citizenship may have lapsed under the age-22 loss rule. If you have already turned 22 without establishing residency in Sweden or filing a retention declaration, citizenship was automatically lost at 22. Contact the Swedish Tax Agency (Skatteverket) or Swedish consulate to determine current status.";
+      return "Consult the Swedish consulate for your specific situation.";
     }
 
     // Denmark
     if (form.country === "Denmark") {
       if (form.dk1 === "no") return "Not eligible for Danish citizenship by descent.";
-      if (form.dk1 === "yes" && form.dk2 === "no") return "Eligible for Danish citizenship by descent. Dual citizenship is permitted.";
-      if (form.dk1 === "yes" && form.dk2 === "yes" && form.dk3 === "yes") return "Eligible for Danish citizenship by descent — retention satisfied. Dual citizenship is permitted.";
-      if (form.dk1 === "yes" && form.dk2 === "yes" && form.dk3 === "no") return "⚠️ At risk: if under 22, file a retention declaration with a Danish consulate immediately. If already 22+, your Danish citizenship may have lapsed — contact the Danish Ministry of Immigration.";
-      return "Not eligible.";
+      if (form.dk1 === "yes" && form.dk2 === "no") return "Eligible for Danish citizenship by descent. Dual citizenship has been permitted since September 1, 2015.";
+      if (form.dk1 === "yes" && form.dk2 === "yes" && form.dk3 === "yes") return "Eligible for Danish citizenship by descent — retention is established. Dual citizenship is permitted.";
+      if (form.dk1 === "yes" && form.dk2 === "yes" && form.dk3 === "under18") return "You are under 18, so the retention window (ages 18–22) has not yet opened. When you turn 18, you must apply to retain Danish citizenship before turning 22 under Section 8 of the Danish Nationality Act. Mark this date in your calendar — missing the window causes automatic loss.";
+      if (form.dk1 === "yes" && form.dk2 === "yes" && form.dk3 === "no") return "⚠️ Danish citizenship may have lapsed. Under Section 8 of the Danish Nationality Act, born-abroad dual nationals who have never been resident in Denmark and did not apply to retain citizenship between ages 18 and 22 lose citizenship automatically. Contact the Danish Agency for International Recruitment and Integration (SIRI) to determine current status.";
+      return "Consult the Danish consulate for your specific situation.";
     }
 
     // Finland
     if (form.country === "Finland") {
       if (form.fi1 === "no") return "Not eligible for Finnish citizenship by descent.";
-      if (form.fi1 === "yes" && form.fi2 === "no") return "Eligible for Finnish citizenship by descent. Dual citizenship is permitted.";
-      if (form.fi1 === "yes" && form.fi2 === "yes" && form.fi3 === "yes") return "Eligible for Finnish citizenship by descent — retention satisfied. Dual citizenship is permitted.";
-      if (form.fi1 === "yes" && form.fi2 === "yes" && form.fi3 === "no") return "⚠️ At risk: if under 22, file a retention declaration with the Finnish Population Register Centre immediately. If already 22+, your Finnish citizenship may have been automatically lost.";
-      return "Not eligible.";
+      if (form.fi1 === "yes" && form.fi2 === "no") return "Eligible for Finnish citizenship by descent (Nationality Act 359/2003). Dual citizenship has been permitted since 2003.";
+      if (form.fi1 === "yes" && form.fi2 === "yes" && form.fi3 === "yes") return "Eligible for Finnish citizenship by descent — connection to Finland established, retention satisfied. Dual citizenship is permitted.";
+      if (form.fi1 === "yes" && form.fi2 === "yes" && form.fi3 === "under22") return "You are still within the window to act. Under Section 33 of the Finnish Nationality Act, born-abroad dual nationals must file a retention declaration with the Finnish Digital and Population Data Services Agency (DVV) before age 22. Act immediately.";
+      if (form.fi1 === "yes" && form.fi2 === "yes" && form.fi3 === "no") return "⚠️ Finnish citizenship may have been automatically lost at age 22 under Section 33 of the Nationality Act. Contact the Finnish Digital and Population Data Services Agency (DVV) or a Finnish consulate to determine current status.";
+      return "Consult the Finnish consulate for your specific situation.";
     }
 
     // Netherlands
     if (form.country === "Netherlands") {
       if (form.nl1 === "no") return "Not eligible for Dutch citizenship by descent.";
-      if (form.nl1 === "yes" && form.nl2 === "no") return "Likely not eligible — Dutch citizenship does not automatically pass beyond one generation born abroad unless the Dutch parent was born in the Netherlands. Consult the Dutch consulate.";
-      if (form.nl1 === "yes" && form.nl2 === "yes" && form.nl3 === "yes") return "Eligible for Dutch citizenship by descent. Dual citizenship is permitted.";
-      return "Not eligible — consult the Dutch consulate.";
+      if (form.nl1 === "yes" && form.nl2 === "no") return "Likely subject to the Option procedure — where a Dutch parent was also born abroad and Dutch citizenship was passed down through them, the automatic transmission rules may require an Option declaration rather than automatic acquisition. This applies particularly to pre-1985 maternal lineages. Consult the Dutch Immigration and Naturalisation Service (IND) or a Dutch consulate.";
+      if (form.nl1 === "yes" && form.nl2 === "yes" && form.nl3 === "yes") return "⚠️ Important warning — eligible by descent, BUT your Dutch citizenship may have lapsed under Article 15 of the Kingdom Act on Netherlands Nationality. Dutch dual nationals who live outside the EU for 10+ consecutive years without renewing their Dutch passport automatically lose Dutch citizenship. If this applies, contact the IND or Dutch consulate immediately, as there may be reinstatement options in limited circumstances.";
+      if (form.nl1 === "yes" && form.nl2 === "yes" && form.nl3 === "no") return "Eligible for Dutch citizenship by descent. Dual citizenship rules for the Netherlands are complex — while permitted in certain circumstances, the Netherlands discourages dual nationality for naturalization. For descent-based citizenship, dual is generally accepted. Keep your Dutch passport renewed every 10 years if you live outside the EU to avoid the Article 15 loss rule.";
+      return "Consult the Dutch consulate (IND) for your specific situation.";
     }
 
     // Belgium
     if (form.country === "Belgium") {
-      if (form.be1 === "yes" && form.be2 === "yes") return "Eligible for Belgian citizenship by descent. Dual citizenship is permitted.";
-      return "Not eligible for Belgian citizenship by descent.";
+      if (form.be1 === "no") return "Not eligible for Belgian citizenship by descent.";
+      if (form.be1 === "yes" && form.be2 === "no") return "Eligible for Belgian citizenship by descent. Dual citizenship has been permitted since April 28, 2008.";
+      if (form.be1 === "yes" && form.be2 === "yes" && form.be3 === "yes") return "Eligible for Belgian citizenship by descent — conservation of citizenship declared. Dual citizenship is permitted.";
+      if (form.be1 === "yes" && form.be2 === "yes" && form.be3 === "under18") return "You are under 18. Under Article 22 §2 of the Belgian Nationality Code, born-abroad dual nationals must file a conservation declaration between ages 18 and 28. Note: Belgium's cutoff is age 28 (not 22 like Nordic countries). When you turn 18, file the declaration — you have until age 28.";
+      if (form.be1 === "yes" && form.be2 === "yes" && form.be3 === "no") return "⚠️ Belgian citizenship may have lapsed under Article 22 §2 of the Belgian Nationality Code. Born-abroad dual nationals who are not resident in Belgium must file a conservation declaration between ages 18–28 or Belgian citizenship is automatically lost. If you are already over 28 without having filed, contact the Belgian consulate — restoration may be possible in limited circumstances.";
+      return "Consult the Belgian consulate for your specific situation.";
     }
 
     // Slovenia
     if (form.country === "Slovenia") {
-      if (form.si1 === "yes" && form.si2 === "yes") return "Eligible for Slovenian citizenship by descent. Dual citizenship is permitted.";
-      return "Not eligible for Slovenian citizenship by descent.";
+      if (form.si1 === "yes") return "Eligible for Slovenian citizenship by descent via the standard registered descent route (Article 14 ZDRS). Dual citizenship is permitted for this route. Contact the Slovenian Administrative Unit (upravna enota) where your ancestor was registered, or the Slovenian consulate.";
+      if (form.si1 === "no" && form.si2 === "no") return "Not eligible for Slovenian citizenship by descent. The standard route requires a formally registered Slovenian citizen parent, and the diaspora route requires ancestry within 4 generations.";
+      if (form.si1 === "no" && form.si2 === "yes" && form.si3 === "yes") return "Potentially eligible via the Slovenian diaspora route (Articles 19 and 40 ZDRS — up to 4th generation of diaspora members). This route requires 1 year of residency in Slovenia and allows dual citizenship. Contact the Slovenian Ministry of the Interior or a Slovenian consulate.";
+      if (form.si1 === "no" && form.si2 === "yes" && form.si3 === "no") return "Potentially eligible via the 'active ties' route — descendants of Slovenian diaspora members can sometimes demonstrate sufficient economic or cultural connection to Slovenia without establishing full residency. This is a discretionary route. Consult the Slovenian Ministry of the Interior for your specific situation.";
+      return "Consult the Slovenian consulate for your specific situation.";
     }
 
     // Austria
     if (form.country === "Austria") {
-      if (form.at1 === "no") return "Not eligible for Austrian citizenship by descent.";
-      if (form.at1 === "yes" && form.at2 === "no") return "Not eligible — Austria generally does not permit dual citizenship. You would need to renounce your current citizenship. Consult the Austrian consulate about possible exceptions.";
-      if (form.at1 === "yes" && form.at2 === "yes" && form.at3 === "yes") return "Eligible for Austrian citizenship by descent — but you must renounce your other citizenship(s). Dual citizenship is generally not permitted.";
-      return "Not eligible — consult the Austrian consulate.";
+      if (form.at1 === "no" && form.at2 === "no") return "Not eligible for Austrian citizenship. The standard route requires a citizen parent, and the §58c persecution pathway requires an ancestor who lost citizenship under Nazi persecution between 1933–1945.";
+      if (form.at1 === "no" && form.at2 === "yes") return "Potentially eligible under §58c of the Austrian Citizenship Act (StbG) — the Nazi persecution pathway. Descendants of Austrians who were stripped of citizenship or forced to flee due to Nazi persecution between 1933–1945 (including political, racial, religious, and military resistance grounds) may reclaim Austrian citizenship with NO generational limit and dual citizenship fully permitted. Contact the Austrian Embassy or the relevant Austrian state authority (Landeshauptmann). Expanded eligibility since September 2020 now includes political and military resistance, not just racial persecution.";
+      if (form.at1 === "yes" && form.at2 === "yes") return "Eligible under §58c of the Austrian Citizenship Act (StbG) — the Nazi persecution pathway. Dual citizenship is fully permitted under this route, no generational limit applies. Contact the Austrian Embassy — do NOT apply under the standard route which would require renunciation.";
+      if (form.at1 === "yes" && form.at2 === "no" && form.at3 === "yes") return "Potentially eligible for Austrian citizenship by standard descent (§1 StbG) — but Austria does NOT permit dual citizenship for standard cases. You will be required to renounce all other nationalities. Contact the Austrian consulate to begin the process.";
+      if (form.at1 === "yes" && form.at2 === "no" && form.at3 === "no") return "Not eligible — Austrian standard citizenship descent requires renunciation of all other nationalities. Since you are unwilling to renounce, this route is not available. Note: if any ancestor fled Austria due to Nazi persecution (1933–1945), ask about the §58c pathway, which allows dual citizenship.";
+      return "Consult the Austrian consulate for your specific situation.";
     }
 
     // Cyprus
     if (form.country === "Cyprus") {
-      if (form.cy1 === "yes" && form.cy2 === "yes") return "Eligible for Cypriot citizenship by descent. Dual citizenship is permitted.";
-      return "Not eligible for Cypriot citizenship by descent.";
+      if (form.cy1 === "no") return "Not eligible for Cypriot citizenship by descent.";
+      if (form.cy1 === "yes" && form.cy2 === "no" && form.cy3 === "yes") return "Eligible for Cypriot citizenship by descent through a citizen parent. Dual citizenship is fully permitted. Apply through the Civil Registry and Migration Department of Cyprus.";
+      if (form.cy1 === "yes" && form.cy2 === "yes" && form.cy3 === "yes") return "Potentially eligible via the grandchild pathway — Cypriot citizenship through a grandparent requires a formal application demonstrating documented lineage. Dual citizenship is permitted. Contact the Civil Registry and Migration Department of Cyprus or a Cypriot consulate.";
+      if (form.cy1 === "yes" && form.cy3 === "no") return "Potentially eligible, but you will need to gather the documentary evidence. Contact the Cypriot consulate once documentation is in order.";
+      return "Consult the Cypriot consulate for your specific situation.";
     }
 
     // Malta
     if (form.country === "Malta") {
-      if (form.mt1 === "no") return "Not eligible for Maltese citizenship by descent.";
-      if (form.mt1 === "yes" && form.mt2 === "no") return "Likely not eligible — Malta does not automatically pass citizenship beyond one generation born abroad. Consult Identity Malta.";
-      if (form.mt1 === "yes" && form.mt2 === "yes" && form.mt3 === "yes") return "Eligible for Maltese citizenship by descent. Dual citizenship is permitted.";
-      return "Not eligible — consult Identity Malta.";
+      if (form.mt1 === "no" && form.mt3 === "no") return "Not eligible for Maltese citizenship by descent.";
+      if (form.mt1 === "no" && form.mt3 === "yes") return "Potentially eligible via the Maltese lineal ascendant pathway — if you have a Maltese-born grandparent or great-grandparent, you may claim citizenship through that direct lineage. Dual citizenship is permitted (since 2000). Contact Identity Malta or Citizenship Malta.";
+      if (form.mt1 === "yes" && form.mt2 === "yes") return "Eligible for Maltese citizenship by descent. Dual citizenship is permitted. Contact Identity Malta (now Identità) to begin the application.";
+      if (form.mt1 === "yes" && form.mt2 === "no" && form.mt3 === "yes") return "Potentially eligible via the lineal ascendant pathway — your Maltese parent may not have registered their own citizenship, but if you have a Maltese-born grandparent or great-grandparent, that generation's citizenship can form the basis of a claim. Contact Identity Malta (Identità).";
+      if (form.mt1 === "yes" && form.mt2 === "no" && form.mt3 === "no") return "Likely not eligible automatically — Malta does not silently pass citizenship across multiple generations born abroad if intermediate generations never formally registered. Consult Identity Malta to explore any available registration route.";
+      return "Consult Identity Malta for your specific situation.";
     }
 
     // United Kingdom
     if (form.country === "United Kingdom") {
       if (form.gb1 === "no") return "Not eligible for British citizenship by descent.";
-      if (form.gb1 === "yes" && form.gb2 === "no") return "Not eligible by automatic descent — British citizenship by descent does not pass to a further generation born abroad unless your parent was born/naturalised in the UK. You may be able to register via the Home Office — consult UK Visas and Immigration.";
-      if (form.gb1 === "yes" && form.gb2 === "yes" && form.gb3 === "yes") return "Eligible for British citizenship by descent under the British Nationality Act 1981.";
-      return "Not eligible — consult UK Visas and Immigration.";
+      if (form.gb1 === "yes" && form.gb2 === "yes") return "Eligible for British citizenship by descent under Section 2(1)(a) of the British Nationality Act 1981. Your parent was a citizen 'otherwise than by descent' (born/naturalised/registered in the UK), so citizenship passes automatically. Dual citizenship is fully permitted. Apply through His Majesty's Passport Office.";
+      if (form.gb1 === "yes" && form.gb2 === "no" && form.gb3 === "yes") return "Potentially registrable under Section 3(2) or 3(5) of the British Nationality Act 1981 — children under 18 whose British grandparent was born in the UK can sometimes be registered by the Home Secretary. This is discretionary. Contact UK Visas and Immigration (UKVI).";
+      if (form.gb1 === "yes" && form.gb2 === "no" && form.gb3 === "no") return "Not automatically eligible — British citizenship by descent (Section 2 BNA 1981) does not pass beyond one generation born abroad unless the parent was born/naturalised in the UK. There is no automatic second-generation-abroad pathway. Consult an immigration solicitor about registration routes or discretionary provisions under Section 4B (historical unfairness).";
+      return "Consult UK Visas and Immigration (UKVI) for your specific situation.";
     }
 
     // Ukraine
     if (form.country === "Ukraine") {
-      if (form.ua1 === "yes" && form.ua2 === "yes") return "Eligible for Ukrainian citizenship by descent. Note: Ukraine does not formally recognise dual citizenship — consult the Ukrainian consulate regarding practical implications.";
-      return "Not eligible for Ukrainian citizenship by descent.";
+      if (form.ua1 === "no" && form.ua2 === "no") return "Not eligible for Ukrainian citizenship by descent.";
+      if (form.ua1 === "yes") return "Eligible for Ukrainian citizenship by descent. Note: Ukraine fully legalised dual citizenship in June 2025 — a historic change. You no longer face a legal prohibition on holding Ukrainian citizenship alongside another nationality. Contact a Ukrainian consulate to begin the process.";
+      if (form.ua1 === "no" && form.ua2 === "yes") return "Potentially eligible via the territorial origin pathway (Articles 9–10 of the Ukrainian Citizenship Law) — persons born in Ukraine before 1991, or children/grandchildren of such persons, may apply for citizenship on grounds of territorial origin. Note: dual citizenship is now fully permitted since June 2025. Contact a Ukrainian consulate.";
+      return "Consult the Ukrainian consulate for your specific situation.";
     }
 
     // Norway
     if (form.country === "Norway") {
       if (form.no1 === "no") return "Not eligible for Norwegian citizenship by descent.";
-      if (form.no1 === "yes" && form.no2 === "no") return "Eligible for Norwegian citizenship by descent. Dual citizenship is permitted.";
-      if (form.no1 === "yes" && form.no2 === "yes" && form.no3 === "yes") return "Eligible for Norwegian citizenship by descent — retention satisfied. Dual citizenship is permitted.";
-      if (form.no1 === "yes" && form.no2 === "yes" && form.no3 === "no") return "⚠️ At risk: if under 22, contact a Norwegian consulate immediately to file a retention declaration. If already 22+ without 2 years residence in Norway, your citizenship may have lapsed.";
-      return "Not eligible.";
+      if (form.no1 === "yes" && form.no2 === "no") return "Eligible for Norwegian citizenship by descent. Dual citizenship has been fully permitted since January 1, 2020. Contact a Norwegian consulate or the Norwegian Directorate of Immigration (UDI).";
+      if (form.no1 === "yes" && form.no2 === "yes" && form.no3 === "yes") return "Eligible for Norwegian citizenship by descent — retention confirmed. Dual citizenship is permitted.";
+      if (form.no1 === "yes" && form.no2 === "yes" && form.no3 === "under22") return "You are still within the window. File a retention declaration with the Norwegian Directorate of Immigration (UDI) or a Norwegian consulate immediately — you must do this before age 22 to preserve Norwegian citizenship under Section 24 of the Nationality Act.";
+      if (form.no1 === "yes" && form.no2 === "yes" && form.no3 === "no") return "⚠️ Norwegian citizenship may have lapsed. Under Section 24 of the Norwegian Nationality Act, born-abroad dual nationals who do not establish a connection to Norway before age 22 lose citizenship automatically. Contact the Norwegian Directorate of Immigration (UDI) — if you lost Norwegian citizenship before January 1, 2020 specifically because you acquired foreign nationality, you may be able to reclaim it by filing a simple declaration under the 2020 reformed rules.";
+      return "Consult the Norwegian consulate for your specific situation.";
     }
 
     // Switzerland
     if (form.country === "Switzerland") {
       if (form.ch1 === "no") return "Not eligible for Swiss citizenship by descent.";
-      if (form.ch1 === "yes" && form.ch2 === "no") return "Eligible for Swiss citizenship by descent. Dual citizenship is permitted.";
+      if (form.ch1 === "yes" && form.ch2 === "no") return "Eligible for Swiss citizenship by descent. Dual citizenship has been permitted since 1992. Contact your cantonal authority (Gemeindeverwaltung) or a Swiss consulate.";
       if (form.ch1 === "yes" && form.ch2 === "yes" && form.ch3 === "yes") return "Eligible for Swiss citizenship by descent — retention declaration filed. Dual citizenship is permitted.";
-      if (form.ch1 === "yes" && form.ch2 === "yes" && form.ch3 === "no") return "⚠️ At risk: if under 25, file a retention declaration at a Swiss consulate immediately. If already 25+, your Swiss citizenship may have been automatically lost — contact the Swiss State Secretariat for Migration (SEM).";
-      return "Not eligible.";
+      if (form.ch1 === "yes" && form.ch2 === "yes" && form.ch3 === "under25") return "You are still within the window. Under Article 8 of the Swiss Citizenship Act (BüG), born-abroad dual nationals who have never resided in Switzerland must file a retention declaration before age 25. Contact a Swiss consulate immediately.";
+      if (form.ch1 === "yes" && form.ch2 === "yes" && form.ch3 === "no") return "⚠️ Swiss citizenship may have lapsed under Article 8 BüG. Born-abroad dual nationals who never resided in Switzerland and did not file a retention declaration before age 25 lose citizenship automatically. Contact the Swiss State Secretariat for Migration (SEM) or Swiss consulate to determine current status.";
+      return "Consult the Swiss consulate for your specific situation.";
     }
 
     // Iceland
     if (form.country === "Iceland") {
       if (form.is1 === "no") return "Not eligible for Icelandic citizenship by descent.";
-      if (form.is1 === "yes" && form.is2 === "no") return "Eligible for Icelandic citizenship by descent. Dual citizenship is permitted.";
-      if (form.is1 === "yes" && form.is2 === "yes" && form.is3 === "yes") return "Eligible for Icelandic citizenship by descent — retention satisfied. Dual citizenship is permitted.";
-      if (form.is1 === "yes" && form.is2 === "yes" && form.is3 === "no") return "⚠️ At risk: if under 22, file a retention declaration with Registers Iceland (Þjóðskrá) immediately. If already 22+, your Icelandic citizenship may have lapsed.";
-      return "Not eligible.";
+      if (form.is1 === "yes" && form.is2 === "no") return "Eligible for Icelandic citizenship by descent. Dual citizenship has been permitted since 2003. Contact Registers Iceland (Þjóðskrá Íslands).";
+      if (form.is1 === "yes" && form.is2 === "yes" && form.is3 === "yes") return "Eligible for Icelandic citizenship by descent — retention notification made. Dual citizenship is permitted.";
+      if (form.is1 === "yes" && form.is2 === "yes" && form.is3 === "under22") return "You are still within the window. Under Article 8 of the Icelandic Nationality Act, you must notify Þjóðskrá Íslands (Registers Iceland) that you wish to retain citizenship before age 22. Act now.";
+      if (form.is1 === "yes" && form.is2 === "yes" && form.is3 === "no") return "⚠️ Icelandic citizenship may have lapsed. Under Article 8 of the Icelandic Nationality Act, born-abroad dual nationals who do not notify Registers Iceland before age 22 lose citizenship automatically. Contact Þjóðskrá Íslands to determine current status.";
+      return "Consult the Icelandic consulate for your specific situation.";
     }
 
     // Serbia
     if (form.country === "Serbia") {
-      if (form.rs1 === "yes" && form.rs2 === "yes") return "Eligible for Serbian citizenship by descent. Dual citizenship is permitted.";
-      return "Not eligible for Serbian citizenship by descent.";
+      if (form.rs1 === "no") return "Not eligible for Serbian citizenship by descent.";
+      if (form.rs1 === "yes" && form.rs2 === "yes") return "Eligible for Serbian citizenship by descent. Dual citizenship is fully permitted. Contact the Serbian consulate or the Ministry of Interior of Serbia.";
+      if (form.rs1 === "yes" && form.rs2 === "no") return "Eligible for Serbian citizenship by descent — but if you were born abroad and are under 23, register your citizenship promptly under the Serbian Citizenship Law. Missing this window may complicate the process. Contact the Serbian consulate.";
+      return "Consult the Serbian consulate for your specific situation.";
     }
 
     // Montenegro
     if (form.country === "Montenegro") {
-      if (form.me1 === "yes" && form.me2 === "yes") return "Eligible for Montenegrin citizenship by descent. Dual citizenship is permitted.";
-      return "Not eligible for Montenegrin citizenship by descent.";
+      if (form.me1 === "no") return "Not eligible for Montenegrin citizenship by descent.";
+      if (form.me1 === "yes" && form.me2 === "no") return "Not eligible — Montenegro strictly prohibits dual citizenship. Montenegrin citizens who acquire foreign nationality AUTOMATICALLY lose Montenegrin citizenship, and to acquire Montenegrin citizenship you must permanently renounce all other nationalities. Since you are unwilling to renounce, this route is not available to you.";
+      if (form.me1 === "yes" && form.me2 === "yes") return "Potentially eligible for Montenegrin citizenship by descent — but you must permanently renounce ALL other nationalities. Montenegro has zero tolerance for dual citizenship. Contact the Montenegrin Ministry of Interior (Ministarstvo unutrašnjih poslova). Consider carefully whether this trade-off makes sense for you.";
+      return "Consult the Montenegrin consulate for your specific situation.";
     }
 
     // Albania
     if (form.country === "Albania") {
-      if (form.al1 === "yes" && form.al2 === "yes") return "Eligible for Albanian citizenship by descent. Dual citizenship is permitted.";
-      return "Not eligible for Albanian citizenship by descent.";
+      if (form.al1 === "no" && form.al2 === "no") return "Not eligible for Albanian citizenship by descent or by the grandparent reduced-naturalization route.";
+      if (form.al1 === "yes") return "Eligible for Albanian citizenship by descent (Law 8389/1998). Dual citizenship is fully permitted. Contact the Albanian Ministry of Interior or a consulate.";
+      if (form.al1 === "no" && form.al2 === "yes") return "While you do not qualify for automatic citizenship by descent, documented Albanian grandparent ancestry qualifies you for a reduced 3-year residency naturalization pathway (vs 5 years standard). This is not automatic citizenship by descent — it requires residency in Albania. Contact the Albanian Ministry of Interior.";
+      return "Consult the Albanian consulate for your specific situation.";
     }
 
     // Bosnia & Herzegovina
     if (form.country === "Bosnia & Herzegovina") {
-      if (form.ba1 === "yes") return "Potentially eligible for BiH citizenship — both parents are BiH citizens. Consult the BiH Ministry of Civil Affairs.";
-      if (form.ba2 === "yes") return "Potentially eligible — one BiH parent and born in Bosnia. Consult the BiH Ministry of Civil Affairs to confirm.";
-      if (form.ba3 === "yes") return "Potentially eligible under the statelessness exception — one BiH parent and currently stateless. Consult the BiH Ministry of Civil Affairs.";
-      return "Not eligible — Bosnia's citizenship rules for those born abroad to only one BiH parent who hold another citizenship are very restrictive.";
+      if (form.ba1 === "yes") return "Potentially eligible for BiH citizenship — both parents are BiH citizens, making acquisition straightforward under Article 9 of the BiH Citizenship Law. Note: Bosnia does NOT permit dual citizenship — you will be required to renounce other nationalities. Contact the BiH Ministry of Civil Affairs.";
+      if (form.ba1 === "no" && form.ba2 === "yes") return "Potentially eligible — one BiH citizen parent and born in Bosnia satisfies the Article 7 criteria. Note: BiH does NOT permit dual citizenship. Contact the BiH Ministry of Civil Affairs to confirm and begin the renunciation process.";
+      if (form.ba1 === "no" && form.ba2 === "no" && form.ba3 === "yes") return "Potentially eligible under the statelessness exception (Article 7 BiH Citizenship Law) — one BiH citizen parent applying to a child who would otherwise be stateless. Note: since you are currently stateless, you would not need to formally renounce, but this is a rare situation. Consult the BiH Ministry of Civil Affairs immediately.";
+      if (form.ba1 === "no" && form.ba2 === "no" && form.ba3 === "no") return "Not eligible under standard rules. Bosnia's citizenship law for those born outside BiH to only one BiH parent who already hold another citizenship does not grant automatic citizenship, and no exceptions apply. Dual citizenship is prohibited, making the path even more restrictive.";
+      return "Consult the BiH Ministry of Civil Affairs for your specific situation.";
     }
 
     // North Macedonia
     if (form.country === "North Macedonia") {
-      if (form.mk1 === "yes" && form.mk2 === "yes") return "Eligible for North Macedonian citizenship by descent. Dual citizenship is permitted.";
-      return "Not eligible for North Macedonian citizenship by descent.";
+      if (form.mk1 === "no") return "Not eligible for North Macedonian citizenship by descent.";
+      if (form.mk1 === "yes" && form.mk2 === "yes") return "Eligible for North Macedonian citizenship by descent (Article 4 of the Citizenship Law). Dual citizenship is permitted. Contact the Ministry of Internal Affairs (MIA) of North Macedonia.";
+      if (form.mk1 === "yes" && form.mk2 === "no") return "Eligible for North Macedonian citizenship by descent — but if you were born abroad and are under 23, file a formal application promptly under the Citizenship Law. Contact the North Macedonian consulate.";
+      return "Consult the North Macedonian consulate for your specific situation.";
     }
 
     // Kosovo
     if (form.country === "Kosovo") {
-      if (form.xk1 === "yes" && form.xk2 === "yes") return "Eligible for Kosovo citizenship by descent. Dual citizenship is permitted.";
-      return "Not eligible for Kosovo citizenship by descent.";
+      if (form.xk1 === "no") return "Not eligible for Kosovo citizenship by descent.";
+      if (form.xk1 === "yes" && form.xk2 === "yes") return "Eligible for Kosovo citizenship by descent (Law 04/L-215 on Citizenship). Dual citizenship is fully permitted. Contact the Kosovo Ministry of Internal Affairs. Important: Kosovo is only partially internationally recognised (~100 of 193 UN members) — a Kosovo passport has restricted utility and is not accepted by Russia, China, Spain, Serbia, and others. Factor this into your decision.";
+      if (form.xk1 === "yes" && form.xk2 === "no") return "Eligible for Kosovo citizenship by descent — but be aware Kosovo is only partially recognised internationally and its passport has restricted utility. Confirm you understand this before applying. Contact the Kosovo Ministry of Internal Affairs.";
+      return "Consult the Kosovo consulate for your specific situation.";
     }
 
     // Moldova
     if (form.country === "Moldova") {
-      if (form.md1 === "yes" && form.md2 === "yes") return "Eligible for Moldovan citizenship by descent. Dual citizenship is permitted. Note: ethnic Moldovans may also have a separate Romanian citizenship claim.";
-      return "Not eligible for Moldovan citizenship by descent.";
+      if (form.md1 === "no" && form.md2 === "no") return "Not eligible for Moldovan citizenship by descent.";
+      if (form.md1 === "yes") {
+        const romanianNote = form.md3 === "yes" ? " Also note: as a person of Moldovan/Romanian ethnic origin, you may SEPARATELY qualify for Romanian citizenship — a full EU passport. Romanian citizenship is available to descendants of pre-1940 Romanian citizens from the territories now forming Moldova. Consider exploring both pathways." : "";
+        return `Eligible for Moldovan citizenship by descent (Law 1024-XIV). Dual citizenship is freely permitted.${romanianNote} Contact the Moldovan Agency for Public Services.`;
+      }
+      if (form.md1 === "no" && form.md2 === "yes") {
+        const romanianNote = form.md3 === "yes" ? " Also note: as a person of Moldovan/Romanian ethnic origin, you may SEPARATELY qualify for Romanian citizenship — a full EU passport. Explore Romanian citizenship in the checker above." : "";
+        return `Potentially eligible via the grandparent route under Moldovan citizenship law. Contact the Moldovan Agency for Public Services.${romanianNote}`;
+      }
+      return "Consult the Moldovan consulate for your specific situation.";
     }
 
     // Georgia
     if (form.country === "Georgia") {
-      if (form.ge1 === "yes" && form.ge3 === "yes") return "Eligible for Georgian citizenship by descent. Dual citizenship is permitted.";
-      if (form.ge1 === "no" && form.ge2 === "yes" && form.ge3 === "yes") return "Potentially eligible via the ethnic Georgian presidential pathway — contact the Georgian consulate. This route is discretionary.";
-      return "Not eligible for Georgian citizenship by descent.";
+      if (form.ge1 === "no" && form.ge2 === "no") return "Not eligible for Georgian citizenship by descent.";
+      if (form.ge1 === "yes" && form.ge3 === "yes") return "Eligible for Georgian citizenship by descent. Dual citizenship is permitted. Contact the Civil Registry Agency of Georgia or a Georgian consulate.";
+      if (form.ge1 === "yes" && form.ge3 === "no") return "Potentially eligible for Georgian citizenship by descent — gather civil records for the generational chain and contact the Georgian consulate.";
+      if (form.ge1 === "no" && form.ge2 === "yes" && form.ge3 === "yes") return "Potentially eligible via the ethnic Georgian presidential pathway — this is a DISCRETIONARY route available to ethnic Georgians in the diaspora (including those whose families emigrated during the Soviet era). Approval is not guaranteed. Contact the Georgian consulate or the Public Services Development Agency.";
+      if (form.ge1 === "no" && form.ge2 === "yes" && form.ge3 === "no") return "Potentially eligible via the ethnic Georgian pathway, but documentary evidence is needed. Contact the Georgian consulate for guidance on what records are accepted.";
+      return "Consult the Georgian consulate for your specific situation.";
     }
 
     // Armenia
     if (form.country === "Armenia") {
-      if (form.am1 === "yes" && form.am3 === "yes") return "Eligible for Armenian citizenship by descent. Dual citizenship is permitted.";
-      if (form.am1 === "no" && form.am2 === "yes" && form.am3 === "yes") return "Potentially eligible via the ethnic Armenian diaspora pathway (including Genocide descendants). Contact the Armenian consulate or Diaspora Armenia portal.";
-      return "Not eligible for Armenian citizenship by descent.";
+      if (form.am1 === "no" && form.am2 === "no") return "Not eligible for Armenian citizenship by descent.";
+      if (form.am1 === "yes" && form.am3 === "yes") return "Eligible for Armenian citizenship by descent. Dual citizenship is fully permitted. Contact the Armenian consulate or the Diaspora Affairs ministry.";
+      if (form.am1 === "yes" && form.am3 === "no") return "Potentially eligible for Armenian citizenship by descent — gather the documentary evidence and contact the Armenian consulate.";
+      if (form.am1 === "no" && form.am2 === "yes" && form.am3 === "yes") return "Potentially eligible via the ethnic Armenian diaspora pathway (Presidential Decree No. 222-A) — this includes descendants of 1915 Armenian Genocide survivors. Church records, diaspora community records, and Genocide survivor documentation are accepted. Contact the Armenian consulate or apply through the Republic of Armenia's Diaspora Ministry.";
+      if (form.am1 === "no" && form.am2 === "yes" && form.am3 === "no") return "Potentially eligible via the ethnic Armenian pathway — gather documentary evidence (church records, community records) and contact the Armenian consulate.";
+      return "Consult the Armenian consulate for your specific situation.";
     }
 
     // Belarus
     if (form.country === "Belarus") {
       if (form.by1 === "no") return "Not eligible for Belarusian citizenship by descent.";
-      if (form.by1 === "yes" && form.by2 === "no") return "Not eligible — Belarus strictly prohibits dual citizenship. You must renounce all other nationalities to proceed. Also note: a Belarusian passport currently carries significant travel restrictions under international sanctions.";
-      if (form.by1 === "yes" && form.by2 === "yes" && form.by3 === "yes") return "Eligible for Belarusian citizenship by descent — but you must renounce all other nationalities first. Note: a Belarusian passport currently carries travel restrictions under EU/US/UK sanctions.";
-      return "Not eligible — consult the Belarusian consulate.";
+      if (form.by1 === "yes" && form.by2 === "no") return "Not eligible — Belarus strictly prohibits dual citizenship (Law No. 136-Z on Citizenship). You must permanently renounce ALL other nationalities to acquire Belarusian citizenship. Additionally: a Belarusian passport currently carries significant EU/US/UK travel restrictions due to international sanctions on the Lukashenko regime. Strongly consider these implications.";
+      if (form.by1 === "yes" && form.by2 === "yes") return "Potentially eligible for Belarusian citizenship by descent — but you must permanently renounce ALL other nationalities first. Belarus will not accept dual citizenship under any circumstances. Important: a Belarusian passport is currently subject to EU/US/UK travel restrictions due to international sanctions. Consult the Belarusian consulate, and carefully consider the practical implications before proceeding.";
+      return "Consult the Belarusian consulate for your specific situation.";
     }
 
     // San Marino
     if (form.country === "San Marino") {
-      if (form.sm1 === "yes" && form.sm2 === "yes") return "Eligible for Sammarinese citizenship by descent. Dual citizenship is now permitted. Note: rules have historically been patrilineal — consult the San Marino Civil Status Office for current matrilineal eligibility.";
-      return "Not eligible for Sammarinese citizenship by descent.";
+      if (form.sm1 === "no") return "Not eligible for Sammarinese citizenship by descent.";
+      if (form.sm1 === "yes" && form.sm2 === "yes") return "Eligible for Sammarinese citizenship by descent. New legislation (2024–2026 reform) now permits dual citizenship, which was previously prohibited or severely restricted. Note: the rules have historically been primarily patrilineal — confirm current matrilineal eligibility with the San Marino Civil Status Office (Ufficio di Stato Civile), as reforms are still being implemented.";
+      if (form.sm1 === "yes" && form.sm2 === "no") return "Potentially eligible — gather the birth and marriage certificate chain and contact the San Marino Civil Status Office. Dual citizenship is now permitted under recent reforms.";
+      return "Consult the San Marino Civil Status Office for your specific situation.";
     }
 
     // Monaco
     if (form.country === "Monaco") {
       if (form.mc1 === "no") return "Not eligible for Monégasque citizenship by descent.";
-      if (form.mc1 === "yes" && form.mc2 === "no") return "Not eligible — Monaco absolutely prohibits dual citizenship. Acquiring Monaco citizenship requires renouncing all other nationalities.";
-      if (form.mc1 === "yes" && form.mc2 === "yes" && form.mc3 === "yes") return "Eligible for Monégasque citizenship by descent — but you must renounce all other nationalities. Monaco citizenship is one of the rarest in the world (~10,000 holders).";
-      return "Not eligible — consult Monaco's Direction de la Sûreté Publique.";
+      if (form.mc1 === "yes" && form.mc2 === "no") return "Not eligible — Monaco absolutely prohibits dual citizenship under the Monégasque Nationality Code. A person who acquires foreign nationality loses Monégasque citizenship automatically, and to acquire Monaco citizenship you must renounce all other nationalities without exception. Since you are unwilling to renounce, this route is not available.";
+      if (form.mc1 === "yes" && form.mc2 === "yes") return "Potentially eligible for Monégasque citizenship by descent — but you must permanently renounce ALL other nationalities. Monaco citizenship is one of the rarest in the world (~10,000 holders). Contact Monaco's Direction de la Sûreté Publique. This is an extraordinary step — consider carefully.";
+      return "Consult Monaco's Direction de la Sûreté Publique for your specific situation.";
     }
 
     // Liechtenstein
     if (form.country === "Liechtenstein") {
-      if (form.li1 === "yes" && form.li2 === "yes") return "Eligible for Liechtenstein citizenship by descent. Dual citizenship is permitted for citizenship acquired by descent.";
-      return "Not eligible for Liechtenstein citizenship by descent.";
+      if (form.li1 === "no") return "Not eligible for Liechtenstein citizenship by descent.";
+      if (form.li1 === "yes" && form.li2 === "yes") return "Eligible for Liechtenstein citizenship by descent. Dual citizenship IS permitted specifically for citizenship acquired by descent (CBD) — this is an exception to Liechtenstein's general rule that naturalization requires renunciation (and 30 years of residency). Contact the Liechtenstein Office of Domestic Affairs (Amt für Inneres).";
+      if (form.li1 === "yes" && form.li2 === "no") return "Potentially eligible — gather the documentary evidence and contact the Office of Domestic Affairs (Amt für Inneres) in Liechtenstein. Note: dual citizenship is permitted for descent-based claims.";
+      return "Consult the Liechtenstein authorities for your specific situation.";
     }
 
     // Andorra
     if (form.country === "Andorra") {
       if (form.ad1 === "no") return "Not eligible for Andorran citizenship by descent.";
-      if (form.ad1 === "yes" && form.ad2 === "no") return "Not eligible — Andorra does not permit dual citizenship. You must renounce your current citizenship to proceed.";
-      if (form.ad1 === "yes" && form.ad2 === "yes" && form.ad3 === "yes") return "Eligible for Andorran citizenship by descent — but you must renounce your other citizenship(s). Dual citizenship is not permitted.";
-      return "Not eligible — consult the Andorran authorities.";
+      if (form.ad1 === "yes" && form.ad2 === "no") return "Not eligible — Andorra does not permit dual citizenship. You must permanently renounce all other citizenship(s) to acquire Andorran nationality. Since you are unwilling to renounce, this route is not available.";
+      if (form.ad1 === "yes" && form.ad2 === "yes" && form.ad3 === "yes") return "Eligible for Andorran citizenship by descent — but you must permanently renounce your other citizenship(s). Contact the Andorran Ministry of Justice and Interior (Ministeri de Justícia i Interior). Carefully consider whether the trade-off is worthwhile for your situation.";
+      if (form.ad1 === "yes" && form.ad2 === "yes" && form.ad3 === "no") return "Potentially eligible — but you will need to gather documentation. Contact the Andorran Ministry of Justice and Interior once records are assembled. Remember: renunciation of all other nationalities is mandatory.";
+      return "Consult the Andorran authorities for your specific situation.";
     }
 
     return "Eligibility rules are complex. Please consult the relevant consulate.";
@@ -1753,10 +1844,15 @@ export default function HeritagePassportLanding() {
                 <div className="flex flex-col gap-5">
                   {visibleQuestions(form.country).map((q: Q, idx: number) => (
                     <div key={q.key} className="rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-800/50 p-5">
-                      <p className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 mb-3 leading-relaxed">
+                      <p className="text-sm font-semibold text-zinc-800 dark:text-zinc-100 mb-1 leading-relaxed">
                         <span className="text-emerald-500 mr-2 font-bold">Q{idx + 1}.</span>
                         {q.label}
                       </p>
+                      {q.hint && (
+                        <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-3 leading-relaxed pl-5 border-l-2 border-zinc-200 dark:border-zinc-700">
+                          {q.hint}
+                        </p>
+                      )}
                       {q.type === "radio" && (
                         <div className="flex flex-wrap gap-2">
                           {q.options.map((opt) => (
@@ -2064,7 +2160,7 @@ export default function HeritagePassportLanding() {
                 ].map(([name, href]) => (
                   <li key={name}><a href={href} className="hover:text-emerald-400 transition-colors">{name}</a></li>
                 ))}
-                <li><a href="/#eligibility" className="hover:text-emerald-400 transition-colors font-medium text-zinc-300">See all 47 countries →</a></li>
+                <li><a href="/#eligibility" className="hover:text-emerald-400 transition-colors font-medium text-zinc-300">See all 46 countries →</a></li>
               </ul>
             </div>
 

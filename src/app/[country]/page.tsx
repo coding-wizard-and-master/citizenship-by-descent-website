@@ -128,31 +128,36 @@ const countryData: Record<string, CountryData> = {
   },
   "hungary-citizenship-by-descent": {
     title: "Hungarian Citizenship by Descent",
-    description: "Guide to Hungarian citizenship by ancestry: simplified naturalization process, language requirements, required documents, and no generational limit explained.",
-    intro: "Hungary offers one of Europe's most accessible citizenship-by-descent programs through simplified naturalization. If you can prove Hungarian ancestry—regardless of how many generations back—and demonstrate basic Hungarian language skills, you may qualify for citizenship.",
-    eligibilityOverview: "Hungary's simplified naturalization process is available to anyone who can prove they had an ancestor who was a Hungarian citizen or lived in territories that were part of historical Hungary (particularly relevant for pre-1920 Trianon borders). Unlike many countries, there is no generational limit. The key requirement beyond proving ancestry is demonstrating basic conversational Hungarian during an interview. This is not a formal language test but rather a casual conversation with a consular officer.",
+    description: "Guide to Hungarian citizenship by ancestry: citizenship by verification (no language test), simplified naturalization, required documents, and no generational limit explained.",
+    intro: "Hungary offers two distinct routes to citizenship by descent: verification of existing citizenship (állampolgárság igazolása) for those with an unbroken chain — no language test required — and simplified naturalization (kedvezményes honosítás) for those whose chain was interrupted. Understanding which route applies to you can save significant time and effort.",
+    eligibilityOverview: "Hungary has two main routes for descendants of Hungarian citizens.\n\nCitizenship by Verification (állampolgárság igazolása / megállapítása): If your ancestor was a Hungarian citizen and that citizenship passed unbroken through every generation down to you — meaning no ancestor in the chain naturalised abroad and formally lost their Hungarian citizenship before the next generation was born — you may already BE a Hungarian citizen by operation of law. In this case, you do not apply for new citizenship; you simply have your existing citizenship verified and confirmed. No language test is required, and no interview is needed. This is governed by Section 11 of Act LV of 1993.\n\nSimplified Naturalization (kedvezményes honosítás): If the chain was broken at some point — for example, an ancestor naturalised in the USA and formally lost Hungarian citizenship before your parent was born — you cannot use the verification route. Instead, you apply for simplified naturalization, which requires proving Hungarian ancestry (no generational limit) and passing a basic conversational Hungarian language interview. This pathway was created by the 2010 amendment to the Citizenship Act and requires no residency in Hungary.",
     keyRequirements: [
-      "Proof of Hungarian ancestry (no generational limit)",
-      "Basic conversational Hungarian language ability",
-      "Clean criminal record",
-      "Ancestor lived in historical Hungarian territories (pre-1920 borders apply)",
-      "Complete documentation chain proving lineage"
+      "Verification route: unbroken chain of Hungarian citizenship from ancestor to applicant — no ancestor in the chain naturalised abroad and lost citizenship before the next generation was born",
+      "Verification route: complete documentary evidence of the unbroken chain",
+      "Verification route: NO language test or interview required",
+      "Simplified naturalization: proof of Hungarian ancestry (no generational limit) — chain may be broken",
+      "Simplified naturalization: basic conversational Hungarian (assessed in a casual interview, not a formal test)",
+      "Simplified naturalization: clean criminal record",
+      "Both routes: ancestor was a Hungarian citizen or lived in historical Hungarian territories (particularly under pre-1920 Trianon borders)"
     ],
     documents: [
       "Birth certificates for each generation linking you to your Hungarian ancestor",
       "Marriage certificates for each generation",
       "Hungarian ancestor's birth certificate or other proof of Hungarian citizenship/residence",
+      "For verification route: evidence that no link in the chain naturalised and lost Hungarian citizenship (e.g., naturalisation records showing the ancestor naturalised AFTER your parent was born, or evidence they never naturalised)",
       "Your valid passport or ID",
       "Completed application forms",
-      "Criminal background check from your country of residence"
+      "Criminal background check from your country of residence (simplified naturalization only)"
     ],
-    timeline: "The simplified naturalization process typically takes 3-6 months once your application is submitted and you've passed the language interview. Document gathering can take several additional months depending on archive accessibility.",
+    timeline: "Citizenship verification (állampolgárság igazolása) typically takes 3–6 months once submitted. Simplified naturalization typically takes 3–6 months after the language interview. Document gathering — especially from former Hungarian territories now in Romania, Slovakia, Serbia, or Ukraine — can add several additional months.",
     commonPitfalls: [
-      "Underestimating the Hungarian language requirement",
+      "Not checking whether you qualify for verification before defaulting to simplified naturalization — many people learn the language unnecessarily",
+      "Assuming the chain is broken just because an ancestor emigrated — emigration alone does not lose citizenship; formal naturalisation abroad was required",
+      "Underestimating the Hungarian language requirement for the simplified naturalization route",
       "Difficulty obtaining records from areas now in Romania, Slovakia, Serbia, or Ukraine",
       "Name spelling variations in old Hungarian records",
       "Missing church records when civil records are unavailable",
-      "Not practicing Hungarian conversation before the interview"
+      "Not practicing Hungarian conversation before the simplified naturalization interview"
     ],
     officialLinks: [
       { name: "Hungarian Consular Services", url: "https://konzuliszolgalat.kormany.hu/en" },
@@ -160,13 +165,13 @@ const countryData: Record<string, CountryData> = {
       { name: "Hungary Ministry of Foreign Affairs", url: "https://mfa.gov.hu/eng" }
     ],
     faqAnswers: {
-      whoQualifies: "Anyone with Hungarian ancestry qualifies for simplified naturalization regardless of how many generations have passed. Your ancestor must have been a Hungarian citizen or lived in historical Hungarian territories (including pre-1920 areas now in neighboring countries). You must also demonstrate basic conversational Hungarian.",
-      documentsNeeded: "You need birth and marriage certificates for each generation from your Hungarian ancestor to yourself. Your Hungarian ancestor's documents proving citizenship or residence in Hungary are essential. All documents should be certified, and foreign documents may need apostilles and translations.",
-      processingTime: "Once you submit your application and pass the Hungarian language interview, citizenship is typically granted within 3-6 months. Document gathering and preparation may add several months to your total timeline."
+      whoQualifies: "If your Hungarian ancestor emigrated but never formally naturalised abroad (or naturalised only after your parent was born), the chain may be intact and you may already BE a Hungarian citizen — use the verification route, no language test needed. If an ancestor did naturalise and the chain broke, use simplified naturalization: any person of Hungarian ancestry qualifies regardless of how many generations have passed, but a basic conversational Hungarian interview is required.",
+      documentsNeeded: "For verification: birth and marriage certificates for every generation, plus evidence that no ancestor in the chain naturalised before the next generation was born. For simplified naturalization: birth and marriage certificates going back to your Hungarian ancestor, plus proof of their Hungarian citizenship or residence in Hungary. All documents should be certified; foreign documents need apostilles and translations where required.",
+      processingTime: "Both the verification and simplified naturalization routes typically take 3–6 months from application submission. Document gathering from Hungarian and foreign archives can add several months. If using simplified naturalization, allow time to prepare basic conversational Hungarian."
     },
-    legalBasis: "Act LV of 1993 on Hungarian Citizenship governs standard and simplified naturalization. The simplified (kedvezményes honosítás) pathway was introduced by amendment in 2010, allowing any person of Hungarian ancestry to apply without residency requirements, subject to the basic language interview.",
-    dualCitizenshipRules: "Hungary fully permits dual and multiple citizenship. Naturalising in another country after obtaining Hungarian citizenship does not result in loss of Hungarian nationality. You are not required to renounce your existing citizenship when applying, and there is no legal mechanism under current Hungarian law that strips citizenship purely because you hold or later acquire another nationality.",
-    costEstimate: "The simplified naturalization application is free of charge. Document costs (translations, apostilles, certified copies) typically run €300–€700 depending on the number of generations. Hungarian language tutoring if needed: €500–€2,000. Overall out-of-pocket costs are among the lowest of any EU citizenship-by-descent program.",
+    legalBasis: "Act LV of 1993 on Hungarian Citizenship. Section 11 governs citizenship verification/establishment (állampolgárság megállapítása) for those who are already citizens by operation of law. The simplified naturalization pathway (kedvezményes honosítás) was introduced by the 2010 amendment to Act LV of 1993 (effective January 1, 2011), allowing persons of Hungarian ancestry to naturalise without a residency requirement, subject to a basic language interview.",
+    dualCitizenshipRules: "Hungary fully permits dual and multiple citizenship. Naturalising in another country after obtaining Hungarian citizenship does not result in loss of Hungarian nationality. You are not required to renounce your existing citizenship when applying for either the verification route or simplified naturalization, and there is no legal mechanism under current Hungarian law that strips citizenship purely because you hold or later acquire another nationality.",
+    costEstimate: "Both routes are free to apply for. Document costs (translations, apostilles, certified copies) typically run €300–€700 depending on the number of generations and the countries involved. Hungarian language tutoring for the simplified naturalization interview, if needed: €500–€2,000. Overall costs are among the lowest of any EU citizenship-by-descent program.",
     keyArchives: [
       { name: "Hungarian National Archives (MNL)", url: "https://mnl.gov.hu/mnl/ol/english_summary" },
       { name: "FamilySearch Hungary Records", url: "https://www.familysearch.org/en/wiki/Hungary_Civil_Registration" },
@@ -1889,7 +1894,7 @@ const countryData: Record<string, CountryData> = {
 
   "moldova-citizenship-by-descent": {
     title: "Moldova Citizenship by Descent",
-    description: "Moldova offers citizenship by descent through a parent or grandparent of Moldovan origin. Ethnic Moldovans may also have a parallel claim through Romania. Learn the requirements and process.",
+    description: "Moldova offers citizenship by descent to any person with a Moldovan parent or grandparent. Ethnic Moldovans whose ancestors held Moldovan or Romanian citizenship before the 1940 Soviet annexation may also have a parallel Romanian citizenship claim. Dual citizenship is permitted. Learn the eligibility requirements, required documents, and application process.",
     intro: "Moldova recognises citizenship by descent allowing individuals with Moldovan parents or grandparents to reclaim their heritage citizenship. Uniquely, many ethnic Moldovans also qualify for Romanian citizenship — providing EU rights — given Moldova's shared history with Romania.",
     eligibilityOverview: "Moldovan citizenship by descent is available if at least one parent is a Moldovan citizen. A grandparent route may apply in certain circumstances. Moldova permits dual citizenship freely.",
     keyRequirements: [
@@ -1935,7 +1940,7 @@ const countryData: Record<string, CountryData> = {
 
   "georgia-citizenship-by-descent": {
     title: "Georgia Citizenship by Descent",
-    description: "Georgia offers citizenship by descent for individuals with Georgian parents. An ethnic Georgians pathway also exists. Dual citizenship is permitted. Learn how to claim Georgian citizenship.",
+    description: "Georgia offers citizenship by descent to children of Georgian citizens born anywhere in the world. An ethnic Georgians restoration pathway also exists for those who can prove Georgian ethnic origin. Dual citizenship is permitted. Learn the eligibility requirements, required documents, and how to apply through Georgian consulates.",
     intro: "Georgia recognises citizenship by descent for those born to Georgian citizen parents. An 'ethnic Georgian' pathway also exists which is administered by the President. Georgia applied for EU candidate status in 2022, raising the profile of Georgian citizenship internationally.",
     eligibilityOverview: "Citizenship by descent applies where at least one parent was a Georgian citizen at the time of birth. An ethnic Georgian route, recognised by Presidential decree, provides a separate pathway for the Georgian diaspora worldwide.",
     keyRequirements: [
@@ -1980,7 +1985,7 @@ const countryData: Record<string, CountryData> = {
 
   "armenia-citizenship-by-descent": {
     title: "Armenia Citizenship by Descent",
-    description: "Armenia offers citizenship by descent to those with an Armenian parent. The Armenian diaspora — including descendants of Genocide survivors — has a dedicated pathway. Dual citizenship is freely permitted.",
+    description: "Armenia offers citizenship by descent to anyone born to an Armenian citizen parent — no residency required. The global Armenian diaspora, including descendants of Armenian Genocide survivors, has a dedicated naturalization and repatriation pathway. Dual citizenship is freely permitted. Learn the eligibility criteria, required documents, and how to apply through Armenian consulates worldwide.",
     intro: "Armenia has one of the world's most accessible citizenship-by-descent programmes, reflecting its large global diaspora. Individuals with at least one Armenian parent qualify automatically. A separate special pathway exists for ethnic Armenians and, most notably, for descendants of survivors of the 1915 Armenian Genocide.",
     eligibilityOverview: "Armenian citizenship by descent is available to any person born to an Armenian citizen parent. Ethnic Armenians without a direct citizen parent line may apply under special provisions. The diaspora pathway allows ethnic Armenians who were never citizens to reclaim ancestral citizenship.",
     keyRequirements: [
@@ -2027,7 +2032,7 @@ const countryData: Record<string, CountryData> = {
 
   "belarus-citizenship-by-descent": {
     title: "Belarus Citizenship by Descent",
-    description: "Belarus offers citizenship by descent through a Belarusian parent, but prohibits dual citizenship. Political sanctions and stability concerns make this a complex choice. Learn the requirements.",
+    description: "Belarus offers citizenship by descent to children of Belarusian citizens. However, Belarus strictly prohibits dual citizenship — applicants must first renounce their existing nationality. The current geopolitical climate adds significant complexity to this path. Learn the eligibility requirements, the dual citizenship prohibition, and what the application process entails.",
     intro: "Belarus allows citizenship by descent where a parent is a Belarusian citizen. However, Belarus strictly prohibits dual citizenship — acquiring Belarusian citizenship requires renouncing all other nationalities. Given ongoing EU and US sanctions since the 2020 disputed elections and the regime's suppression of political dissent, prospective applicants should weigh significant political and practical considerations.",
     eligibilityOverview: "Belarusian citizenship by descent is available to individuals born to a Belarusian citizen parent. However, dual citizenship is not permitted. Belarusian citizens who acquire foreign nationality are considered to automatically lose Belarusian citizenship, and vice versa.",
     keyRequirements: [
@@ -2072,7 +2077,7 @@ const countryData: Record<string, CountryData> = {
 
   "san-marino-citizenship-by-descent": {
     title: "San Marino Citizenship by Descent",
-    description: "San Marino — the world's oldest republic — offers citizenship by descent through patrilineal lines. Dual citizenship has been newly permitted. Learn how to claim Sammarinese citizenship.",
+    description: "San Marino — the world's oldest republic, a microstate surrounded by Italy — offers citizenship by descent to descendants of Sammarinese emigrants through the paternal line. Dual citizenship has been newly permitted since 2022. Learn the eligibility criteria, required documents, and how to apply through the San Marino State Secretariat.",
     intro: "The Republic of San Marino, a microstate of around 34,000 citizens entirely surrounded by Italy, has traditionally granted citizenship by descent through the paternal line. A historic 2024–2026 legal reform has opened dual citizenship for those acquiring San Marino citizenship by descent or naturalization. While the country is not an EU member, it has a deep relationship with Italy and Europe.",
     eligibilityOverview: "San Marino citizenship by descent is available to those with a Sammarinese father (patrilineal) or, following recent legal reforms being implemented, through either parent. The process is administered by the Civil Status Office of San Marino directly or via Italian consulates for diaspora applicants.",
     keyRequirements: [
@@ -2117,7 +2122,7 @@ const countryData: Record<string, CountryData> = {
 
   "monaco-citizenship-by-descent": {
     title: "Monaco Citizenship by Descent",
-    description: "Monaco citizenship by descent is available to those with a Monégasque parent, but dual citizenship is prohibited. With only ~10,000 citizens, it is one of the rarest citizenships in the world.",
+    description: "Monaco citizenship by descent is available to children of a Monégasque parent, but dual citizenship is strictly prohibited — applicants must renounce other nationalities upon acquiring Monaco citizenship. With fewer than 10,000 citizens in this Mediterranean microstate, Monégasque citizenship is among the rarest in the world. Learn the eligibility criteria, renunciation requirement, and application steps.",
     intro: "Monaco — a sovereign city-state on the French Riviera — grants citizenship to children of Monégasque citizens. With approximately 10,000 Monégasque citizens in a total population of around 40,000, it is one of the rarest citizenships globally. Dual citizenship is strictly prohibited: acquiring foreign nationality automatically results in loss of Monaco citizenship, and vice versa.",
     eligibilityOverview: "Monaco citizenship by descent requires a Monégasque citizen parent. Historically patrilineal, reforms have extended this to matrilineal descent. Dual citizenship is absolutely prohibited — holding Monaco citizenship means you cannot concurrently hold another nationality.",
     keyRequirements: [
@@ -2309,6 +2314,38 @@ const passportImages: Record<string, string> = {
   "czech-republic-citizenship-by-descent": "czech-republic.jpg",
   "slovakia-citizenship-by-descent": "slovakia.jpg",
   "luxembourg-citizenship-by-descent": "luxembourg.png",
+  "france-citizenship-by-descent": "france.jpg",
+  "romania-citizenship-by-descent": "romania.png",
+  "croatia-citizenship-by-descent": "croatia.jpg",
+  "bulgaria-citizenship-by-descent": "bulgaria.jpg",
+  "sweden-citizenship-by-descent": "sweden.png",
+  "denmark-citizenship-by-descent": "denmark.jpg",
+  "finland-citizenship-by-descent": "finland.png",
+  "netherlands-citizenship-by-descent": "netherlands.jpg",
+  "belgium-citizenship-by-descent": "belgium.jpg",
+  "slovenia-citizenship-by-descent": "slovenia.png",
+  "austria-citizenship-by-descent": "austria.png",
+  "cyprus-citizenship-by-descent": "cyprus.png",
+  "malta-citizenship-by-descent": "malta.png",
+  "uk-citizenship-by-descent": "uk.png",
+  "ukraine-citizenship-by-descent": "ukraine.jpg",
+  "norway-citizenship-by-descent": "norway.jpg",
+  "switzerland-citizenship-by-descent": "switzerland.jpg",
+  "iceland-citizenship-by-descent": "iceland.jpg",
+  "serbia-citizenship-by-descent": "serbia.png",
+  "montenegro-citizenship-by-descent": "montenegro.png",
+  "albania-citizenship-by-descent": "albania.jpg",
+  "bosnia-citizenship-by-descent": "bosnia.png",
+  "north-macedonia-citizenship-by-descent": "north-macedonia.png",
+  "kosovo-citizenship-by-descent": "kosovo.jpg",
+  "moldova-citizenship-by-descent": "moldova.jpg",
+  "georgia-citizenship-by-descent": "georgia.jpg",
+  "armenia-citizenship-by-descent": "armenia.jpg",
+  "belarus-citizenship-by-descent": "belarus.png",
+  "san-marino-citizenship-by-descent": "san-marino.jpg",
+  "monaco-citizenship-by-descent": "monaco.jpg",
+  "liechtenstein-citizenship-by-descent": "liechtenstein.jpg",
+  "andorra-citizenship-by-descent": "andorra.jpg",
 };
 
 export function generateStaticParams() {
@@ -2328,22 +2365,57 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
+  // Derive country proper noun from slug for keyword variations
+  const countryNameOverrides: Record<string, string> = {
+    "uk-citizenship-by-descent": "United Kingdom",
+  };
+  const countryName = countryNameOverrides[slug] ??
+    slug.replace("-citizenship-by-descent", "").split("-")
+      .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+
+  // Adjective label from title (e.g. "Italian" from "Italian Citizenship by Descent")
+  const adjectiveLabel = data.title.replace(/\s*[\u2014\u2013-].*$/, "").replace(" Citizenship by Descent", "").trim();
+
+  const keywords = [
+    `citizenship by descent ${countryName}`,
+    `${adjectiveLabel} citizenship by descent`,
+    `${countryName} citizenship by descent`,
+    `${countryName} ancestry citizenship`,
+    `${adjectiveLabel.toLowerCase()} passport by descent`,
+    `jure sanguinis ${countryName.toLowerCase()}`,
+    `${countryName} dual citizenship`,
+    `${adjectiveLabel.toLowerCase()} citizenship requirements`,
+    `how to get ${adjectiveLabel.toLowerCase()} citizenship`,
+    `${countryName.toLowerCase()} citizenship through parents`,
+  ];
+
+  // Ensure the country proper noun appears in the meta description
+  const hasCountryNoun = data.description.toLowerCase().includes(countryName.toLowerCase());
+  const metaDescription = hasCountryNoun
+    ? data.description
+    : `${countryName}: ${data.description}`;
+
+  const ogImageUrl = `/og?title=${encodeURIComponent(data.title)}`;
+
   return {
     title: data.title,
-    description: data.description,
+    description: metaDescription,
+    keywords,
     alternates: { canonical: `https://heritagepassportfinder.com/${slug}` },
     openGraph: {
       title: data.title,
-      description: data.description,
+      description: metaDescription,
       url: `https://heritagepassportfinder.com/${slug}`,
       type: "article",
       publishedTime: SITE_DATE_PUBLISHED,
       modifiedTime: new Date().toISOString().split("T")[0],
+      images: [{ url: ogImageUrl, width: 1200, height: 630, alt: data.title }],
     },
     twitter: {
       title: data.title,
-      description: data.description,
-      card: "summary",
+      description: metaDescription,
+      card: "summary_large_image",
     },
   };
 }
@@ -2766,7 +2838,7 @@ export default async function CountryPage({ params }: Props) {
                     ].map(([name, slug]) => (
                       <li key={slug}><Link href={`/${slug}`} className="hover:text-emerald-600 transition-colors">{name}</Link></li>
                     ))}
-                    <li><Link href="/" className="hover:text-emerald-600 transition-colors font-medium text-zinc-700 dark:text-zinc-300">See all 47 countries →</Link></li>
+                    <li><Link href="/" className="hover:text-emerald-600 transition-colors font-medium text-zinc-700 dark:text-zinc-300">See all 46 countries →</Link></li>
                   </ul>
                 </div>
                 <div>

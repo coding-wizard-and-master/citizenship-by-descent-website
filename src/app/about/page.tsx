@@ -70,7 +70,7 @@ export default function AboutPage() {
             </h1>
 
             <p className="text-lg text-zinc-600 dark:text-zinc-300 leading-relaxed mb-8">
-              Heritage Passport Finder is a free educational tool that helps descendants of European immigrants understand whether they may qualify for citizenship by descent — and what steps they would need to take. It covers 14 European countries, from Italy and Ireland to Luxembourg and Estonia.
+              Heritage Passport Finder is a free educational tool that helps descendants of European immigrants understand whether they may qualify for citizenship by descent — and what steps they would need to take. It covers 46 European countries, from major EU nations like Italy, Ireland, Germany, and Poland to smaller states like Luxembourg, Liechtenstein, and San Marino.
             </p>
 
             <section className="mb-10">
@@ -91,7 +91,7 @@ export default function AboutPage() {
                   <ul className="space-y-2 text-sm text-zinc-700 dark:text-zinc-300">
                     {[
                       "Free interactive eligibility checker (no signup required)",
-                      "In-depth guides for each of 14 European countries",
+                      "In-depth guides for each of 46 countries",
                       "Document requirements and preparation guidance",
                       "Processing time and cost estimates",
                       "Links to official government resources",
@@ -156,7 +156,7 @@ export default function AboutPage() {
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
                   { href: "/#eligibility", label: "Free Eligibility Checker" },
-                  { href: "/citizenship-by-descent-requirements-by-country", label: "Compare 14 European Countries" },
+                  { href: "/citizenship-by-descent-requirements-by-country", label: "Compare Top 14 Countries (Table)" },
                   { href: "/apostille-guide", label: "Apostille Guide" },
                   { href: "/documents-checklist", label: "Document Checklist" },
                   { href: "/italy-1948-rule", label: "Italy 1948 Rule Explained" },
