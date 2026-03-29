@@ -1472,7 +1472,7 @@ export default function HeritagePassportLanding() {
                 <span className="font-bold text-white text-sm">Heritage Passport Finder</span>
               </div>
               <p className="text-zinc-400 text-sm leading-relaxed mb-6">
-                Free educational guidance for people exploring European citizenship by descent. Covers 14 EU countries.
+                Free educational guidance for people exploring European citizenship by descent. Covers 47 European countries.
               </p>
               <ScrollLink
                 to="eligibility" smooth offset={-80} duration={400}
@@ -1497,24 +1497,26 @@ export default function HeritagePassportLanding() {
                 ].map(([name, href]) => (
                   <li key={name}><a href={href} className="hover:text-emerald-400 transition-colors">{name}</a></li>
                 ))}
+                <li><a href="/#eligibility" className="hover:text-emerald-400 transition-colors font-medium text-zinc-300">See all 47 countries →</a></li>
               </ul>
             </div>
 
             {/* More Countries */}
             <div>
-              <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-4">More</p>
+              <p className="text-xs font-semibold text-zinc-400 uppercase tracking-widest mb-4">More Countries</p>
               <ul className="space-y-2.5 text-sm text-zinc-400">
                 {[
                   ["Hungary", "/hungary-citizenship-by-descent"],
-                  ["Lithuania", "/lithuania-citizenship-by-descent"],
-                  ["Estonia", "/estonia-citizenship-by-descent"],
-                  ["Latvia", "/latvia-citizenship-by-descent"],
-                  ["Czech Republic", "/czech-republic-citizenship-by-descent"],
-                  ["Slovakia", "/slovakia-citizenship-by-descent"],
-                  ["Luxembourg", "/luxembourg-citizenship-by-descent"],
+                  ["France", "/france-citizenship-by-descent"],
+                  ["Romania", "/romania-citizenship-by-descent"],
+                  ["Ukraine", "/ukraine-citizenship-by-descent"],
+                  ["Armenia", "/armenia-citizenship-by-descent"],
+                  ["Norway", "/norway-citizenship-by-descent"],
+                  ["Switzerland", "/switzerland-citizenship-by-descent"],
                 ].map(([name, href]) => (
                   <li key={name}><a href={href} className="hover:text-emerald-400 transition-colors">{name}</a></li>
                 ))}
+                <li><a href="/citizenship-by-descent-requirements-by-country" className="hover:text-emerald-400 transition-colors font-medium text-zinc-300">Compare all countries →</a></li>
               </ul>
             </div>
 

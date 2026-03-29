@@ -1519,7 +1519,7 @@ const countryData: Record<string, CountryData> = {
     ],
     timeline: "Citizenship registration for qualifying children: 2–6 months. Retention declaration before age 25: 1–3 months. Swiss naturalization (for those without descent, through cantonal procedure): 3–10+ years of process after meeting 10-year residency requirement.",
     commonPitfalls: [
-      "Age-25 loss: Swiss nationals born abroad who hold another citizenship and have never lived in Switzerland lose Swiss citizenship automatically at age 25 if they fail to file a retention declaration — this age cutoff is 25 (stricter than the Nordic countries' age 22)",
+      "Age-25 loss: Swiss nationals born abroad who hold another citizenship and have never lived in Switzerland lose Swiss citizenship automatically at age 25 if they fail to file a retention declaration — note the Nordic countries impose the same rule but at age 22, giving Swiss nationals three extra years to act",
       "Cantonal complexity: Swiss naturalization is decentralized; each of the 26 cantons has additional requirements beyond federal law, which can be demanding and vary widely",
       "Heimatort system: Swiss citizenship is tied to a Gemeinde (home commune/Heimatort); the Heimatschein from the Heimatort is the fundamental citizenship document — applicants need to identify the correct Heimatort for their Swiss ancestor",
       "Pre-1992 renunciations: Swiss who were required to renounce before 1992 when acquiring another nationality generally cannot automatically reclaim Swiss citizenship"
@@ -2766,22 +2766,24 @@ export default async function CountryPage({ params }: Props) {
                     ].map(([name, slug]) => (
                       <li key={slug}><Link href={`/${slug}`} className="hover:text-emerald-600 transition-colors">{name}</Link></li>
                     ))}
+                    <li><Link href="/" className="hover:text-emerald-600 transition-colors font-medium text-zinc-700 dark:text-zinc-300">See all 47 countries →</Link></li>
                   </ul>
                 </div>
                 <div>
                   <p className="font-semibold text-zinc-900 dark:text-zinc-100 mb-3">More</p>
                   <ul className="flex flex-col gap-2 text-zinc-500 dark:text-zinc-400">
                     {[
-                      ["Hungary", "hungary-citizenship-by-descent"],
-                      ["Lithuania", "lithuania-citizenship-by-descent"],
-                      ["Estonia", "estonia-citizenship-by-descent"],
-                      ["Latvia", "latvia-citizenship-by-descent"],
-                      ["Czech Republic", "czech-republic-citizenship-by-descent"],
-                      ["Slovakia", "slovakia-citizenship-by-descent"],
-                      ["Luxembourg", "luxembourg-citizenship-by-descent"],
+                      ["France", "france-citizenship-by-descent"],
+                      ["Romania", "romania-citizenship-by-descent"],
+                      ["Ukraine", "ukraine-citizenship-by-descent"],
+                      ["Armenia", "armenia-citizenship-by-descent"],
+                      ["Norway", "norway-citizenship-by-descent"],
+                      ["Switzerland", "switzerland-citizenship-by-descent"],
+                      ["Sweden", "sweden-citizenship-by-descent"],
                     ].map(([name, slug]) => (
                       <li key={slug}><Link href={`/${slug}`} className="hover:text-emerald-600 transition-colors">{name}</Link></li>
                     ))}
+                    <li><Link href="/citizenship-by-descent-requirements-by-country" className="hover:text-emerald-600 transition-colors font-medium text-zinc-700 dark:text-zinc-300">Compare all countries →</Link></li>
                   </ul>
                 </div>
               </div>
