@@ -1412,22 +1412,24 @@ export default function HeritagePassportLanding() {
 
       {/* ── ADSENSE ─────────────────────────────────────────────── */}
       {process.env.NODE_ENV === "production" && (
-        <div className="max-w-4xl mx-auto px-6">
-          <ins
-            className="adsbygoogle"
-            style={{ display: "block" }}
-            data-ad-client="ca-pub-1772060773365341"
-            data-ad-slot="7043924687"
-            data-ad-format="auto"
-            data-full-width-responsive="true"
-          />
+        <div className="bg-zinc-50 border-t border-zinc-100">
+          <div className="max-w-4xl mx-auto px-6 py-4">
+            <ins
+              className="adsbygoogle"
+              style={{ display: "block" }}
+              data-ad-client="ca-pub-1772060773365341"
+              data-ad-slot="7043924687"
+              data-ad-format="auto"
+              data-full-width-responsive="true"
+            />
+          </div>
         </div>
       )}
 
       {/* ── FOOTER ──────────────────────────────────────────────── */}
       <footer className="bg-zinc-950 text-white">
         {/* Main grid */}
-        <div className="max-w-6xl mx-auto px-6 pt-16 pb-10">
+        <div className="max-w-6xl mx-auto px-6 pt-10 pb-8">
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-10">
 
             {/* Brand */}
