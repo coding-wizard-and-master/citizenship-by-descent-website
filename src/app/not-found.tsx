@@ -4,13 +4,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Page Not Found",
   description: "The page you're looking for doesn't exist. Return to Heritage Passport Finder to check your citizenship eligibility.",
-  robots: {
-    index: false,
-    follow: true,
-  },
 };
 
-export default function NotFoundPage() {
+export default function NotFound() {
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black flex flex-col">
       {/* Header */}
@@ -90,4 +86,3 @@ export default function NotFoundPage() {
     </div>
   );
 }
-

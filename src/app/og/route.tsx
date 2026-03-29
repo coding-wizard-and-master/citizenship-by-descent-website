@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
           fontFamily: 'Inter, sans-serif',
         }}
       >
-        <img src="https://heritagepassportfinder.com/logo.png" width={120} height={120} style={{ marginBottom: 40 }} alt="Logo" />
+        <img src="https://heritagepassportfinder.com/logo.svg" width={120} height={120} style={{ marginBottom: 40 }} alt="Logo" />
         <span style={{ fontSize: 60, fontWeight: 700, color: '#14532d', textAlign: 'center', lineHeight: 1.1 }}>{title}</span>
         <span style={{ fontSize: 32, color: '#334155', marginTop: 32 }}>heritagepassportfinder.com</span>
       </div>

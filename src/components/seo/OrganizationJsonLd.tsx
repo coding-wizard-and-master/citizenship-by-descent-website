@@ -7,9 +7,12 @@ export function OrganizationJsonLd() {
     "@type": "Organization",
     name: "Heritage Passport Finder",
     url: "https://heritagepassportfinder.com",
-    logo: "https://heritagepassportfinder.com/logo.png",
+    logo: "https://heritagepassportfinder.com/logo.svg",
     sameAs: [
-      // add socials if you have them
+      // Add your real social profile URLs here, e.g.:
+      // "https://twitter.com/yourhandle",
+      // "https://www.facebook.com/yourpage",
+      // "https://www.linkedin.com/company/yourcompany",
     ],
   };
   return (
