@@ -184,7 +184,39 @@ export default function HeritagePassportLanding() {
   lv1: "", lv2: "",
   cz1: "", cz2: "", cz3: "", cz4: "",
   sk1: "", sk2: "",
-  lu1: "", lu2: "", lu3: ""
+  lu1: "", lu2: "", lu3: "",
+  fr1: "", fr2: "",
+  ro1: "", ro2: "", ro3: "",
+  hr1: "", hr2: "",
+  bg1: "", bg2: "",
+  se1: "", se2: "", se3: "",
+  dk1: "", dk2: "", dk3: "",
+  fi1: "", fi2: "", fi3: "",
+  nl1: "", nl2: "", nl3: "",
+  be1: "", be2: "",
+  si1: "", si2: "",
+  at1: "", at2: "", at3: "",
+  cy1: "", cy2: "",
+  mt1: "", mt2: "", mt3: "",
+  gb1: "", gb2: "", gb3: "",
+  ua1: "", ua2: "",
+  no1: "", no2: "", no3: "",
+  ch1: "", ch2: "", ch3: "",
+  is1: "", is2: "", is3: "",
+  rs1: "", rs2: "",
+  me1: "", me2: "",
+  al1: "", al2: "",
+  ba1: "", ba2: "", ba3: "",
+  mk1: "", mk2: "",
+  xk1: "", xk2: "",
+  md1: "", md2: "",
+  ge1: "", ge2: "", ge3: "",
+  am1: "", am2: "", am3: "",
+  by1: "", by2: "", by3: "",
+  sm1: "", sm2: "",
+  mc1: "", mc2: "", mc3: "",
+  li1: "", li2: "",
+  ad1: "", ad2: "", ad3: ""
   });
   const [submitted, setSubmitted] = useState(false);
   const [result, setResult] = useState<string | null>(null);
@@ -209,7 +241,39 @@ export default function HeritagePassportLanding() {
       lv1: "", lv2: "",
       cz1: "", cz2: "", cz3: "", cz4: "",
       sk1: "", sk2: "",
-      lu1: "", lu2: "", lu3: ""
+      lu1: "", lu2: "", lu3: "",
+      fr1: "", fr2: "",
+      ro1: "", ro2: "", ro3: "",
+      hr1: "", hr2: "",
+      bg1: "", bg2: "",
+      se1: "", se2: "", se3: "",
+      dk1: "", dk2: "", dk3: "",
+      fi1: "", fi2: "", fi3: "",
+      nl1: "", nl2: "", nl3: "",
+      be1: "", be2: "",
+      si1: "", si2: "",
+      at1: "", at2: "", at3: "",
+      cy1: "", cy2: "",
+      mt1: "", mt2: "", mt3: "",
+      gb1: "", gb2: "", gb3: "",
+      ua1: "", ua2: "",
+      no1: "", no2: "", no3: "",
+      ch1: "", ch2: "", ch3: "",
+      is1: "", is2: "", is3: "",
+      rs1: "", rs2: "",
+      me1: "", me2: "",
+      al1: "", al2: "",
+      ba1: "", ba2: "", ba3: "",
+      mk1: "", mk2: "",
+      xk1: "", xk2: "",
+      md1: "", md2: "",
+      ge1: "", ge2: "", ge3: "",
+      am1: "", am2: "", am3: "",
+      by1: "", by2: "", by3: "",
+      sm1: "", sm2: "",
+      mc1: "", mc2: "", mc3: "",
+      li1: "", li2: "",
+      ad1: "", ad2: "", ad3: ""
     });
   }
 
@@ -699,6 +763,247 @@ export default function HeritagePassportLanding() {
           showIf: f => f.huB1 === "yes"
         }
       ]
+    },
+
+    France: {
+      questions: [
+        { key: "fr1", label: "Was at least one parent a French citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "fr2", label: "Can you document the descent with birth and civil registration certificates?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.fr1 === "yes" }
+      ]
+    },
+
+    Romania: {
+      questions: [
+        { key: "ro1", label: "Was at least one parent a Romanian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "ro2", label: "If not, do you have a grandparent who held Romanian citizenship (including before communist-era loss)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ro1 === "no" },
+        { key: "ro3", label: "Can you document the descent chain with birth and marriage certificates?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ro1 === "yes" || f.ro2 === "yes" }
+      ]
+    },
+
+    Croatia: {
+      questions: [
+        { key: "hr1", label: "Was at least one parent a Croatian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "hr2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.hr1 === "yes" }
+      ]
+    },
+
+    Bulgaria: {
+      questions: [
+        { key: "bg1", label: "Was at least one parent a Bulgarian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "bg2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.bg1 === "yes" }
+      ]
+    },
+
+    Sweden: {
+      questions: [
+        { key: "se1", label: "Was at least one parent a Swedish citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "se2", label: "Were you born outside Sweden AND do you currently hold another citizenship?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.se1 === "yes" },
+        { key: "se3", label: "Have you lived in Sweden for at least 2 consecutive years, OR already filed a retention declaration with a Swedish consulate (required before age 22)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Not yet" }], required: true, showIf: f => f.se1 === "yes" && f.se2 === "yes" }
+      ]
+    },
+
+    Denmark: {
+      questions: [
+        { key: "dk1", label: "Was at least one parent a Danish citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "dk2", label: "Were you born outside Denmark AND do you currently hold another citizenship?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.dk1 === "yes" },
+        { key: "dk3", label: "Have you lived in Denmark, or filed a retention declaration before age 22?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Not yet" }], required: true, showIf: f => f.dk1 === "yes" && f.dk2 === "yes" }
+      ]
+    },
+
+    Finland: {
+      questions: [
+        { key: "fi1", label: "Was at least one parent a Finnish citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "fi2", label: "Were you born outside Finland AND do you hold another citizenship AND have you never been registered in a Finnish municipality?", type: "radio", options: [{ value: "yes", label: "All three apply" }, { value: "no", label: "No / Not all" }], required: true, showIf: f => f.fi1 === "yes" },
+        { key: "fi3", label: "Have you lived in Finland or filed a retention declaration with the Finnish Population Register Centre before age 22?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Not yet" }], required: true, showIf: f => f.fi1 === "yes" && f.fi2 === "yes" }
+      ]
+    },
+
+    Netherlands: {
+      questions: [
+        { key: "nl1", label: "Was at least one parent a Dutch citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "nl2", label: "Was that Dutch parent born in the Netherlands (or Aruba/Curaçao/Sint Maarten), OR was your birth registered at a Dutch consulate within one year?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Unsure" }], required: true, showIf: f => f.nl1 === "yes" },
+        { key: "nl3", label: "Can you document the descent with birth and civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.nl1 === "yes" && f.nl2 === "yes" }
+      ]
+    },
+
+    Belgium: {
+      questions: [
+        { key: "be1", label: "Was at least one parent a Belgian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "be2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.be1 === "yes" }
+      ]
+    },
+
+    Slovenia: {
+      questions: [
+        { key: "si1", label: "Was at least one parent a Slovenian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "si2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.si1 === "yes" }
+      ]
+    },
+
+    Austria: {
+      questions: [
+        { key: "at1", label: "Was at least one parent an Austrian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "at2", label: "Are you prepared to renounce your other citizenship(s)? Austria does not permit dual citizenship in most cases.", type: "radio", options: [{ value: "yes", label: "Yes, willing to renounce" }, { value: "no", label: "No, want to keep existing citizenship" }], required: true, showIf: f => f.at1 === "yes" },
+        { key: "at3", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.at1 === "yes" && f.at2 === "yes" }
+      ]
+    },
+
+    Cyprus: {
+      questions: [
+        { key: "cy1", label: "Was at least one parent a Cypriot citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "cy2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.cy1 === "yes" }
+      ]
+    },
+
+    Malta: {
+      questions: [
+        { key: "mt1", label: "Was at least one parent a Maltese citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "mt2", label: "Was that Maltese parent born in Malta, or did they acquire citizenship by registration/naturalization in Malta (not purely by descent from abroad)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No — my parent was also born abroad" }], required: true, showIf: f => f.mt1 === "yes" },
+        { key: "mt3", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.mt1 === "yes" && f.mt2 === "yes" }
+      ]
+    },
+
+    "United Kingdom": {
+      questions: [
+        { key: "gb1", label: "Was at least one parent a British citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "gb2", label: "Was that British parent a citizen 'otherwise than by descent' — i.e., born in the UK, or naturalised/registered in the UK (not simply inheriting citizenship from a grandparent abroad)?", type: "radio", options: [{ value: "yes", label: "Yes — born/naturalised in the UK" }, { value: "no", label: "No — they were also a citizen by descent only" }], required: true, showIf: f => f.gb1 === "yes" },
+        { key: "gb3", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.gb1 === "yes" && f.gb2 === "yes" }
+      ]
+    },
+
+    Ukraine: {
+      questions: [
+        { key: "ua1", label: "Was at least one parent a Ukrainian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "ua2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ua1 === "yes" }
+      ]
+    },
+
+    Norway: {
+      questions: [
+        { key: "no1", label: "Was at least one parent a Norwegian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "no2", label: "Were you born outside Norway AND do you currently hold another citizenship?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.no1 === "yes" },
+        { key: "no3", label: "Have you lived in Norway for at least 2 years, OR have you filed a retention declaration before age 22?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Not yet" }], required: true, showIf: f => f.no1 === "yes" && f.no2 === "yes" }
+      ]
+    },
+
+    Switzerland: {
+      questions: [
+        { key: "ch1", label: "Was at least one parent a Swiss citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "ch2", label: "Were you born outside Switzerland AND do you hold another citizenship AND have you never lived in Switzerland?", type: "radio", options: [{ value: "yes", label: "All three apply" }, { value: "no", label: "No / Not all" }], required: true, showIf: f => f.ch1 === "yes" },
+        { key: "ch3", label: "Have you filed a retention declaration with a Swiss consulate before age 25?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Not yet" }], required: true, showIf: f => f.ch1 === "yes" && f.ch2 === "yes" }
+      ]
+    },
+
+    Iceland: {
+      questions: [
+        { key: "is1", label: "Was at least one parent an Icelandic citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "is2", label: "Were you born outside Iceland AND do you currently hold another citizenship?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.is1 === "yes" },
+        { key: "is3", label: "Have you resided in Iceland or filed a retention declaration before age 22?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No / Not yet" }], required: true, showIf: f => f.is1 === "yes" && f.is2 === "yes" }
+      ]
+    },
+
+    Serbia: {
+      questions: [
+        { key: "rs1", label: "Was at least one parent a Serbian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "rs2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.rs1 === "yes" }
+      ]
+    },
+
+    Montenegro: {
+      questions: [
+        { key: "me1", label: "Was at least one parent a Montenegrin citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "me2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.me1 === "yes" }
+      ]
+    },
+
+    Albania: {
+      questions: [
+        { key: "al1", label: "Was at least one parent an Albanian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "al2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.al1 === "yes" }
+      ]
+    },
+
+    "Bosnia & Herzegovina": {
+      questions: [
+        { key: "ba1", label: "Were BOTH parents BiH citizens at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes — both parents" }, { value: "no", label: "No — only one" }], required: true },
+        { key: "ba2", label: "Was one parent a BiH citizen AND were you born in Bosnia and Herzegovina?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ba1 === "no" },
+        { key: "ba3", label: "Are you currently stateless (you hold no other citizenship)?", type: "radio", options: [{ value: "yes", label: "Yes — stateless" }, { value: "no", label: "No — I have another citizenship" }], required: true, showIf: f => f.ba1 === "no" && f.ba2 === "no" }
+      ]
+    },
+
+    "North Macedonia": {
+      questions: [
+        { key: "mk1", label: "Was at least one parent a North Macedonian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "mk2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.mk1 === "yes" }
+      ]
+    },
+
+    Kosovo: {
+      questions: [
+        { key: "xk1", label: "Was at least one parent a Kosovo citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "xk2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.xk1 === "yes" }
+      ]
+    },
+
+    Moldova: {
+      questions: [
+        { key: "md1", label: "Was at least one parent a Moldovan citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "md2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.md1 === "yes" }
+      ]
+    },
+
+    Georgia: {
+      questions: [
+        { key: "ge1", label: "Was at least one parent a Georgian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "ge2", label: "If no citizen-parent, do you identify as ethnically Georgian (Georgian diaspora or descendants of Georgian emigrants)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ge1 === "no" },
+        { key: "ge3", label: "Can you document your Georgian descent or ethnic identity (civil records, church records, etc.)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ge1 === "yes" || f.ge2 === "yes" }
+      ]
+    },
+
+    Armenia: {
+      questions: [
+        { key: "am1", label: "Was at least one parent an Armenian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "am2", label: "If no citizen-parent, are you of Armenian ethnic descent (including descendants of 1915 Genocide survivors)?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.am1 === "no" },
+        { key: "am3", label: "Can you document your Armenian descent — civil records, church records, or diaspora evidence?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.am1 === "yes" || f.am2 === "yes" }
+      ]
+    },
+
+    Belarus: {
+      questions: [
+        { key: "by1", label: "Was at least one parent a Belarusian citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "by2", label: "Are you prepared to renounce ALL other citizenships? Belarus strictly prohibits dual citizenship.", type: "radio", options: [{ value: "yes", label: "Yes, willing to renounce all other nationalities" }, { value: "no", label: "No, want to retain existing citizenship(s)" }], required: true, showIf: f => f.by1 === "yes" },
+        { key: "by3", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.by1 === "yes" && f.by2 === "yes" }
+      ]
+    },
+
+    "San Marino": {
+      questions: [
+        { key: "sm1", label: "Was at least one parent a Sammarinese citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "sm2", label: "Can you document the descent with records from the San Marino Civil Status Office?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.sm1 === "yes" }
+      ]
+    },
+
+    Monaco: {
+      questions: [
+        { key: "mc1", label: "Was at least one parent a Monégasque citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "mc2", label: "Are you prepared to renounce ALL other citizenships? Monaco absolutely prohibits dual citizenship.", type: "radio", options: [{ value: "yes", label: "Yes, willing to renounce all other nationalities" }, { value: "no", label: "No, want to retain existing citizenship(s)" }], required: true, showIf: f => f.mc1 === "yes" },
+        { key: "mc3", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.mc1 === "yes" && f.mc2 === "yes" }
+      ]
+    },
+
+    Liechtenstein: {
+      questions: [
+        { key: "li1", label: "Was at least one parent a Liechtenstein citizen at the time of your birth?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "li2", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.li1 === "yes" }
+      ]
+    },
+
+    Andorra: {
+      questions: [
+        { key: "ad1", label: "Was at least one parent an Andorran citizen?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true },
+        { key: "ad2", label: "Are you prepared to renounce your other citizenship(s)? Andorra does not permit dual citizenship.", type: "radio", options: [{ value: "yes", label: "Yes, willing to renounce" }, { value: "no", label: "No, want to keep existing citizenship" }], required: true, showIf: f => f.ad1 === "yes" },
+        { key: "ad3", label: "Can you document the descent with civil records?", type: "radio", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], required: true, showIf: f => f.ad1 === "yes" && f.ad2 === "yes" }
+      ]
     }
   };
 
@@ -892,6 +1197,236 @@ export default function HeritagePassportLanding() {
       if (form.lt4 === "yes" && form.lt5 === "no")
         return "Not eligible yet. You will be eligible once you pass the language and Constitution exam.";
       return "Not eligible for Lithuanian citizenship by descent or naturalization.";
+    }
+
+    // France
+    if (form.country === "France") {
+      if (form.fr1 === "yes" && form.fr2 === "yes") return "Eligible for French citizenship by descent. Dual citizenship is permitted.";
+      if (form.fr1 === "no") return "Not eligible for French citizenship by descent.";
+      return "Not eligible — consult the French consulate.";
+    }
+
+    // Romania
+    if (form.country === "Romania") {
+      if ((form.ro1 === "yes" || form.ro2 === "yes") && form.ro3 === "yes") return "Eligible for Romanian citizenship by descent. Dual citizenship is permitted.";
+      if (form.ro1 === "no" && form.ro2 === "no") return "Not eligible for Romanian citizenship by descent.";
+      return "Not eligible — consult the Romanian consulate.";
+    }
+
+    // Croatia
+    if (form.country === "Croatia") {
+      if (form.hr1 === "yes" && form.hr2 === "yes") return "Eligible for Croatian citizenship by descent. Dual citizenship is permitted.";
+      return "Not eligible for Croatian citizenship by descent.";
+    }
+
+    // Bulgaria
+    if (form.country === "Bulgaria") {
+      if (form.bg1 === "yes" && form.bg2 === "yes") return "Eligible for Bulgarian citizenship by descent. Dual citizenship is permitted.";
+      return "Not eligible for Bulgarian citizenship by descent.";
+    }
+
+    // Sweden
+    if (form.country === "Sweden") {
+      if (form.se1 === "no") return "Not eligible for Swedish citizenship by descent.";
+      if (form.se1 === "yes" && form.se2 === "no") return "Eligible for Swedish citizenship by descent. Dual citizenship is permitted.";
+      if (form.se1 === "yes" && form.se2 === "yes" && form.se3 === "yes") return "Eligible for Swedish citizenship by descent — retention satisfied. Dual citizenship is permitted.";
+      if (form.se1 === "yes" && form.se2 === "yes" && form.se3 === "no") return "⚠️ At risk: if under 22, file a retention declaration at a Swedish consulate immediately. If already 22+, your Swedish citizenship may have lapsed — contact the Swedish Tax Agency.";
+      return "Not eligible.";
+    }
+
+    // Denmark
+    if (form.country === "Denmark") {
+      if (form.dk1 === "no") return "Not eligible for Danish citizenship by descent.";
+      if (form.dk1 === "yes" && form.dk2 === "no") return "Eligible for Danish citizenship by descent. Dual citizenship is permitted.";
+      if (form.dk1 === "yes" && form.dk2 === "yes" && form.dk3 === "yes") return "Eligible for Danish citizenship by descent — retention satisfied. Dual citizenship is permitted.";
+      if (form.dk1 === "yes" && form.dk2 === "yes" && form.dk3 === "no") return "⚠️ At risk: if under 22, file a retention declaration with a Danish consulate immediately. If already 22+, your Danish citizenship may have lapsed — contact the Danish Ministry of Immigration.";
+      return "Not eligible.";
+    }
+
+    // Finland
+    if (form.country === "Finland") {
+      if (form.fi1 === "no") return "Not eligible for Finnish citizenship by descent.";
+      if (form.fi1 === "yes" && form.fi2 === "no") return "Eligible for Finnish citizenship by descent. Dual citizenship is permitted.";
+      if (form.fi1 === "yes" && form.fi2 === "yes" && form.fi3 === "yes") return "Eligible for Finnish citizenship by descent — retention satisfied. Dual citizenship is permitted.";
+      if (form.fi1 === "yes" && form.fi2 === "yes" && form.fi3 === "no") return "⚠️ At risk: if under 22, file a retention declaration with the Finnish Population Register Centre immediately. If already 22+, your Finnish citizenship may have been automatically lost.";
+      return "Not eligible.";
+    }
+
+    // Netherlands
+    if (form.country === "Netherlands") {
+      if (form.nl1 === "no") return "Not eligible for Dutch citizenship by descent.";
+      if (form.nl1 === "yes" && form.nl2 === "no") return "Likely not eligible — Dutch citizenship does not automatically pass beyond one generation born abroad unless the Dutch parent was born in the Netherlands. Consult the Dutch consulate.";
+      if (form.nl1 === "yes" && form.nl2 === "yes" && form.nl3 === "yes") return "Eligible for Dutch citizenship by descent. Dual citizenship is permitted.";
+      return "Not eligible — consult the Dutch consulate.";
+    }
+
+    // Belgium
+    if (form.country === "Belgium") {
+      if (form.be1 === "yes" && form.be2 === "yes") return "Eligible for Belgian citizenship by descent. Dual citizenship is permitted.";
+      return "Not eligible for Belgian citizenship by descent.";
+    }
+
+    // Slovenia
+    if (form.country === "Slovenia") {
+      if (form.si1 === "yes" && form.si2 === "yes") return "Eligible for Slovenian citizenship by descent. Dual citizenship is permitted.";
+      return "Not eligible for Slovenian citizenship by descent.";
+    }
+
+    // Austria
+    if (form.country === "Austria") {
+      if (form.at1 === "no") return "Not eligible for Austrian citizenship by descent.";
+      if (form.at1 === "yes" && form.at2 === "no") return "Not eligible — Austria generally does not permit dual citizenship. You would need to renounce your current citizenship. Consult the Austrian consulate about possible exceptions.";
+      if (form.at1 === "yes" && form.at2 === "yes" && form.at3 === "yes") return "Eligible for Austrian citizenship by descent — but you must renounce your other citizenship(s). Dual citizenship is generally not permitted.";
+      return "Not eligible — consult the Austrian consulate.";
+    }
+
+    // Cyprus
+    if (form.country === "Cyprus") {
+      if (form.cy1 === "yes" && form.cy2 === "yes") return "Eligible for Cypriot citizenship by descent. Dual citizenship is permitted.";
+      return "Not eligible for Cypriot citizenship by descent.";
+    }
+
+    // Malta
+    if (form.country === "Malta") {
+      if (form.mt1 === "no") return "Not eligible for Maltese citizenship by descent.";
+      if (form.mt1 === "yes" && form.mt2 === "no") return "Likely not eligible — Malta does not automatically pass citizenship beyond one generation born abroad. Consult Identity Malta.";
+      if (form.mt1 === "yes" && form.mt2 === "yes" && form.mt3 === "yes") return "Eligible for Maltese citizenship by descent. Dual citizenship is permitted.";
+      return "Not eligible — consult Identity Malta.";
+    }
+
+    // United Kingdom
+    if (form.country === "United Kingdom") {
+      if (form.gb1 === "no") return "Not eligible for British citizenship by descent.";
+      if (form.gb1 === "yes" && form.gb2 === "no") return "Not eligible by automatic descent — British citizenship by descent does not pass to a further generation born abroad unless your parent was born/naturalised in the UK. You may be able to register via the Home Office — consult UK Visas and Immigration.";
+      if (form.gb1 === "yes" && form.gb2 === "yes" && form.gb3 === "yes") return "Eligible for British citizenship by descent under the British Nationality Act 1981.";
+      return "Not eligible — consult UK Visas and Immigration.";
+    }
+
+    // Ukraine
+    if (form.country === "Ukraine") {
+      if (form.ua1 === "yes" && form.ua2 === "yes") return "Eligible for Ukrainian citizenship by descent. Note: Ukraine does not formally recognise dual citizenship — consult the Ukrainian consulate regarding practical implications.";
+      return "Not eligible for Ukrainian citizenship by descent.";
+    }
+
+    // Norway
+    if (form.country === "Norway") {
+      if (form.no1 === "no") return "Not eligible for Norwegian citizenship by descent.";
+      if (form.no1 === "yes" && form.no2 === "no") return "Eligible for Norwegian citizenship by descent. Dual citizenship is permitted.";
+      if (form.no1 === "yes" && form.no2 === "yes" && form.no3 === "yes") return "Eligible for Norwegian citizenship by descent — retention satisfied. Dual citizenship is permitted.";
+      if (form.no1 === "yes" && form.no2 === "yes" && form.no3 === "no") return "⚠️ At risk: if under 22, contact a Norwegian consulate immediately to file a retention declaration. If already 22+ without 2 years residence in Norway, your citizenship may have lapsed.";
+      return "Not eligible.";
+    }
+
+    // Switzerland
+    if (form.country === "Switzerland") {
+      if (form.ch1 === "no") return "Not eligible for Swiss citizenship by descent.";
+      if (form.ch1 === "yes" && form.ch2 === "no") return "Eligible for Swiss citizenship by descent. Dual citizenship is permitted.";
+      if (form.ch1 === "yes" && form.ch2 === "yes" && form.ch3 === "yes") return "Eligible for Swiss citizenship by descent — retention declaration filed. Dual citizenship is permitted.";
+      if (form.ch1 === "yes" && form.ch2 === "yes" && form.ch3 === "no") return "⚠️ At risk: if under 25, file a retention declaration at a Swiss consulate immediately. If already 25+, your Swiss citizenship may have been automatically lost — contact the Swiss State Secretariat for Migration (SEM).";
+      return "Not eligible.";
+    }
+
+    // Iceland
+    if (form.country === "Iceland") {
+      if (form.is1 === "no") return "Not eligible for Icelandic citizenship by descent.";
+      if (form.is1 === "yes" && form.is2 === "no") return "Eligible for Icelandic citizenship by descent. Dual citizenship is permitted.";
+      if (form.is1 === "yes" && form.is2 === "yes" && form.is3 === "yes") return "Eligible for Icelandic citizenship by descent — retention satisfied. Dual citizenship is permitted.";
+      if (form.is1 === "yes" && form.is2 === "yes" && form.is3 === "no") return "⚠️ At risk: if under 22, file a retention declaration with Registers Iceland (Þjóðskrá) immediately. If already 22+, your Icelandic citizenship may have lapsed.";
+      return "Not eligible.";
+    }
+
+    // Serbia
+    if (form.country === "Serbia") {
+      if (form.rs1 === "yes" && form.rs2 === "yes") return "Eligible for Serbian citizenship by descent. Dual citizenship is permitted.";
+      return "Not eligible for Serbian citizenship by descent.";
+    }
+
+    // Montenegro
+    if (form.country === "Montenegro") {
+      if (form.me1 === "yes" && form.me2 === "yes") return "Eligible for Montenegrin citizenship by descent. Dual citizenship is permitted.";
+      return "Not eligible for Montenegrin citizenship by descent.";
+    }
+
+    // Albania
+    if (form.country === "Albania") {
+      if (form.al1 === "yes" && form.al2 === "yes") return "Eligible for Albanian citizenship by descent. Dual citizenship is permitted.";
+      return "Not eligible for Albanian citizenship by descent.";
+    }
+
+    // Bosnia & Herzegovina
+    if (form.country === "Bosnia & Herzegovina") {
+      if (form.ba1 === "yes") return "Potentially eligible for BiH citizenship — both parents are BiH citizens. Consult the BiH Ministry of Civil Affairs.";
+      if (form.ba2 === "yes") return "Potentially eligible — one BiH parent and born in Bosnia. Consult the BiH Ministry of Civil Affairs to confirm.";
+      if (form.ba3 === "yes") return "Potentially eligible under the statelessness exception — one BiH parent and currently stateless. Consult the BiH Ministry of Civil Affairs.";
+      return "Not eligible — Bosnia's citizenship rules for those born abroad to only one BiH parent who hold another citizenship are very restrictive.";
+    }
+
+    // North Macedonia
+    if (form.country === "North Macedonia") {
+      if (form.mk1 === "yes" && form.mk2 === "yes") return "Eligible for North Macedonian citizenship by descent. Dual citizenship is permitted.";
+      return "Not eligible for North Macedonian citizenship by descent.";
+    }
+
+    // Kosovo
+    if (form.country === "Kosovo") {
+      if (form.xk1 === "yes" && form.xk2 === "yes") return "Eligible for Kosovo citizenship by descent. Dual citizenship is permitted.";
+      return "Not eligible for Kosovo citizenship by descent.";
+    }
+
+    // Moldova
+    if (form.country === "Moldova") {
+      if (form.md1 === "yes" && form.md2 === "yes") return "Eligible for Moldovan citizenship by descent. Dual citizenship is permitted. Note: ethnic Moldovans may also have a separate Romanian citizenship claim.";
+      return "Not eligible for Moldovan citizenship by descent.";
+    }
+
+    // Georgia
+    if (form.country === "Georgia") {
+      if (form.ge1 === "yes" && form.ge3 === "yes") return "Eligible for Georgian citizenship by descent. Dual citizenship is permitted.";
+      if (form.ge1 === "no" && form.ge2 === "yes" && form.ge3 === "yes") return "Potentially eligible via the ethnic Georgian presidential pathway — contact the Georgian consulate. This route is discretionary.";
+      return "Not eligible for Georgian citizenship by descent.";
+    }
+
+    // Armenia
+    if (form.country === "Armenia") {
+      if (form.am1 === "yes" && form.am3 === "yes") return "Eligible for Armenian citizenship by descent. Dual citizenship is permitted.";
+      if (form.am1 === "no" && form.am2 === "yes" && form.am3 === "yes") return "Potentially eligible via the ethnic Armenian diaspora pathway (including Genocide descendants). Contact the Armenian consulate or Diaspora Armenia portal.";
+      return "Not eligible for Armenian citizenship by descent.";
+    }
+
+    // Belarus
+    if (form.country === "Belarus") {
+      if (form.by1 === "no") return "Not eligible for Belarusian citizenship by descent.";
+      if (form.by1 === "yes" && form.by2 === "no") return "Not eligible — Belarus strictly prohibits dual citizenship. You must renounce all other nationalities to proceed. Also note: a Belarusian passport currently carries significant travel restrictions under international sanctions.";
+      if (form.by1 === "yes" && form.by2 === "yes" && form.by3 === "yes") return "Eligible for Belarusian citizenship by descent — but you must renounce all other nationalities first. Note: a Belarusian passport currently carries travel restrictions under EU/US/UK sanctions.";
+      return "Not eligible — consult the Belarusian consulate.";
+    }
+
+    // San Marino
+    if (form.country === "San Marino") {
+      if (form.sm1 === "yes" && form.sm2 === "yes") return "Eligible for Sammarinese citizenship by descent. Dual citizenship is now permitted. Note: rules have historically been patrilineal — consult the San Marino Civil Status Office for current matrilineal eligibility.";
+      return "Not eligible for Sammarinese citizenship by descent.";
+    }
+
+    // Monaco
+    if (form.country === "Monaco") {
+      if (form.mc1 === "no") return "Not eligible for Monégasque citizenship by descent.";
+      if (form.mc1 === "yes" && form.mc2 === "no") return "Not eligible — Monaco absolutely prohibits dual citizenship. Acquiring Monaco citizenship requires renouncing all other nationalities.";
+      if (form.mc1 === "yes" && form.mc2 === "yes" && form.mc3 === "yes") return "Eligible for Monégasque citizenship by descent — but you must renounce all other nationalities. Monaco citizenship is one of the rarest in the world (~10,000 holders).";
+      return "Not eligible — consult Monaco's Direction de la Sûreté Publique.";
+    }
+
+    // Liechtenstein
+    if (form.country === "Liechtenstein") {
+      if (form.li1 === "yes" && form.li2 === "yes") return "Eligible for Liechtenstein citizenship by descent. Dual citizenship is permitted for citizenship acquired by descent.";
+      return "Not eligible for Liechtenstein citizenship by descent.";
+    }
+
+    // Andorra
+    if (form.country === "Andorra") {
+      if (form.ad1 === "no") return "Not eligible for Andorran citizenship by descent.";
+      if (form.ad1 === "yes" && form.ad2 === "no") return "Not eligible — Andorra does not permit dual citizenship. You must renounce your current citizenship to proceed.";
+      if (form.ad1 === "yes" && form.ad2 === "yes" && form.ad3 === "yes") return "Eligible for Andorran citizenship by descent — but you must renounce your other citizenship(s). Dual citizenship is not permitted.";
+      return "Not eligible — consult the Andorran authorities.";
     }
 
     return "Eligibility rules are complex. Please consult the relevant consulate.";
@@ -1164,6 +1699,38 @@ export default function HeritagePassportLanding() {
                   <option value="CzechRepublic">Czech Republic</option>
                   <option>Slovakia</option>
                   <option>Luxembourg</option>
+                  <option>France</option>
+                  <option>Romania</option>
+                  <option>Croatia</option>
+                  <option>Bulgaria</option>
+                  <option>Sweden</option>
+                  <option>Denmark</option>
+                  <option>Finland</option>
+                  <option>Netherlands</option>
+                  <option>Belgium</option>
+                  <option>Slovenia</option>
+                  <option>Austria</option>
+                  <option>Cyprus</option>
+                  <option>Malta</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option>Ukraine</option>
+                  <option>Norway</option>
+                  <option>Switzerland</option>
+                  <option>Iceland</option>
+                  <option>Serbia</option>
+                  <option>Montenegro</option>
+                  <option>Albania</option>
+                  <option value="Bosnia &amp; Herzegovina">Bosnia &amp; Herzegovina</option>
+                  <option value="North Macedonia">North Macedonia</option>
+                  <option>Kosovo</option>
+                  <option>Moldova</option>
+                  <option>Georgia</option>
+                  <option>Armenia</option>
+                  <option>Belarus</option>
+                  <option value="San Marino">San Marino</option>
+                  <option>Monaco</option>
+                  <option>Liechtenstein</option>
+                  <option>Andorra</option>
                 </select>
               </div>
               <div>
